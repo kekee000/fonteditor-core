@@ -10,6 +10,13 @@ define(
         // common
         require('./common/lang.spec');
 
+        // glyf
+        require('./graphics/computeBoundingBox.spec');
+        require('./graphics/pathAdjust.spec');
+
+        // math
+        require('./math/bezierCubic2Q2.spec');
+
         // ttf
         require('./ttf/reader.spec');
         require('./ttf/writer.spec');

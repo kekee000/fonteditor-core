@@ -7,16 +7,15 @@
 define(
     function (require) {
 
-
-        var is = {};
         var toString = toString || Object.prototype.toString;
 
-        // 生成 isXXX方法
-        ['String', 'Array', 'Function', 'Date', 'Object'].forEach(function (type) {
-            is['is' + type] = function (obj) {
-                return obj != null && toString.call(obj).slice(8, -1) === type;
-            };
-        });
+        function isArray(obj) {
+            return obj != null && toString.call(obj).slice(8, -1) === 'Array';
+        }
+
+        function isObject(obj) {
+            return obj != null && toString.call(obj).slice(8, -1) === 'Object';
+        }
 
         /**
          * 为函数提前绑定前置参数（柯里化）
@@ -164,10 +163,10 @@ define(
 
             var cloned = source;
 
-            if (is.isArray(source)) {
+            if (isArray(source)) {
                 cloned = source.slice().map(clone);
             }
-            else if (is.isObject(source) && 'isPrototypeOf' in source) {
+            else if (isObject(source) && 'isPrototypeOf' in source) {
                 cloned = {};
                 for (var key in source) {
                     if (hasOwnProperty.call(source, key)) {
@@ -306,7 +305,12 @@ define(
             debounce: debounce
         };
 
-        extend(exports, is);
+        // 生成 isXXX方法
+        ['String', 'Function', 'Date'].forEach(function (type) {
+            exports['is' + type] = function (obj) {
+                return obj != null && toString.call(obj).slice(8, -1) === type;
+            };
+        });
 
         return exports;
     }
