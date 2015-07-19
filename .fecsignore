@@ -1,0 +1,8 @@
+src/ttf/data/*
+demo/*
+node_modules
+release
+test
+edp-build-config.js
+edp-build-config-node.js
+edp-webserver-config.js

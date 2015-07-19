@@ -1,0 +1,34 @@
+{
+  "name": "fonteditor-core",
+
+  "version": "0.0.1",
+
+  "description": "ttf to woff, svg, eot convert, otf to ttf convert, ttf adjust",
+  "keywords": ["font", "ttf", "woff", "svg", "eot", "otf"],
+  "homepage": "https://github.com/kekee000/fonteditor-core",
+  "author": {
+    "name": "kekee000",
+    "email": "kekee000@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/kekee000/fonteditor-core/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/kekee000/fonteditor-core/raw/master/LICENSE"
+    }
+  ],
+
+  "dependencies": {
+    "xmldom": "~ 0.1.19",
+    "pako": "~ 0.2.4"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kekee000/fonteditor-core.git"
+  },
+
+  "main": "./main.js"
+}
