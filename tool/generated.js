@@ -12,14 +12,14 @@
             test1: 'test1',
             test2: 'test2'
         });
-
+    
 
 
 // 测试 string
 
 
         module.exports = 'test string';
-
+    
 
 
 // 测试commonjs wrapper
@@ -29,7 +29,7 @@
             test1: 'test1',
             test2: 'test2'
         };
-
+    
 
 
 
@@ -57,7 +57,7 @@ module.exports ={
                 };
             };
         }
-
+    
 
 
 // 测试 nodejs兼容写法
@@ -66,7 +66,7 @@ if (typeof exports !== 'undefined') {
     module.exports = exports = require('xmldom').DOMParser;
 }
 else {
-
+    
             module.exports = window.DOMParser;
-
+        
 }
