@@ -1,8 +1,8 @@
 var path = require( 'path' );
-var amd2module = require('./node/amd2module');
+var amd2module = require('./tool/amd2module');
 
-exports.input =  path.resolve(__dirname, './src');;
-exports.output = path.resolve(__dirname, '../fonteditor-ttf/lib');
+exports.input =  path.resolve(__dirname, './src');
+exports.output = path.resolve(__dirname, './node');
 
 
 exports.getProcessors = function () {
