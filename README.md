@@ -1,26 +1,74 @@
-fonteditor ttf相关函数库
-==========
+# fonteditor-core 
 
-提供ttf、woff、eot、svg、otf格式字体的读取、生成和转换
+**font editor core functions**
 
-提供ttf字形调整相关函数
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Downloads][downloads-image]][npm-url]
 
-提供otf转ttf相关函数
+## Feature
 
-提供svg转字形相关函数
+- sfnt parse
+- read, write, transform fonts (ttf, woff, eot, svg, otf)  
+- ttf glyph adjust
+- svg to glyph
 
+## Usage
 
-fonteditor在线编辑器: [fonteditor](http://font.baidu.com/)
+```js
+// read font file
+var fs = require('fs');
+var bufferToArrayBuffer = require('b3b').bufferToArrayBuffer;
+var fontBuffer = fs.readFileSync('font.ttf');
+var fontArrayBuffer = bufferToArrayBuffer(fontBuffer);
 
+// read font data
+var TTFReader = require('fonteditor-core').TTFReader;
+var ttfReader = new TTFReader({ hinting: true });
+var fontData = ttfReader.read(fontArrayBuffer);
 
-### 编译fonteditor-ttf的node版本:
+console.log(Object.keys(fontData));
+// => [ 'version',
+  'numTables',
+  'searchRenge',
+  'entrySelector',
+  'rengeShift',
+  'head',
+  'maxp',
+  'glyf',
+  'cmap',
+  'name',
+  'hhea',
+  'post',
+  'OS/2',
+  'fpgm',
+  'cvt',
+  'prep'
+]
 
 ```
-sh build-node.sh
+
+## Demo
+
+```
+edp webserver
 ```
 
-### 相关项目:
+open <http://127.0.0.1:9999/demo>
 
-node端函数库（fonteditor-core导出版本，不在此进行开发）: [fonteditor-ttf](https://github.com/kekee000/fonteditor-ttf)
+## Related
 
-在线编辑器: [fonteditor](https://github.com/ecomfe/fonteditor)
+- [fonteditor](https://github.com/ecomfe/fonteditor)
+- [fontmin](https://github.com/ecomfe/fontmin)
+- [fonteditor online](http://font.baidu.com/)
+
+## License
+
+MIT © Fonteditor
+
+[downloads-image]: http://img.shields.io/npm/dm/fonteditor-core.svg
+[npm-url]: https://npmjs.org/package/fonteditor-core
+[npm-image]: http://img.shields.io/npm/v/fonteditor-core.svg
+
+[travis-url]: https://travis-ci.org/kekee000/fonteditor-core
+[travis-image]: http://img.shields.io/travis/kekee000/fonteditor-core.svg

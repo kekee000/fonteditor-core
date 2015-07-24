@@ -1,15 +1,28 @@
 {
   "name": "fonteditor-core",
-
-  "version": "0.0.1",
-
-  "description": "ttf to woff, svg, eot convert, otf to ttf convert, ttf adjust",
-  "keywords": ["font", "ttf", "woff", "svg", "eot", "otf"],
+  "version": "0.0.2",
+  "description": "fonteditor core, sfnt read, conventr , support otf, ttf, woff, svg, eot.",
+  "keywords": [
+    "sfnt",
+    "font",
+    "editor",
+    "ttf",
+    "woff",
+    "svg",
+    "eot",
+    "otf"
+  ],
   "homepage": "https://github.com/kekee000/fonteditor-core",
-  "author": {
-    "name": "kekee000",
-    "email": "kekee000@gmail.com"
-  },
+  "author": [
+    {
+      "name": "kekee000",
+      "email": "kekee000@gmail.com"
+    },
+    {
+      "name": "junmer",
+      "email": "junmer@foxmail.com"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/kekee000/fonteditor-core/issues"
   },
@@ -19,16 +32,30 @@
       "url": "https://github.com/kekee000/fonteditor-core/raw/master/LICENSE"
     }
   ],
-
-  "dependencies": {
-    "xmldom": "~ 0.1.19",
-    "pako": "~ 0.2.4"
+  "scripts": {
+    "build": "sh build-node.sh",
+    "test": "phantomjs test/run-jasmine.js test/SpecRunner.html"
   },
-
+  "edp": {
+    "main": "src/main",
+    "dependencies": {}
+  },
+  "dependencies": {
+    "xmldom": "~ 0.1.19"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/kekee000/fonteditor-core.git"
   },
-
-  "main": "./main.js"
+  "files": [
+    "node"
+  ],
+  "main": "node/main.js",
+  "devDependencies": {
+    "b3b": "0.0.1",
+    "esprima": "^2.4.1",
+    "estraverse": "^4.1.0",
+    "pako": "^0.2.7",
+    "phantomjs": "^1.9.17"
+  }
 }
