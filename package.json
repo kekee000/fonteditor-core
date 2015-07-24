@@ -1,7 +1,7 @@
 {
   "name": "fonteditor-core",
   "version": "0.0.2",
-  "description": "fonteditor core, sfnt read, conventr , support otf, ttf, woff, svg, eot.",
+  "description": "fonts (ttf, woff, eot, svg, otf) parse, write, transform. glyph adjust.",
   "keywords": [
     "sfnt",
     "font",
@@ -41,7 +41,7 @@
     "dependencies": {}
   },
   "dependencies": {
-    "xmldom": "~ 0.1.19"
+    "xmldom": "~0.1.19"
   },
   "repository": {
     "type": "git",
