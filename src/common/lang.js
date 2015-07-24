@@ -268,7 +268,9 @@ define(
             }
 
             // 这里`fields`未指定则仅overwrite自身可枚举的字段，指定`fields`则不做限制
-            fields = fields || Object.keys(thisObj);
+            fields = fields || (typeof thisObj === 'object'
+                    ? Object.keys(thisObj)
+                    : []);
 
             if (!fields.length) {
                 return thisObj === thatObj;
