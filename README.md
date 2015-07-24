@@ -28,7 +28,7 @@ var ttfReader = new TTFReader({ hinting: true });
 var fontData = ttfReader.read(fontArrayBuffer);
 
 console.log(Object.keys(fontData));
-// => [ 'version',
+/* => [ 'version',
   'numTables',
   'searchRenge',
   'entrySelector',
@@ -45,6 +45,7 @@ console.log(Object.keys(fontData));
   'cvt',
   'prep'
 ]
+*/
 
 ```
 
