@@ -1,0 +1,34 @@
+{
+  "name": "fonteditor-core",
+  "version": "0.0.2",
+  "homepage": "https://github.com/kekee000/fonteditor-core",
+  "authors": [
+    "kekee000 <kekee000@gmail.com>",
+    "junmer <junmer@foxmail.com>"
+  ],
+  "description": "fonteditor core",
+  "main": "src/main",
+  "keywords": [
+    "sfnt",
+    "font",
+    "editor",
+    "ttf",
+    "woff",
+    "svg",
+    "eot",
+    "otf"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "edp-*",
+    "*.sh",
+    "node",
+    "tool",
+    "demo",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
