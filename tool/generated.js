@@ -8,27 +8,27 @@
 // 测试define函数
 
 
-        module.exports = require('../common/test').test({
-            test1: 'test1',
-            test2: 'test2'
-        });
+module.exports = require('../common/test').test({
+    test1: 'test1',
+    test2: 'test2'
+});
     
 
 
 // 测试 string
 
 
-        module.exports = 'test string';
+module.exports = 'test string';
     
 
 
 // 测试commonjs wrapper
 
 
-        module.exports = {
-            test1: 'test1',
-            test2: 'test2'
-        };
+module.exports = {
+    test1: 'test1',
+    test2: 'test2'
+};
     
 
 
@@ -45,18 +45,18 @@ module.exports ={
 // 测试多return
 
 
-        var string = require('../common/string');
+var string = require('../common/string');
 
-        if (string.pad) {
-            module.exports = string.pad;
-        }
-        else {
-            module.exports = function (str) {
-                return function () {
-                    str;
-                };
-            };
-        }
+if (string.pad) {
+    module.exports = string.pad;
+}
+else {
+    module.exports = function (str) {
+        return function () {
+            str;
+        };
+    };
+}
     
 
 
@@ -67,6 +67,6 @@ if (typeof exports !== 'undefined') {
 }
 else {
     
-            module.exports = window.DOMParser;
-        
+    module.exports = window.DOMParser;
+
 }
