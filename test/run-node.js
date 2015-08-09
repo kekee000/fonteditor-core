@@ -1,7 +1,8 @@
 // read font file
 var fs = require('fs');
 var bufferToArrayBuffer = require('b3b').bufferToArrayBuffer;
-var fontBuffer = fs.readFileSync('./data/bebas.ttf');
+var path = require('path');
+var fontBuffer = fs.readFileSync(path.resolve(__dirname, 'data/bebas.ttf'));
 var fontArrayBuffer = bufferToArrayBuffer(fontBuffer);
 
 // read font data

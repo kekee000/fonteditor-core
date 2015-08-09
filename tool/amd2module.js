@@ -206,6 +206,22 @@ function replaceRequire(code, codeDepth) {
     });
 }
 
+
+
+function fixCodeStyle (code) {
+
+    var reLine = /define\(function/.test(code)
+        ? /^\s{4}/
+        : /^\s{8}/;
+
+    return code
+        .split('\n')
+        .map(function(line) {
+            return line.replace(reLine, '');
+        })
+        .join('\n');
+}
+
 module.exports = function (code, codeDepth) {
 
     if (codeDepth && codeDepth[codeDepth.length - 1] !== '/') {
@@ -214,8 +230,10 @@ module.exports = function (code, codeDepth) {
 
     code = String(code);
 
+    code = fixCodeStyle(code);
     code = replaceDefine(code);
     code = replaceRequire(code, codeDepth);
+
 
     return code;
 };
