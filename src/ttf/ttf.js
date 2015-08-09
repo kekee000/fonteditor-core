@@ -643,6 +643,46 @@ define(
             return this.ttf.glyf;
         };
 
+        /**
+         * 对字形按照unicode编码排序，此处不对复合字形进行排序，如果存在复合字形, 不进行排序
+         *
+         * @param {Array} glyfList glyf列表
+         * @return {Array} 设置的glyf列表
+         */
+        TTF.prototype.sortGlyf = function () {
+            var glyf = this.ttf.glyf;
+            if (glyf.length > 1) {
+
+                // 如果存在复合字形则退出
+                if (glyf.some(function (a) {
+                    return a.compound;
+                })) {
+                    return -2;
+                }
+
+                var notdef = glyf.shift();
+                // 按代码点排序, 首先将空字形排到最后，然后按照unicode第一个编码进行排序
+                glyf.sort(function (a, b) {
+                    if ((!a.unicode || !a.unicode.length) && (!b.unicode || !b.unicode.length)) {
+                        return 0;
+                    }
+                    else if ((!a.unicode || !a.unicode.length) && b.unicode) {
+                        return 1;
+                    }
+                    else if (a.unicode && (!b.unicode || !b.unicode.length)) {
+                        return -1;
+                    }
+                    return Math.min.apply(null, a.unicode) - Math.min.apply(null, b.unicode);
+                });
+
+                glyf.unshift(notdef);
+                return glyf;
+            }
+
+            return -1;
+        };
+
+
 
         /**
          * 设置名字

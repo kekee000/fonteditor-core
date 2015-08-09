@@ -20,12 +20,14 @@ define(
             var checkUnicodeRepeat = {}; // 检查是否有重复代码点
             var repeatList = [];
 
-            // 将glyf的代码点按小到大排序
             ttf.glyf.forEach(function (glyf, index) {
                 if (glyf.unicode) {
                     glyf.unicode = glyf.unicode.sort();
 
-                    glyf.unicode.forEach(function (u) {
+                    // 将glyf的代码点按小到大排序
+                    glyf.unicode.sort(function (a, b) {
+                        return a - b;
+                    }).forEach(function (u) {
                         if (checkUnicodeRepeat[u]) {
                             repeatList.push(index);
                         }
