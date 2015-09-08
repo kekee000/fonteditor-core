@@ -37,6 +37,18 @@ define(
         }
 
         /**
+         * 对xml文本进行处理
+         *
+         * @param  {string} svg svg文本
+         * @return {string} 处理后文本
+         */
+        function resolveSVG(svg) {
+            // 去除xmlns，防止xmlns导致svg解析错误
+            svg = svg.replace(/\s+xmlns(?:\:[\w-]+)?=("|')[^"']*\1/g, ' ');
+            return svg;
+        }
+
+        /**
          * 获取空的ttf格式对象
          *
          * @return {Object} ttfObject对象
@@ -402,6 +414,7 @@ define(
 
             var xmlDoc = svg;
             if (typeof svg === 'string') {
+                svg = resolveSVG(svg);
                 xmlDoc = loadXML(svg);
             }
 
