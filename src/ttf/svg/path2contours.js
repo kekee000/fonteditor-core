@@ -114,13 +114,19 @@ define(function (require) {
                 contour = [];
             }
             else if (cmd === 'M') {
+                // 有些svg的M指令对多于2个参数，这里只取最后两个作为有效参数
+                ql = args.length;
+                if (ql % 2) {
+                    throw 'path `M` command needs even params';
+                }
+
                 if (relative) {
-                    prevX += args[0];
-                    prevY += args[1];
+                    prevX += args[ql - 2];
+                    prevY += args[ql - 1];
                 }
                 else {
-                    prevX = args[0];
-                    prevY = args[1];
+                    prevX = args[ql - 2];
+                    prevY = args[ql - 1];
                 }
 
                 contour.push({
