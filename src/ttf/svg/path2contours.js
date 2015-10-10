@@ -475,14 +475,13 @@ define(function (require) {
 
         path = path.trim();
 
+        // 修正头部不为`m`的情况
         if (path[0] !== 'M' && path[0] !== 'm') {
             path = 'M 0 0' + path;
         }
 
-        var last = path.length - 1;
-        if (path[last] !== 'Z' && path[last] !== 'z') {
-            path += 'Z';
-        }
+        // 修复中间没有结束符`z`的情况
+        path = path.replace(/(\d+)\s*(m|$)/gi, '$1z$2');
 
         // 获取segments
         var segments = [];
