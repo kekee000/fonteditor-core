@@ -10,8 +10,9 @@ define(
 
             it('test svg glyf', function () {
                 expect(ttfObject.from).toBe('svg');
-                expect(ttfObject.glyf.length).toBe(1);
+                expect(ttfObject.glyf.length).toBe(2);
                 expect(ttfObject.glyf[0].contours.length).toBe(7);
+                expect(ttfObject.glyf[1].contours.length).toBe(1);
             });
 
             var fontObject = svg2ttfobject(require('data/icomoon.svg'));

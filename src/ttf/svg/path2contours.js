@@ -113,59 +113,11 @@ define(function (require) {
                 contours.push(contour);
                 contour = [];
             }
-            else if (cmd === 'M') {
-                // 有些svg的M指令对多于2个参数，这里只取最后两个作为有效参数
-                ql = args.length;
-                if (ql % 2) {
+            else if (cmd === 'M' || cmd === 'L') {
+
+                if (args.length < 2 || args.length % 2) {
                     throw 'path `M` command needs even params';
                 }
-
-                if (relative) {
-                    prevX += args[ql - 2];
-                    prevY += args[ql - 1];
-                }
-                else {
-                    prevX = args[ql - 2];
-                    prevY = args[ql - 1];
-                }
-
-                contour.push({
-                    x: prevX,
-                    y: prevY,
-                    onCurve: true
-                });
-            }
-            else if (cmd === 'H') {
-
-                if (relative) {
-                    prevX += args[0];
-                }
-                else {
-                    prevX = args[0];
-                }
-
-                contour.push({
-                    x: prevX,
-                    y: prevY,
-                    onCurve: true
-                });
-            }
-            else if (cmd === 'V') {
-
-                if (relative) {
-                    prevY += args[0];
-                }
-                else {
-                    prevY = args[0];
-                }
-
-                contour.push({
-                    x: prevX,
-                    y: prevY,
-                    onCurve: true
-                });
-            }
-            else if (cmd === 'L') {
 
                 // 这里可能会连续绘制，最后一个是终点
                 if (relative) {
@@ -197,7 +149,36 @@ define(function (require) {
 
                 prevX = px;
                 prevY = py;
+            }
+            else if (cmd === 'H') {
 
+                if (relative) {
+                    prevX += args[0];
+                }
+                else {
+                    prevX = args[0];
+                }
+
+                contour.push({
+                    x: prevX,
+                    y: prevY,
+                    onCurve: true
+                });
+            }
+            else if (cmd === 'V') {
+
+                if (relative) {
+                    prevY += args[0];
+                }
+                else {
+                    prevY = args[0];
+                }
+
+                contour.push({
+                    x: prevX,
+                    y: prevY,
+                    onCurve: true
+                });
             }
             // 二次贝塞尔
             else if (cmd === 'Q') {
