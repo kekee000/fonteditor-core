@@ -164,10 +164,12 @@ define(
          */
         function TTFReader(options) {
             options = options || {};
-            this.options = {
-                hinting: options.hinting || false, // 不保留hints信息
-                compound2simple: options.compound2simple || false // 复合字形转简单字形
-            };
+
+            options.subset = options.subset || [],       // 子集
+            options.hinting = options.hinting || false, // 不保留hints信息
+            options.compound2simple = options.compound2simple || false // 复合字形转简单字形
+
+            this.options = options;
         }
 
         /**

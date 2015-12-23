@@ -129,6 +129,7 @@ define(
          */
         function OTFReader(options) {
             options = options || {};
+            options.subset = options.subset || [];
             this.options = options;
         }
 

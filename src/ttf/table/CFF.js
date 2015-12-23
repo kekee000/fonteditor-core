@@ -193,10 +193,53 @@ define(
                     }
 
                     cff.glyf = [];
-                    for (var i = 0, l = nGlyphs; i < l; i++) {
-                        var glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
-                        glyf.name = cff.charset[i];
-                        cff.glyf.push(glyf);
+
+                    // only parse subset glyphs
+                    var subset = font.readOptions.subset;
+                    if (subset && subset.length > 0) {
+
+                        // subset map
+                        var subsetMap = {};
+                        var codes = font.cmap;
+
+                        // unicode to index
+                        Object.keys(codes).forEach(function (c) {
+                            if (subset.indexOf(+c) > -1) {
+                                var i = codes[c];
+                                subsetMap[i] = true;
+                            }
+                        });
+
+                        var glyf;
+
+                        for (var i = 0, l = nGlyphs; i < l; i++) {
+
+                            // parse glyph
+                            if (subsetMap[i]) {
+                                glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
+                            }
+                            // empty glyph
+                            else {
+                                glyf = {
+                                    contours: [],
+                                    advanceWidth: 0
+                                };
+                            }
+
+                            // name
+                            glyf.name = cff.charset[i];
+
+                            cff.glyf.push(glyf);
+                        }
+                    }
+                    // parse all
+                    else {
+                        for (var i = 0, l = nGlyphs; i < l; i++) {
+                            var glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
+                            glyf.name = cff.charset[i];
+
+                            cff.glyf.push(glyf);
+                        }
                     }
 
                     return cff;
