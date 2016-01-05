@@ -850,12 +850,26 @@ define(
                 return [];
             }
 
-            var list = this.getGlyf(indexList).filter(function (glyf) {
-                if (glyf.compound) {
-                    compound2simpleglyf(glyf, ttf);
-                    return true;
+            var i;
+            var l;
+            // 全部的compound glyf
+            if (!indexList || !indexList.length) {
+                indexList = [];
+                for (i = 0, l = ttf.glyf.length; i < l; ++i) {
+                    if (ttf.glyf[i].compound) {
+                        indexList.push(i);
+                    }
                 }
-            });
+            }
+
+            var list = [];
+            for (i = 0, l = indexList.length; i < l; ++i) {
+                var glyfIndex = indexList[i];
+                if (ttf.glyf[glyfIndex] && ttf.glyf[glyfIndex].compound) {
+                    compound2simpleglyf(glyfIndex, ttf, true);
+                    list.push(ttf.glyf[glyfIndex]);
+                }
+            }
 
             return list;
         };

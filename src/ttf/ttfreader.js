@@ -143,9 +143,9 @@ define(
 
             // 复合字形转简单字形
             if (this.options.compound2simple && ttf.maxp.maxComponentElements) {
-                ttf.glyf.forEach(function (glyf) {
+                ttf.glyf.forEach(function (glyf, index) {
                     if (glyf.compound) {
-                        compound2simpleglyf(glyf, ttf);
+                        compound2simpleglyf(index, ttf, true);
                     }
                 });
                 ttf.maxp.maxComponentElements = 0;
