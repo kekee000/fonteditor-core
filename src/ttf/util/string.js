@@ -41,6 +41,7 @@ define(
 
             /**
              * bytes to string
+             *
              * @param  {Array} bytes 字节数组
              * @return {string}       string
              */
@@ -112,6 +113,7 @@ define(
 
             /**
              * 获取pascal string 字节数组
+             *
              * @param {string} str 字符串
              * @return {Array.<byte>} byteArray byte数组
              */
@@ -145,7 +147,15 @@ define(
                         str += '%' + (256 + bytes[i]).toString(16).slice(1);
                     }
                 }
-                return decodeURIComponent(str);
+
+                try {
+                    str = decodeURIComponent(str);
+                }
+                catch (e) {
+
+                }
+
+                return str;
             },
 
             /**
