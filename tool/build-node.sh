@@ -25,6 +25,6 @@ if [ -d ./node ]; then
 
 fi
 
-echo "[done]"
+echo "[edp build done]"
 
 

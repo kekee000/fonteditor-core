@@ -18,4 +18,4 @@ if [ -d ./node ]; then
 
 fi
 
-echo "[done]"
+echo "[clean done]"

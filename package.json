@@ -33,8 +33,7 @@
     }
   ],
   "scripts": {
-    "prepublish": "sh tool/build-node.sh",
-    "postpublish": "sh tool/clean-node.sh",
+    "npm_publish": "sh tool/publish-node.sh",
     "test": "phantomjs test/run-jasmine.js test/SpecRunner.html"
   },
   "edp": {
