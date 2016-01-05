@@ -38,9 +38,9 @@ define(
             }
             else {
                 var contoursList = {};
-                transformGlyfContours(glyf, -1, ttf, contoursList);
-                if (contoursList[-1]) {
-                    pathArray.push(contours2svg(contoursList[-1]));
+                var contours = transformGlyfContours(glyf, ttf);
+                if (contours && contours.length) {
+                    pathArray.push(contours2svg(contours));
                 }
             }
 

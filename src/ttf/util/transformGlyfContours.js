@@ -12,17 +12,22 @@ define(function (require) {
 
 
     /**
-     * 转换复合字形轮廓，结果保存在contoursList中
+     * 转换复合字形轮廓，结果保存在contoursList中，并返回当前glyf的轮廓
      *
      * @param  {Object} glyf glyf对象
-     * @param  {number} index glyf对象当前的index
      * @param  {Object} ttf ttfObject对象
-     * @param  {Object} contoursList 保存转换中间生成的contours
+     * @param  {Object=} contoursList 保存转换中间生成的contours
+     * @param  {number} glyfIndex glyf对象当前的index
+     * @return {Array} 转换后的轮廓
      */
-    function transformGlyfContours(glyf, index, ttf, contoursList) {
+    function transformGlyfContours(glyf, ttf, contoursList, glyfIndex) {
 
         if (!glyf.glyfs) {
             return glyf;
+        }
+
+        if (!contoursList) {
+            contoursList = {};
         }
 
         var compoundContours = [];
@@ -35,7 +40,7 @@ define(function (require) {
 
             // 递归转换contours
             if (glyph.compound && !contoursList[g.glyphIndex]) {
-                transformGlyfContours(glyph, g.glyphIndex, ttf, contoursList);
+                transformGlyfContours(glyph, ttf, contoursList, g.glyphIndex);
             }
 
             // 这里需要进行matrix变换，需要复制一份
@@ -55,7 +60,11 @@ define(function (require) {
             }
         });
 
-        contoursList[index] = compoundContours;
+        if (null != glyfIndex) {
+            contoursList[glyfIndex] = compoundContours;
+        }
+
+        return compoundContours;
     }
 
     return transformGlyfContours;

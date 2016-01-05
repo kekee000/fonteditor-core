@@ -8,23 +8,7 @@ define(
     function (require) {
 
         var transformGlyfContours = require('./transformGlyfContours');
-
-        /**
-         * 复合字形转简单字形
-         *
-         * @param  {Object} glyf glyf对象
-         * @param  {Array} contours 轮廓数组
-         * @return {Object} 转换后对象
-         */
-        function compound2simple(glyf, contours) {
-            glyf.contours = contours;
-            delete glyf.compound;
-            delete glyf.glyfs;
-            // 这里hinting信息会失效，删除hinting信息
-            delete glyf.instructions;
-            return glyf;
-        }
-
+        var compound2simple = require('./compound2simple');
 
         /**
          * ttf复合字形转简单字形
@@ -54,7 +38,7 @@ define(
             }
 
             var contoursList = {};
-            transformGlyfContours(glyf, glyfIndex, ttf, contoursList);
+            transformGlyfContours(glyf, ttf, contoursList, glyfIndex);
 
             if (recrusive) {
                 Object.keys(contoursList).forEach(function (index) {
