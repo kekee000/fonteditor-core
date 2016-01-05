@@ -148,14 +148,7 @@ define(
                     }
                 }
 
-                try {
-                    str = decodeURIComponent(str);
-                }
-                catch (e) {
-
-                }
-
-                return str;
+                return unescape(str);
             },
 
             /**
