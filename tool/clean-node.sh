@@ -9,10 +9,8 @@ echo "[clean node]: ./"
 
 if [ -d ./node ]; then
 
-    ls -l ./node | awk '{if($9) print " \
-    if [ -a "$9" ]; then \
-        rm -r ./"$9" \
-    fi"}' | sh
+
+    ls ./node | xargs -I {} rm -r {}
 
     rm -r ./node
 
