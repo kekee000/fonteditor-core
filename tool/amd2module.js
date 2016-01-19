@@ -49,18 +49,16 @@ function getAst(code) {
 function getDefineFactory(defineExpr) {
 
     var args = defineExpr.arguments;
-    var factoryAst;
+    var factoryAst = args[args.length - 1];
 
-    // 解析参数
-    for (var i = 0, l = args.length; i < l; i++) {
-        var argument = args[i];
-        if (argument.type === SYNTAX.FunctionExpression || argument.type === SYNTAX.ObjectExpression) {
-            factoryAst = argument;
-            break;
-        }
+    if (factoryAst.type === SYNTAX.FunctionExpression
+        || factoryAst.type === SYNTAX.ObjectExpression
+        || factoryAst.type === SYNTAX.ArrayExpression
+    ) {
+        return factoryAst;
     }
 
-    return factoryAst;
+    return false;
 }
 
 /**
@@ -82,9 +80,13 @@ function getDefineBlock(code) {
             ) {
 
                 var factory = getDefineFactory(node.expression);
+                if (!factory) {
+                    this.skip();
+                    return;
+                }
 
                 // define('xxx', {})
-                if (factory.type === SYNTAX.ObjectExpression) {
+                if (factory.type === SYNTAX.ObjectExpression || factory.type === SYNTAX.ArrayExpression) {
                     defineList.push({
                         type: 'object',
                         defineRange: node.range,
@@ -172,7 +174,7 @@ function replaceDefine(code) {
         }
         else if (block.type === 'object') {
             segments.push(code.slice(index, block.defineRange[0]));
-            segments.push('module.exports =');
+            segments.push('module.exports = ');
             segments.push(code.slice(block.factoryRange[0], block.factoryRange[1]) + ';');
             index = block.defineRange[1];
         }

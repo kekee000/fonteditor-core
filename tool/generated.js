@@ -31,16 +31,29 @@ module.exports = {
 };
     
 
-
-
-
 // 测试object
 
-module.exports ={
+module.exports = {
     test1: 'test1',
     test2: 'test2'
 };
 
+module.exports = {
+    test1: 'test1',
+    test2: 'test2'
+};
+
+// 测试array
+
+module.exports = [
+    'test1',
+    'test2'
+];
+
+module.exports = [
+    'test1',
+    'test2'
+];
 
 // 测试多return
 

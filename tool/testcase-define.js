@@ -37,9 +37,6 @@ define('test-module', ['test-module'],
     }
 );
 
-
-
-
 // 测试object
 
 define('test-module', {
@@ -47,6 +44,22 @@ define('test-module', {
     test2: 'test2'
 });
 
+define({
+    test1: 'test1',
+    test2: 'test2'
+});
+
+// 测试array
+
+define('test-module', [
+    'test1',
+    'test2'
+]);
+
+define([
+    'test1',
+    'test2'
+]);
 
 // 测试多return
 define(
