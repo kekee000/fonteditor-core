@@ -1,15 +1,16 @@
-// read font file
+/**
+ * @file test node interface
+ * @author mengke01(kekee000@gmail.com)
+ */
+
 var fs = require('fs');
-var bufferToArrayBuffer = require('b3b').bufferToArrayBuffer;
-var path = require('path');
-var fontBuffer = fs.readFileSync(path.resolve(__dirname, 'data/bebas.ttf'));
-var fontArrayBuffer = bufferToArrayBuffer(fontBuffer);
 
-// read font data
-var TTFReader = require('../node/main').TTFReader;
-var ttfReader = new TTFReader({
-    hinting: true
+
+var files = fs.readdirSync('./node-spec');
+// 测试node的接口
+files.forEach(function (file) {
+    if (file.match(/\.spec\.js$/)) {
+        console.log(file);
+        require(__dirname + '/node-spec/' + file);
+    }
 });
-var fontData = ttfReader.read(fontArrayBuffer);
-
-console.log(Object.keys(fontData));
