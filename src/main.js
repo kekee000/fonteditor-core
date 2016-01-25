@@ -19,7 +19,9 @@ define(
             Reader: require('./ttf/reader'),
             Writer: require('./ttf/writer'),
             OTFReader: require('./ttf/otfreader'),
-            otf2ttfobject: require('./ttf/otf2ttfobject')
+            otf2ttfobject: require('./ttf/otf2ttfobject'),
+            ttf2base64: require('./ttf/ttf2base64'),
+            ttf2icon: require('./ttf/ttf2icon')
         };
     }
 );

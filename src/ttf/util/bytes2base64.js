@@ -5,7 +5,7 @@
 
 define(
     function (require) {
-
+        var btoa = require('btoa');
         /**
          * 二进制byte流转base64编码
          *
