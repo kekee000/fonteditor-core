@@ -5,7 +5,9 @@
 
 define(
     function (require) {
-        var btoa = require('btoa');
+        var btoa = typeof window !== 'undefined' ? window.btoa : function (str) {
+                 return new Buffer(str, 'binary').toString('base64');
+             };
         /**
          * 二进制byte流转base64编码
          *
