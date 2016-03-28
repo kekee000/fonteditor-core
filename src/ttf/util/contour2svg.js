@@ -24,6 +24,8 @@ define(
             var curPoint;
             var prevPoint;
             var nextPoint;
+            var x; // x相对坐标
+            var y; // y相对坐标
             for (var i = 0, l = contour.length; i < l; i++) {
                 curPoint = contour[i];
                 prevPoint = i === 0 ? contour[l - 1] : contour[i - 1];
@@ -32,31 +34,44 @@ define(
                 // 起始坐标
                 if (i === 0) {
                     if (curPoint.onCurve) {
-                        pathArr.push('M' + curPoint.x + ' ' + curPoint.y);
+                        x = curPoint.x;
+                        y = curPoint.y;
+                        pathArr.push('M' + x + ' ' + y);
                     }
                     else {
                         if (prevPoint.onCurve) {
-                            pathArr.push('M' + prevPoint.x + ' ' + prevPoint.y);
+                            x = prevPoint.x;
+                            y = prevPoint.y;
+                            pathArr.push('M' + x + ' ' + y);
                         }
                         else {
-                            pathArr.push('M' + ((prevPoint.x + curPoint.x) / 2)
-                                + ' ' + ((prevPoint.y + curPoint.y) / 2));
+                            x = (prevPoint.x + curPoint.x) / 2;
+                            y = (prevPoint.y + curPoint.y) / 2;
+                            pathArr.push('M' + x  + ' ' + y);
                         }
                     }
                 }
 
                 // 直线
                 if (curPoint.onCurve && nextPoint.onCurve) {
-                    pathArr.push('L' + nextPoint.x + ' ' + nextPoint.y);
+                    pathArr.push('l' + (nextPoint.x - x) + ' ' + (nextPoint.y - y));
+                    x = nextPoint.x;
+                    y = nextPoint.y;
                 }
                 else if (!curPoint.onCurve) {
                     if (nextPoint.onCurve) {
-                        pathArr.push('Q' + curPoint.x + ' ' + curPoint.y
-                            + ' ' + nextPoint.x + ' ' + nextPoint.y);
+                        pathArr.push('q' + (curPoint.x - x) + ' ' + (curPoint.y - y)
+                            + ' ' + (nextPoint.x - x) + ' ' + (nextPoint.y - y));
+                        x = nextPoint.x;
+                        y = nextPoint.y;
                     }
                     else {
-                        pathArr.push('Q' + curPoint.x + ' ' + curPoint.y + ' '
-                            + ((curPoint.x + nextPoint.x) / 2) + ' ' + ((curPoint.y + nextPoint.y) / 2));
+                        var x1 = (curPoint.x + nextPoint.x) / 2;
+                        var y1 = (curPoint.y + nextPoint.y) / 2;
+                        pathArr.push('q' + (curPoint.x - x) + ' ' + (curPoint.y - y) + ' '
+                            + (x1 - x) + ' ' + (y1 - y));
+                        x = x1;
+                        y = y1;
                     }
                 }
             }
