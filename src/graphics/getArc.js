@@ -11,7 +11,7 @@
 define(
 
     function (require) {
-        var bezierCubic2Q2 = require('math/bezierCubic2Q2');
+        var bezierCubic2Q2 = require('../math/bezierCubic2Q2');
 
 
         var TAU = Math.PI * 2;
