@@ -16,7 +16,7 @@ echo "[asset node]: ./"
 
 if [ -d ./node ]; then
 
-    ls ./node | xargs -I {} rm -r {}
+    ls ./node | xargs -I {} [ -d {} ] && rm -r {}
 
     cp -r ./node/* ./
 
