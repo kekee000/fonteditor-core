@@ -87,6 +87,41 @@ define(
 
         });
 
+        describe('ttf subset', function () {
+            var fontObject = new TTFReader({
+                subset: [
+                    65, 0xe003, 0xe00d
+                ]
+            }).read(require('data/baiduHealth.ttf'));
+
+            it('test read subset', function () {
+                expect(fontObject.glyf.length).toBe(3);
+                expect(fontObject.glyf[0].name).toBe('.notdef');
+                expect(fontObject.glyf[1].unicode[0]).toBe(0xe003);
+                expect(fontObject.glyf[2].unicode[0]).toBe(0xe00d);
+                expect(fontObject.subsetMap).toBeUndefined();
+            });
+        });
+
+        describe('ttf subset with compound', function () {
+            var fontObject = new TTFReader({
+                subset: [
+                    65, 0x21, 0x22
+                ]
+            }).read(require('data/wingdings3.ttf'));
+
+            it('test read hinting', function () {
+                expect(fontObject.glyf.length).toBe(3);
+                expect(fontObject.glyf[0].name).toBe('.notdef');
+                expect(fontObject.glyf[1].unicode[0]).toBe(0x21);
+                expect(fontObject.glyf[1].compound).toBeUndefined();
+                expect(fontObject.glyf[2].unicode[0]).toBe(0x22);
+                expect(fontObject.glyf[2].contours.length).toBe(1);
+                expect(fontObject.glyf[2].compound).toBeUndefined();
+                expect(fontObject.subsetMap).toBeUndefined();
+            });
+        });
+
         describe('读错误ttf数据', function () {
 
             it('test read version error', function () {

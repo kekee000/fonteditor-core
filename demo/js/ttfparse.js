@@ -19,7 +19,8 @@ define(
             reader.onload = function(e) {
 
                 var ttfReader = new ttfreader({
-                    hinting: true
+                    hinting: true,
+                    //subset: [65, 0x160, 0x161, 0x162]
                 });
                 var ttfData = ttfReader.read(e.target.result);
                 console.log(ttfData);
@@ -44,10 +45,11 @@ define(
 
                 ajaxFile({
                     type: 'binary',
-                    url: './test/baiduHealth.ttf',
+                    url: './test/tt0586m_.ttf',
                     onSuccess: function(binaryData) {
                         var ttfReader = new ttfreader({
-                            hinting: true
+                            //hinting: true,
+                            subset: [65, 0x160, 0x161, 0x162]
                         });
                         var ttfData = ttfReader.read(binaryData);
 

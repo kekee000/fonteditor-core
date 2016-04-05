@@ -17,6 +17,14 @@ define(
             return obj != null && toString.call(obj).slice(8, -1) === 'Object';
         }
 
+        function isEmptyObject(object) {
+            var name;
+            for (name in object) {
+                return false;
+            }
+            return true;
+        }
+
         /**
          * 为函数提前绑定前置参数（柯里化）
          * @see http://en.wikipedia.org/wiki/Currying
@@ -304,7 +312,8 @@ define(
             uncurry: generic,
             clone: clone,
             throttle: throttle,
-            debounce: debounce
+            debounce: debounce,
+            isEmptyObject: isEmptyObject
         };
 
         // 生成 isXXX方法

@@ -80,10 +80,13 @@ define(
 
             var codes = font.cmap;
             var glyf = font.CFF.glyf;
-
+            var subsetMap = font.readOptions.subset ? font.subsetMap : null; // 当前ttf的子集列表
             // unicode
             Object.keys(codes).forEach(function (c) {
                 var i = codes[c];
+                if (subsetMap && !subsetMap[i]) {
+                    return;
+                }
                 if (!glyf[i].unicode) {
                     glyf[i].unicode = [];
                 }
@@ -92,9 +95,21 @@ define(
 
             // leftSideBearing
             font.hmtx.forEach(function (item, i) {
+                if (subsetMap && !subsetMap[i]) {
+                    return;
+                }
                 glyf[i].advanceWidth = glyf[i].advanceWidth || item.advanceWidth || 0;
                 glyf[i].leftSideBearing = item.leftSideBearing;
             });
+
+            // 设置了subsetMap之后需要选取subset中的字形
+            if (subsetMap) {
+                var subGlyf = [];
+                Object.keys(subsetMap).forEach(function (i) {
+                    subGlyf.push(glyf[+i]);
+                });
+                glyf = subGlyf;
+            }
 
             font.glyf = glyf;
         }
@@ -110,6 +125,7 @@ define(
             delete font.hmtx;
             delete font.post.glyphNameIndex;
             delete font.post.names;
+            delete font.subsetMap;
 
             // 删除无用的表
             var cff = font.CFF;

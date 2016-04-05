@@ -34,7 +34,7 @@ define(function (require) {
          glyf.glyfs.forEach(function (g) {
             var glyph = ttf.glyf[g.glyphIndex];
 
-            if (!glyph) {
+            if (!glyph || glyph === glyf) {
                 return;
             }
 

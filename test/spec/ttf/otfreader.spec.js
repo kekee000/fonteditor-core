@@ -60,6 +60,18 @@ define(
                 expect(fontObject.CFF.topDict.underlineThickness).toBe(50);
                 expect(fontObject.CFF.topDict.underlinePosition).toBe(-100);
             });
+
+            it('test read otf subset', function () {
+                var fontObject = new OTFReader({
+                    subset: [0x31, 0x32, 0xe001]
+                }).read(require('data/BalladeContour.otf'));
+                expect(fontObject.glyf.length).toBe(3);
+                expect(fontObject.glyf[0].name).toBe('.notdef');
+                expect(fontObject.glyf[1].unicode[0]).toBe(0x31);
+                expect(fontObject.glyf[2].unicode[0]).toBe(0x32);
+                expect(fontObject.subsetMap).toBeUndefined();
+            });
+
         });
 
 

@@ -199,7 +199,9 @@ define(
                     if (subset && subset.length > 0) {
 
                         // subset map
-                        var subsetMap = {};
+                        var subsetMap = {
+                            0: true // 设置.notdef
+                        };
                         var codes = font.cmap;
 
                         // unicode to index
@@ -209,35 +211,20 @@ define(
                                 subsetMap[i] = true;
                             }
                         });
+                        font.subsetMap = subsetMap;
 
-                        var glyf;
-
-                        for (var i = 0, l = nGlyphs; i < l; i++) {
-
-                            // parse glyph
-                            if (subsetMap[i]) {
-                                glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
-                            }
-                            // empty glyph
-                            else {
-                                glyf = {
-                                    contours: [],
-                                    advanceWidth: 0
-                                };
-                            }
-
-                            // name
+                        Object.keys(subsetMap).forEach(function (i) {
+                            i = +i;
+                            var glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
                             glyf.name = cff.charset[i];
-
-                            cff.glyf.push(glyf);
-                        }
+                            cff.glyf[i] = glyf;
+                        });
                     }
                     // parse all
                     else {
                         for (var i = 0, l = nGlyphs; i < l; i++) {
                             var glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
                             glyf.name = cff.charset[i];
-
                             cff.glyf.push(glyf);
                         }
                     }

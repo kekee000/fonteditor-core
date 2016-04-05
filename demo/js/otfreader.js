@@ -47,11 +47,6 @@ define(
         function showGlyf(charcode) {
 
             var glyf = lang.clone(ttf.getGlyfByCode(charcode));
-            if (glyf.compound) {
-                glyf.glyfs.forEach(function(g){
-                    g.glyf = ttf.getGlyfByIndex(g.glyphIndex);
-                });
-            }
 
             var canvas = $('#glyf-canvas').get(0);
             var ctx = canvas.getContext('2d');
@@ -76,7 +71,9 @@ define(
                 var binaryData = e.target.result;
                 setFont(binaryData);
 
-                var otfReader = new otfreader();
+                var otfReader = new otfreader({
+                    //subset: [0x31, 0x32, 0x33]
+                });
                 var data = otfReader.read(binaryData);
                 console.log(data);
                 showOTFGlyf(data);
@@ -103,7 +100,9 @@ define(
                     onSuccess: function(binaryData) {
                         setFont(binaryData);
 
-                        var otfReader = new otfreader();
+                        var otfReader = new otfreader({
+                            //subset: [0x31, 0x32, 0x33]
+                        });
                         var data = otfReader.read(binaryData);
                         console.log(data);
                         showOTFGlyf(data);

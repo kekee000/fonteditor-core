@@ -12,20 +12,7 @@ define(
         var parse = require('./glyf/parse');
         var write = require('./glyf/write');
         var sizeof = require('./glyf/sizeof');
-
-        function parseGlyfInSubset(reader, ttf, start, inSubset) {
-
-            if (inSubset) {
-                return parse(reader, ttf, start);
-            }
-            else {
-                return {
-                    contours: []
-                };
-            }
-
-        };
-
+        var lang = require('../../common/lang');
         var glyf = table.create(
             'glyf',
             [],
@@ -41,13 +28,12 @@ define(
 
                     // subset
                     var subset = ttf.readOptions.subset;
-                    var subsetMap = {};
-
-                    // 全解析字形
-                    var parseGlyph = parse;
 
                     if (subset && subset.length > 0) {
-
+                        var subsetMap = {
+                            0: true // 设置.notdef
+                        };
+                        subsetMap[0] = true;
                         // subset map
                         var cmap = ttf.cmap;
 
@@ -58,15 +44,43 @@ define(
                                 subsetMap[i] = true;
                             }
                         });
+                        ttf.subsetMap = subsetMap;
+                        var parsedGlyfMap = {};
+                        // 循环解析subset相关的glyf，包括复合字形相关的字形
+                        var travelsParse = function travels(subsetMap) {
+                            var newSubsetMap = {};
+                            Object.keys(subsetMap).forEach(function (i) {
+                                parsedGlyfMap[i] = true;
+                                // 当前的和下一个一样，或者最后一个无轮廓
+                                if (loca[i] === loca[i + 1]) {
+                                    glyphs[i] = {
+                                        contours: []
+                                    };
+                                }
+                                else {
+                                    glyphs[i] = parse(reader, ttf, startOffset + loca[i]);
+                                }
 
-                        // 解析部分字形
-                        parseGlyph = parseGlyfInSubset;
+                                if (glyphs[i].compound) {
+                                    glyphs[i].glyfs.forEach(function (g) {
+                                        if (!parsedGlyfMap[g.glyphIndex]) {
+                                            newSubsetMap[g.glyphIndex] = true;
+                                        }
+                                    })
+                                }
+                            });
 
+                            if (!lang.isEmptyObject(newSubsetMap)) {
+                                travels(newSubsetMap);
+                            }
+                        };
+
+                        travelsParse(subsetMap);
+                        return glyphs;
                     }
 
                     // 解析字体轮廓, 前n-1个
                     for (var i = 0, l = numGlyphs - 1; i < l; i++) {
-
                         // 当前的和下一个一样，或者最后一个无轮廓
                         if (loca[i] === loca[i + 1]) {
                             glyphs[i] = {
@@ -74,10 +88,9 @@ define(
                             };
                         }
                         else {
-                            glyphs[i] = parseGlyph(reader, ttf, startOffset + loca[i], subsetMap[i]);
+                            glyphs[i] = parse(reader, ttf, startOffset + loca[i]);
                         }
                     }
-
 
                     // 最后一个轮廓
                     if ((ttf.tables.glyf.length - loca[i]) < 5) {
@@ -86,7 +99,7 @@ define(
                         };
                     }
                     else {
-                        glyphs[i] = parseGlyph(reader, ttf, startOffset + loca[i], subsetMap[i]);
+                        glyphs[i] = parse(reader, ttf, startOffset + loca[i]);
                     }
 
                     return glyphs;

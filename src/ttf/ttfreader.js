@@ -87,10 +87,14 @@ define(
 
             var codes = ttf.cmap;
             var glyf = ttf.glyf;
+            var subsetMap = ttf.readOptions.subset ? ttf.subsetMap : null; // 当前ttf的子集列表
 
             // unicode
             Object.keys(codes).forEach(function (c) {
                 var i = codes[c];
+                if (subsetMap && !subsetMap[i]) {
+                    return;
+                }
                 if (!glyf[i].unicode) {
                     glyf[i].unicode = [];
                 }
@@ -99,6 +103,9 @@ define(
 
             // advanceWidth
             ttf.hmtx.forEach(function (item, i) {
+                if (subsetMap && !subsetMap[i]) {
+                    return;
+                }
                 glyf[i].advanceWidth = item.advanceWidth;
                 glyf[i].leftSideBearing = item.leftSideBearing;
             });
@@ -108,6 +115,9 @@ define(
                 var nameIndex = ttf.post.nameIndex;
                 var names = ttf.post.names;
                 nameIndex.forEach(function (nameIndex, i) {
+                    if (subsetMap && !subsetMap[i]) {
+                        return;
+                    }
                     if (nameIndex <= 257) {
                         glyf[i].name = postName[nameIndex];
                     }
@@ -115,6 +125,23 @@ define(
                         glyf[i].name = names[nameIndex - 258] || '';
                     }
                 });
+            }
+
+            // 设置了subsetMap之后需要选取subset中的字形
+            // 并且对复合字形转换成简单字形
+            if (subsetMap) {
+                var subGlyf = [];
+                Object.keys(subsetMap).forEach(function (i) {
+                    i = +i;
+                    if (glyf[i].compound) {
+                        compound2simpleglyf(i, ttf, true);
+                    }
+                    subGlyf.push(glyf[i]);
+                });
+                ttf.glyf = subGlyf;
+                // 转换之后不存在复合字形了
+                ttf.maxp.maxComponentElements = 0;
+                ttf.maxp.maxComponentDepth = 0;
             }
         }
 
@@ -129,6 +156,7 @@ define(
             delete ttf.loca;
             delete ttf.post.nameIndex;
             delete ttf.post.names;
+            delete ttf.subsetMap;
 
             // 不携带hinting信息则删除hint相关表
             if (!this.options.hinting) {
