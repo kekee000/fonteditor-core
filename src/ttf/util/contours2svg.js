@@ -12,16 +12,17 @@ define(
          * contours轮廓转svgpath
          *
          * @param {Array} contours 轮廓list
+         * @param {number} precision 精确度
          * @return {string} path字符串
          */
-        function contours2svg(contours) {
+        function contours2svg(contours, precision) {
 
             if (!contours.length) {
                 return '';
             }
 
             return contours.map(function (contour) {
-                return contour2svg(contour);
+                return contour2svg(contour, precision);
             }).join('');
         }
 

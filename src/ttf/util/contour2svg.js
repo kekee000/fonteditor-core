@@ -11,16 +11,20 @@ define(
          * 将路径转换为svg路径
          *
          * @param {Array} contour 轮廓序列
+         * @param {number} precision 精确度
          * @return {string} 路径
          */
-        function contour2svg(contour) {
+        function contour2svg(contour, precision) {
+            precision = precision || 2;
 
             if (!contour.length) {
                 return '';
             }
 
+            var ceil = function (number) {
+                return +(number).toFixed(precision);
+            };
             var pathArr = [];
-
             var curPoint;
             var prevPoint;
             var nextPoint;
@@ -36,40 +40,45 @@ define(
                     if (curPoint.onCurve) {
                         x = curPoint.x;
                         y = curPoint.y;
-                        pathArr.push('M' + x + ' ' + y);
+                        pathArr.push('M' + ceil(x) + ' ' + ceil(y));
                     }
                     else {
                         if (prevPoint.onCurve) {
                             x = prevPoint.x;
                             y = prevPoint.y;
-                            pathArr.push('M' + x + ' ' + y);
+                            pathArr.push('M' + ceil(x) + ' ' + ceil(y));
                         }
                         else {
                             x = (prevPoint.x + curPoint.x) / 2;
                             y = (prevPoint.y + curPoint.y) / 2;
-                            pathArr.push('M' + x  + ' ' + y);
+                            pathArr.push('M' + ceil(x)  + ' ' + ceil(y));
                         }
                     }
                 }
 
                 // 直线
                 if (curPoint.onCurve && nextPoint.onCurve) {
-                    pathArr.push('l' + (nextPoint.x - x) + ' ' + (nextPoint.y - y));
+                    pathArr.push('l' + ceil(nextPoint.x - x)
+                        + ' ' + ceil(nextPoint.y - y));
                     x = nextPoint.x;
                     y = nextPoint.y;
                 }
                 else if (!curPoint.onCurve) {
                     if (nextPoint.onCurve) {
-                        pathArr.push('q' + (curPoint.x - x) + ' ' + (curPoint.y - y)
-                            + ' ' + (nextPoint.x - x) + ' ' + (nextPoint.y - y));
+                        pathArr.push('q' + ceil(curPoint.x - x)
+                            + ' ' + ceil(curPoint.y - y)
+                            + ' ' + ceil(nextPoint.x - x)
+                            + ' ' + ceil(nextPoint.y - y));
                         x = nextPoint.x;
                         y = nextPoint.y;
                     }
                     else {
                         var x1 = (curPoint.x + nextPoint.x) / 2;
                         var y1 = (curPoint.y + nextPoint.y) / 2;
-                        pathArr.push('q' + (curPoint.x - x) + ' ' + (curPoint.y - y) + ' '
-                            + (x1 - x) + ' ' + (y1 - y));
+                        pathArr.push('q' + ceil(curPoint.x - x)
+                             + ' ' + ceil(curPoint.y - y)
+                             + ' ' + ceil(x1 - x)
+                             + ' ' + ceil(y1 - y));
                         x = x1;
                         y = y1;
                     }
