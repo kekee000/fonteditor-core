@@ -1,5 +1,5 @@
 /**
- * @file glyf转换svg
+ * @file glyf转换svg，复合字形轮廓需要ttfObject支持
  * @author mengke01(kekee000@gmail.com)
  *
  * thanks to：

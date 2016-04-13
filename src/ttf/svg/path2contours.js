@@ -409,33 +409,34 @@ define(function (require) {
             // 求弧度, rx, ry, angle, largeArc, sweep, ex, ey
             else if (cmd === 'A') {
 
-                if (args.length !== 7) {
+                if (args.length % 7) {
                     throw 'arc command params error:' + args.join(',');
                 }
 
-                var ex = args[5];
-                var ey = args[6];
+                for (q = 0, ql = args.length; q < ql; q += 7) {
+                    var ex = args[q + 5];
+                    var ey = args[q + 6];
 
-                if (relative) {
-                    ex = prevX + ex;
-                    ey = prevY + ey;
-                }
-
-                var path = getArc(
-                    args[0], args[1],
-                    args[2], args[3], args[4],
-                    {x: prevX, y: prevY},
-                    {x: ex, y: ey}
-                );
-
-                if (path && path.length > 1) {
-                    for (q = 1, ql = path.length; q < ql; q++) {
-                        contour.push(path[q]);
+                    if (relative) {
+                        ex = prevX + ex;
+                        ey = prevY + ey;
                     }
-                }
 
-                prevX = ex;
-                prevY = ey;
+                    var path = getArc(
+                        args[q], args[q + 1],
+                        args[q + 2], args[q + 3], args[q + 4],
+                        {x: prevX, y: prevY},
+                        {x: ex, y: ey}
+                    );
+
+                    if (path && path.length > 1) {
+                        for (var r = 1, rl = path.length; r < rl; r++) {
+                            contour.push(path[r]);
+                        }
+                    }
+                    prevX = ex;
+                    prevY = ey;
+                }
             }
         }
 
