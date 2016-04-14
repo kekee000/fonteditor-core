@@ -11,7 +11,7 @@ define(
             length = length || buffer.byteLength;
 
             if (offset + length > buffer.byteLength) {
-                throw 'check sum out of bound';
+                throw new Error('check sum out of bound');
             }
 
             var nLongs = Math.floor(length / 4);
@@ -40,7 +40,7 @@ define(
             length = length || buffer.length;
 
             if (offset + length > buffer.length) {
-                throw 'check sum out of bound';
+                throw new Error('check sum out of bound');
             }
 
             var nLongs = Math.floor(length / 4);
@@ -84,7 +84,7 @@ define(
                 return checkSumArray(buffer, offset, length);
             }
 
-            throw 'not support checksum buffer type';
+            throw new Error('not support checksum buffer type');
         }
 
         return checkSum;

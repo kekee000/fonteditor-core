@@ -4,7 +4,7 @@
  */
 
 define(function (require) {
-    var SEGMENT_REGEX = /\-?\d+(?:\.\d+)?\b/g;
+    var SEGMENT_REGEX = /-?\d+(?:\.\d+)?(?:e[-+]?\d+)?\b/g;
 
     /**
      * 获取参数值

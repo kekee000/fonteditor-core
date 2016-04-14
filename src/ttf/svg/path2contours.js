@@ -109,14 +109,18 @@ define(function (require) {
             relative = segment.relative;
             args = segment.args;
 
+            if (args && !args.length && cmd !== 'Z') {
+                console.warn('`' + cmd + '` command args empty!');
+                continue;
+            }
+
             if (cmd === 'Z') {
                 contours.push(contour);
                 contour = [];
             }
             else if (cmd === 'M' || cmd === 'L') {
-
-                if (args.length < 2 || args.length % 2) {
-                    throw 'path `M` command needs even params';
+                if (args.length % 2) {
+                    throw new Error('`M` command error:' + args.join(','));
                 }
 
                 // 这里可能会连续绘制，最后一个是终点
@@ -151,7 +155,6 @@ define(function (require) {
                 prevY = py;
             }
             else if (cmd === 'H') {
-
                 if (relative) {
                     prevX += args[0];
                 }
@@ -166,7 +169,6 @@ define(function (require) {
                 });
             }
             else if (cmd === 'V') {
-
                 if (relative) {
                     prevY += args[0];
                 }
@@ -182,7 +184,6 @@ define(function (require) {
             }
             // 二次贝塞尔
             else if (cmd === 'Q') {
-
                 // 这里可能会连续绘制，最后一个是终点
                 if (relative) {
                     px = prevX;
@@ -226,11 +227,12 @@ define(function (require) {
             }
             // 二次贝塞尔平滑
             else if (cmd === 'T') {
-
                 // 这里需要移除上一个曲线的终点
                 var last = contour.pop();
-
                 var pc = contour[contour.length - 1];
+                if (!pc) {
+                    pc = last;
+                }
 
                 contour.push(pc = {
                     x: 2 * last.x - pc.x,
@@ -280,6 +282,9 @@ define(function (require) {
             }
             // 三次贝塞尔
             else if (cmd === 'C') {
+                if (args.length % 6) {
+                    throw new Error('`C` command params error:' + args.join(','));
+                }
 
                 // 这里可能会连续绘制，最后一个是终点
                 cubicList = [];
@@ -343,6 +348,9 @@ define(function (require) {
             }
             // 三次贝塞尔平滑
             else if (cmd === 'S') {
+                if (args.length % 4) {
+                    throw new Error('`S` command params error:' + args.join(','));
+                }
 
                 // 这里可能会连续绘制，最后一个是终点
                 cubicList = [];
@@ -358,6 +366,10 @@ define(function (require) {
 
                 // 这里需要移除上一个曲线的终点
                 p1 = contour.pop();
+                if (!prevCubicC1) {
+                    prevCubicC1 = p1;
+                }
+
                 c1 = {
                     x: 2 * p1.x - prevCubicC1.x,
                     y: 2 * p1.y - prevCubicC1.y
@@ -408,9 +420,8 @@ define(function (require) {
             }
             // 求弧度, rx, ry, angle, largeArc, sweep, ex, ey
             else if (cmd === 'A') {
-
                 if (args.length % 7) {
-                    throw 'arc command params error:' + args.join(',');
+                    throw new Error('arc command params error:' + args.join(','));
                 }
 
                 for (q = 0, ql = args.length; q < ql; q += 7) {

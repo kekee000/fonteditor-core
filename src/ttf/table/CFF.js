@@ -233,11 +233,11 @@ define(
                 },
 
                 write: function (writer, font) {
-                    throw 'not support write cff table';
+                    throw new Error('not support write cff table');
                 },
 
                 size: function (font) {
-                    throw 'not support get cff table size';
+                    throw new Error('not support get cff table size');
                 }
             }
         );

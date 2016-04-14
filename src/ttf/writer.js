@@ -11,7 +11,7 @@ define(
 
         // 检查数组支持情况
         if (typeof ArrayBuffer === 'undefined' || typeof DataView === 'undefined') {
-            throw 'not support ArrayBuffer and DataView';
+            throw new Error('not support ArrayBuffer and DataView');
         }
 
         // 数据类型

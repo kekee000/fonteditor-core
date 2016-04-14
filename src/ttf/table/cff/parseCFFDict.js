@@ -241,7 +241,7 @@ define(
                 return -(b0 - 251) * 256 - b1 - 108;
             }
 
-            throw 'invalid b0 ' + b0 + ',at:' + reader.offset;
+            throw new Error('invalid b0 ' + b0 + ',at:' + reader.offset);
         }
 
 
