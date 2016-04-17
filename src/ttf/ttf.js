@@ -120,13 +120,16 @@ define(
          * @param {Object} ttf ttfObject
          * @param {Object} imported ttfObject
          * @param {Object} options 参数选项
-         * @param {boolean} options.scale 是否自动缩放
+         * @param {boolean} options.scale 是否自动缩放，默认true
          * @param {boolean} options.adjustGlyf 是否调整字形以适应边界
+         *                                     (与 options.scale 互斥)
          *
          * @return {Object} 合并后的ttfObject
          */
         function merge(ttf, imported, options) {
-            options = options || {};
+            options = options || {
+                scale: true
+            };
 
             var list = imported.glyf.filter(function (g, index) {
                 // 简单轮廓
@@ -280,6 +283,8 @@ define(
          * @param {Object} imported ttfObject
          * @param {Object} options 参数选项
          * @param {boolean} options.scale 是否自动缩放
+         * @param {boolean} options.adjustGlyf 是否调整字形以适应边界
+         *                                     (和 options.scale 参数互斥)
          *
          * @return {Array} 添加的glyf
          */
@@ -461,6 +466,9 @@ define(
          *
          * @param {Array=} indexList 索引列表
          * @param {Object} setting 选项
+         * @param {number=} setting.leftSideBearing 左边距
+         * @param {number=} setting.rightSideBearing 右边距
+         * @param {number=} setting.verticalAlign 垂直对齐
          * @return {Array} 改变的glyf
          */
         TTF.prototype.adjustGlyfPos = function (indexList, setting) {
@@ -481,6 +489,11 @@ define(
          *
          * @param {Array=} indexList 索引列表
          * @param {Object} setting 选项
+         * @param {boolean=} setting.reverse 字形反转操作
+         * @param {boolean=} setting.mirror 字形镜像操作
+         * @param {number=} setting.scale 字形缩放
+         * @param {boolean=} setting.ajdustToEmBox  是否调整字形到 em 框
+         * @param {number=} setting.ajdustToEmPadding 调整到 em 框的留白
          * @return {boolean}
          */
         TTF.prototype.adjustGlyf = function (indexList, setting) {
@@ -554,8 +567,12 @@ define(
          * @param  {Object} condition 查询条件
          * @param  {Array|number} condition.unicode unicode编码列表或者单个unicode编码
          * @param  {string} condition.name glyf名字，例如`uniE001`, `uniE`
-         *
-         * @return {Array}  glyf字形列表
+         * @param  {Function} condition.filter 自定义过滤器
+         * @example
+         *     condition.filter = function (glyf) {
+         *         return glyf.name === 'logo';
+         *     }
+         * @return {Array}  glyf字形索引列表
          */
         TTF.prototype.findGlyf = function (condition) {
             if (!condition) {

@@ -7,6 +7,7 @@
 define(
     function (require) {
         return {
+            Font: require('./ttf/font'),
             TTF: require('./ttf/ttf'),
             TTFReader: require('./ttf/ttfreader'),
             TTFWriter: require('./ttf/ttfwriter'),

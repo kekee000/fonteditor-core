@@ -39,12 +39,10 @@ define(
                 }
 
                 if (!glyf.compound && glyf.contours) {
-
                     // 整数化
                     glyf.contours.forEach(function (contour) {
                         pathCeil(contour);
                     });
-
                     // 缩减glyf
                     reduceGlyf(glyf);
                 }
@@ -58,10 +56,14 @@ define(
                 glyf.advanceWidth = Math.round(glyf.advanceWidth || 0);
             });
 
-            // 过滤无轮廓字体
-            ttf.glyf = ttf.glyf.filter(function (glyf, index) {
-                return index === 0 || glyf.contours && glyf.contours.length;
-            });
+            // 过滤无轮廓字体，如果存在复合字形不进行过滤
+            if (!ttf.glyf.some(function (a) {
+                return a.compound;
+            })) {
+                ttf.glyf = ttf.glyf.filter(function (glyf, index) {
+                    return index === 0 || glyf.contours && glyf.contours.length;
+                });
+            }
 
             if (!repeatList.length) {
                 return true;

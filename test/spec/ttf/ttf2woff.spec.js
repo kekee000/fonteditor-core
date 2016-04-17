@@ -15,7 +15,7 @@ define(
                 expect(woffBuffer.byteLength).toBeLessThan(10000);
             });
 
-            it('test read ttf2woff', function () {
+            it('test read woff', function () {
                 var ttf = new TTFReader().read(woff2ttf(woffBuffer));
 
                 expect(ttf.version).toBe(1);

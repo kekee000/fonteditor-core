@@ -10,12 +10,12 @@ define(
 
             var eotBuffer = ttf2eot(require('data/baiduHealth.ttf'))
 
-            it('test woff format', function () {
+            it('test eot format', function () {
                 expect(eotBuffer.byteLength).toBeGreaterThan(1000);
                 expect(eotBuffer.byteLength).toBeLessThan(10000);
             });
 
-            it('test read ttf2eot', function () {
+            it('test read eot', function () {
                 var ttf = new TTFReader().read(eot2ttf(eotBuffer));
 
                 expect(ttf.version).toBe(1);

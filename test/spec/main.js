@@ -30,5 +30,6 @@ define(
         require('./ttf/eot2ttf.spec');
         require('./ttf/svg2ttfobject.spec');
         require('./ttf/ttf2svg.spec');
+        require('./ttf/font.spec');
     }
 );

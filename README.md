@@ -1,6 +1,6 @@
-# fonteditor-core 
+# fonteditor-core
 
-**font editor core functions**
+**FontEditor core functions**
 
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
@@ -9,7 +9,7 @@
 ## Feature
 
 - sfnt parse
-- read, write, transform fonts (ttf, woff, eot, svg, otf)  
+- read, write, transform fonts (ttf, woff, eot, svg, otf)
 - ttf glyph adjust
 - svg to glyph
 
@@ -17,17 +17,21 @@
 
 ```js
 // read font file
+var Font = require('fonteditor-core').Font;
 var fs = require('fs');
-var bufferToArrayBuffer = require('b3b').bufferToArrayBuffer;
-var fontBuffer = fs.readFileSync('font.ttf');
-var fontArrayBuffer = bufferToArrayBuffer(fontBuffer);
+var buffer = fs.readFileSync('font.ttf');
 
 // read font data
-var TTFReader = require('fonteditor-core').TTFReader;
-var ttfReader = new TTFReader({ hinting: true });
-var fontData = ttfReader.read(fontArrayBuffer);
-
-console.log(Object.keys(fontData));
+var font = Font.create(buffer, {
+  type: 'ttf', // support ttf,woff,eot,otf,svg
+  subset: [65, 66], // only read `a`, `b` glyf
+  hinting: true, // save font hinting
+  compound2simple: true, // transform ttf compound glyf to simple
+  inflate: null, // inflate function for woff
+  combinePath: false, // for svg path
+});
+var fontObject = font.get();
+console.log(Object.keys(fontObject));
 /* => [ 'version',
   'numTables',
   'searchRenge',
@@ -46,6 +50,43 @@ console.log(Object.keys(fontData));
   'prep'
 ]
 */
+
+// write font file
+var buffer = font.write({
+  type: 'woff', // support ttf,woff,eot,otf,svg
+  hinting: true, // save font hinting
+  deflate: null, // deflate function for woff
+});
+// fs.writeFileSync('font.woff', buffer);
+
+// to base64 str
+font.toBase64({
+  type: 'ttf' // support ttf,woff,eot,svg
+});
+
+// optimize glyf
+font.optimize()
+
+// compound2simple
+font.compound2simple()
+
+// sort glyf
+font.sort()
+
+// find glyf
+var result = font.find({
+  unicode: [65]
+});
+var result = font.find({
+  filter: function (glyf) {
+    return glyf.name == 'icon'
+  }
+});
+
+// merge another font object
+font.merge(font1, {
+  scale: 1
+});
 
 ```
 

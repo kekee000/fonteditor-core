@@ -19,26 +19,26 @@ function writettf(buffer) {
 
     var ttfObject  = new TTFReader().read(buffer);
 
-    assert(ttfObject.name.fontFamily === 'Bebas', 'test writettf');
+    assert(ttfObject.name.fontFamily === 'Bebas', 'test read ttf');
     assert(JSON.stringify(ttfObject), 'test writettf');
 
 
     var ttfBuffer = new TTFWriter().write(ttfObject);
 
     // 写ttf
-    assert(util.toBuffer(ttfBuffer).length, 'test writettf');
+    assert(util.toBuffer(ttfBuffer).length, 'test write ttf');
 
     // 写eot
     var eotBuffer = ttf2eot(buffer);
-    assert(util.toBuffer(eotBuffer).length, 'test writettf');
+    assert(util.toBuffer(eotBuffer).length, 'test write eot');
 
     // 写woff
     var woffBuffer = ttf2woff(buffer);
-    assert(util.toBuffer(woffBuffer).length, 'test writettf');
+    assert(util.toBuffer(woffBuffer).length, 'test write woff');
 
     // 写svg
     var svg = ttf2svg(ttfObject);
-    assert(svg.length, 'test writettf');
+    assert(svg.length, 'test write svg');
 
 }
 
