@@ -27,6 +27,7 @@ define(function (require) {
     var eot2base64 = require('./eot2base64');
     var woff2base64 = require('./woff2base64');
     var svg2base64 = require('./svg2base64');
+    var bytes2base64 = require('./util/bytes2base64');
 
     var optimizettf = require('./util/optimizettf');
 
@@ -320,6 +321,26 @@ define(function (require) {
      */
     Font.create = function (buffer, options) {
         return new Font(buffer, options);
+    };
+
+    /**
+     * base64序列化buffer 数据
+     *
+     * @param {ArrayBuffer|Buffer|string} buffer 字体数据
+     * @return {Font}
+     */
+    Font.toBase64 = function (buffer) {
+        if (typeof buffer === 'string') {
+            // node 环境中没有 btoa 函数
+            if (!btoa) {
+                return new Buffer(buffer, 'binary').toString('base64');
+            }
+
+            return btoa(buffer);
+        }
+        else {
+            return bytes2base64(buffer);
+        }
     };
 
     return Font;

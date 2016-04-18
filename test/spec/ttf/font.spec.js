@@ -322,6 +322,18 @@ define(
                 expect(font.data.glyf.length).toBe(18);
             });
 
+            it('toBase64', function () {
+                var str = Font.toBase64('abcd');
+                expect(str).toBe('YWJjZA==');
+
+                var buffer = new Int8Array([65, 66, 67]);
+                var str = Font.toBase64(buffer);
+                expect(str).toBe('QUJD');
+
+                var str = Font.toBase64(buffer.buffer);
+                expect(str).toBe('QUJD');
+            });
+
         });
 
     }

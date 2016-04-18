@@ -38,6 +38,10 @@ function writettf(buffer) {
     });
     assert(svg.length, 'test write svg');
 
+    var buffer = new Buffer([65, 66, 67]);
+    assert(Font.toBase64(buffer) === 'QUJD', 'test buffer to toBase64');
+    var buffer = new Int8Array([65, 66, 67]);
+    assert(Font.toBase64(buffer.buffer) === 'QUJD', 'test arraybuffer to toBase64');
 }
 
 var buffer = readttf(__dirname + '/../data/bebas.ttf');

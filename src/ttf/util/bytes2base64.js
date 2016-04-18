@@ -12,26 +12,26 @@ define(
         /**
          * 二进制byte流转base64编码
          *
-         * @param {ArrayBuffer|Array} arrayBuffer ArrayBuffer对象
+         * @param {ArrayBuffer|Array} buffer ArrayBuffer对象
          * @return {string} base64编码
          */
-        function bytes2base64(arrayBuffer) {
+        function bytes2base64(buffer) {
             var str = '';
             var length;
             var i;
             // ArrayBuffer
-            if (arrayBuffer instanceof ArrayBuffer) {
-                length = arrayBuffer.byteLength;
-                var view = new DataView(arrayBuffer, 0, length);
+            if (buffer instanceof ArrayBuffer) {
+                length = buffer.byteLength;
+                var view = new DataView(buffer, 0, length);
                 for (i = 0; i < length; i++) {
                     str += String.fromCharCode(view.getUint8(i, false));
                 }
             }
             // Array
-            else if (arrayBuffer instanceof Array) {
-                length = arrayBuffer.length;
+            else if (buffer.length) {
+                length = buffer.length;
                 for (i = 0; i < length; i++) {
-                    str += String.fromCharCode(arrayBuffer[i]);
+                    str += String.fromCharCode(buffer[i]);
                 }
             }
 
