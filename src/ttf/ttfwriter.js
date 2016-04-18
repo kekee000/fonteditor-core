@@ -91,7 +91,10 @@ define(
 
                     glyf.unicode.forEach(function (u) {
                         if (checkUnicodeRepeat[u]) {
-                            error.raise(10200, index);
+                            error.raise({
+                                number: 10200,
+                                data: index
+                            }, index);
                         }
                         else {
                             checkUnicodeRepeat[u] = true;
