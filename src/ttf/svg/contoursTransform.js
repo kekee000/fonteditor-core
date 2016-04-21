@@ -6,6 +6,9 @@
 define(function (require) {
     var pathAdjust = require('../../graphics/pathAdjust');
     var pathTransform = require('../../graphics/pathTransform');
+    var pathRotate = require('../../graphics/pathRotate');
+    var pathSkewX = require('../../graphics/pathSkewX');
+    var pathSkewY = require('../../graphics/pathSkewY');
 
     /**
      * 根据transform参数变换轮廓
@@ -37,6 +40,15 @@ define(function (require) {
                         break;
                     case 'matrix':
                         pathTransform(p, params[0], params[1], params[2], params[3], params[4], params[5]);
+                        break;
+                    case 'rotate':
+                        pathRotate(p, params[0] * Math.PI / 180, params[1], params[2]);
+                        break;
+                    case 'skewX':
+                        pathSkewX(p, params[0] * Math.PI / 180);
+                        break;
+                    case 'skewY':
+                        pathSkewY(p, params[0] * Math.PI / 180);
                         break;
                 }
             }
