@@ -40,6 +40,21 @@ define(
             stringify: stringify,
 
             /**
+             * 将双字节编码字符转换成`\uxxxx`形式
+             *
+             * @param {string} str str字符串
+             * @return {string} 转换后字符串
+             */
+            escape: function (str) {
+                if (!str) {
+                    return str;
+                }
+                return String(str).replace(/[\uff-\uffff]/g, function (c) {
+                    return escape(c).replace('%', '\\');
+                })
+            },
+
+            /**
              * bytes to string
              *
              * @param  {Array} bytes 字节数组

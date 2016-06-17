@@ -22,6 +22,7 @@ define(function (require) {
     var ttf2eot = require('./ttf2eot');
     var ttf2woff = require('./ttf2woff');
     var ttf2svg = require('./ttf2svg');
+    var ttf2symbol = require('./ttf2symbol');
 
     var ttf2base64 = require('./ttf2base64');
     var eot2base64 = require('./eot2base64');
@@ -155,6 +156,9 @@ define(function (require) {
         else if (options.type === 'svg') {
             buffer = ttf2svg(this.data, options);
         }
+        else if (options.type === 'symbol') {
+            buffer = ttf2symbol(this.data, options);
+        }
         else {
             throw new Error('not support font type' + options.type);
         }
@@ -209,6 +213,9 @@ define(function (require) {
         }
         else if (options.type === 'svg') {
             base64Str = svg2base64(buffer);
+        }
+        else if (options.type === 'symbol') {
+            base64Str = svg2base64(buffer, 'image/svg+xml');
         }
         else {
             throw new Error('not support font type' + options.type);

@@ -204,6 +204,25 @@ define(
         });
 
 
+        describe('写svg数据', function () {
+            var font = Font.create(require('data/baiduHealth.ttf'), {
+                type: 'ttf'
+            })
+            var svg = font.write({
+                type: 'svg'
+            });
+            it('test svg format', function () {
+                expect(svg.length).toBeGreaterThan(1000);
+            });
+            var symbol = font.write({
+                type: 'symbol'
+            })
+            it('test symbol format', function () {
+                expect(symbol.length).toBeGreaterThan(1000);
+            });
+
+        });
+
         describe('toBase64', function () {
             it('test ttf to toBase64', function () {
                 var base64Str = Font.create(require('data/baiduHealth.ttf'), {
@@ -252,6 +271,18 @@ define(
                 expect(base64Str.length).toBeGreaterThan(1000);
                 expect(base64Str.length).toBeLessThan(20000);
             });
+
+            it('test svg symbol to toBase64', function () {
+                var base64Str = Font.create(require('data/baiduHealth.ttf'), {
+                    type: 'ttf'
+                }).toBase64({
+                    type: 'symbol'
+                });
+                expect(base64Str.indexOf('data:image/svg+xml;'))
+                    .toBe(0);
+                expect(base64Str.length).toBeGreaterThan(1000);
+            });
+
         });
 
         describe('font method', function () {

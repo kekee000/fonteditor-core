@@ -9,6 +9,7 @@
 define(
     function (require) {
         var string = require('../common/string');
+        var escape = require('./util/string').escape;
         var TTFReader = require('./ttfreader');
         var contours2svg = require('./util/contours2svg');
         var unicode2xml = require('./util/unicode2xml');
@@ -86,7 +87,7 @@ define(
                 // 筛选简单字形，并且有轮廓，有编码
                 if (!glyf.compound && glyf.contours && glyf.unicode && glyf.unicode.length) {
                     var glyfObject = {
-                        name: glyf.name,
+                        name: escape(glyf.name),
                         unicode: unicode2xml(glyf.unicode),
                         d: contours2svg(glyf.contours)
                     };

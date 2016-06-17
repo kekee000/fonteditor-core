@@ -6,7 +6,7 @@ define(
         var ttf2svg = require('ttf/ttf2svg');
         var svg2ttfobject = require('ttf/svg2ttfobject');
 
-        describe('ttf 转 eot', function () {
+        describe('ttf 转 svg', function () {
 
             var fontObject = new TTFReader().read(require('data/baiduHealth.ttf'));
             var svg = ttf2svg(fontObject);

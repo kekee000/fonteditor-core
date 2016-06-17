@@ -8,6 +8,7 @@ define(
         var TTFReader = require('./ttfreader');
         var error = require('./error');
         var config = require('./data/default');
+        var getSymbolId = require('./ttf2symbol').getSymbolId;
 
         /**
          * listUnicode
@@ -42,11 +43,12 @@ define(
                     && g.unicode && g.unicode.length;
             });
 
-            filtered.forEach(function (g) {
+            filtered.forEach(function (g, i) {
                 glyfList.push({
                     code: '&#x' + g.unicode[0].toString(16) + ';',
                     codeName: listUnicode(g.unicode),
-                    name: g.name
+                    name: g.name,
+                    id: getSymbolId(g, i)
                 });
             });
 
