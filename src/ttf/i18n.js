@@ -24,6 +24,7 @@ define(
             10107: '写入ttf文件错误',
             10108: '写入woff文件错误',
             10109: '写入svg文件错误',
+            10112: '写入svg symbol 错误',
 
             10110: '读取eot文件错误',
             10111: '读取eot字体错误',
@@ -57,6 +58,7 @@ define(
             10107: 'Write ttf error',
             10108: 'Write woff error',
             10109: 'Write svg error',
+            10112: 'Write svg symbol error',
 
             10110: 'Read eot error',
             10111: 'Write eot error',
