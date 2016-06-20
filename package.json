@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "fonts (ttf, woff, eot, svg, otf) parse, write, transform. glyph adjust.",
   "keywords": [
     "sfnt",
@@ -33,7 +33,7 @@
     }
   ],
   "scripts": {
-    "npm_publish": "sh tool/publish-node.sh",
+    "publish": "sh tool/publish-node.sh",
     "test": "phantomjs test/run-jasmine.js test/SpecRunner.html",
     "test_node": "sh tool/test-node.sh"
   },
