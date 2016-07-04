@@ -31,6 +31,11 @@ define(function (require) {
     var bytes2base64 = require('./util/bytes2base64');
 
     var optimizettf = require('./util/optimizettf');
+    // 必须是nodejs环境下的Buffer对象才能触发buffer转换
+    var SUPPORT_BUFFER = typeof process === 'object'
+        && typeof process.versions === 'object'
+        && typeof process.versions.node !== 'undefined'
+        && typeof Buffer === 'function';
 
     /**
      * 字体对象构造函数
@@ -87,7 +92,7 @@ define(function (require) {
      */
     Font.prototype.read = function (buffer, options) {
         // nodejs buffer
-        if (typeof Buffer === 'function') {
+        if (SUPPORT_BUFFER) {
             if (buffer instanceof Buffer) {
                 buffer = bufferTool.toArrayBuffer(buffer);
             }
@@ -163,7 +168,7 @@ define(function (require) {
             throw new Error('not support font type' + options.type);
         }
 
-        if (typeof Buffer === 'function') {
+        if (SUPPORT_BUFFER) {
             if (false !== options.toBuffer && buffer instanceof ArrayBuffer) {
                 buffer = bufferTool.toBuffer(buffer);
             }
@@ -190,7 +195,7 @@ define(function (require) {
         }
 
         if (buffer) {
-            if (typeof Buffer === 'function') {
+            if (SUPPORT_BUFFER) {
                 if (buffer instanceof Buffer) {
                     buffer = bufferTool.toArrayBuffer(buffer);
                 }
