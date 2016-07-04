@@ -30,7 +30,7 @@ define(
             this.store = appendLanguage({}, languageList);
             this.setLanguage(
                 defaultLanguage
-                || typeof navigator !== 'undefined' && navigator.language.toLowerCase()
+                || typeof navigator !== 'undefined' && navigator.language && navigator.language.toLowerCase()
                 || 'en-us'
             );
         }
