@@ -36,6 +36,45 @@ define(
                 }
                 format0.glyphIdArray = glyphIdArray;
             }
+            else if (subTable.format === 2) {
+                var format2 = subTable;
+                // 跳过format字段
+                format2.length = reader.readUint16();
+                format2.language = reader.readUint16();
+
+                var subHeadKeys = [];
+                var maxSubHeadKey = 0;// 最大索引
+                var maxPos = -1; // 最大位置
+                for (var i = 0, l = 256; i < l; i++) {
+                    subHeadKeys[i] = reader.readUint16() / 8;
+                    if (subHeadKeys[i] > maxSubHeadKey) {
+                        maxSubHeadKey = subHeadKeys[i];
+                        maxPos = i;
+                    }
+                }
+
+                var subHeads = [];
+                for (var i = 0; i <= maxSubHeadKey; i++) {
+                    subHeads[i] = {
+                        firstCode: reader.readUint16(),
+                        entryCount: reader.readUint16(),
+                        idDelta: reader.readUint16(),
+                        idRangeOffset: (reader.readUint16() - (maxSubHeadKey - i) * 8 - 2) / 2
+                    };
+                }
+
+                var glyphCount = (startOffset + format2.length - reader.offset) / 2;
+                var glyphs = [];
+                for (var i = 0; i < glyphCount; i++) {
+                    glyphs[i] = reader.readUint16();
+                }
+
+                format2.subHeadKeys = subHeadKeys;
+                format2.maxPos = maxPos;
+                format2.subHeads = subHeads;
+                format2.glyphs = glyphs;
+
+            }
             // 双字节编码，非紧凑排列
             else if (subTable.format === 4) {
                 var format4 = subTable;
@@ -170,7 +209,7 @@ define(
                 offset += 8;
             }
 
-            var cmap = readWindowsAllCodes(subTables);
+            var cmap = readWindowsAllCodes(subTables, ttf);
 
             return cmap;
         }
