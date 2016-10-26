@@ -474,7 +474,6 @@ define(
         TTF.prototype.adjustGlyfPos = function (indexList, setting) {
 
             var glyfList = this.getGlyf(indexList);
-
             return adjustPos(
                 glyfList,
                 setting.leftSideBearing,
