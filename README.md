@@ -102,7 +102,7 @@ open <http://127.0.0.1:9999/demo>
 
 - [fonteditor](https://github.com/ecomfe/fonteditor)
 - [fontmin](https://github.com/ecomfe/fontmin)
-- [fonteditor online](http://font.baidu.com/)
+- [fonteditor online](http://fontstore.baidu.com/editor)
 
 ## License
 
