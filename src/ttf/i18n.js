@@ -38,7 +38,11 @@ define(
 
             10301: '错误的otf文件',
             10302: '读取otf表错误',
-            10303: 'otf字形轮廓数据为空'
+            10303: 'otf字形轮廓数据为空',
+
+            10401: '错误的woff2文件',
+            10402: '没有提供解压函数`decompress`'
+
         };
 
 
@@ -72,7 +76,10 @@ define(
 
             10301: 'otf file damaged',
             10302: 'Read otf table error',
-            10303: 'otf `glyph` data is empty'
+            10303: 'otf `glyph` data is empty',
+
+            10401: 'read woff2 file error',
+            10402: 'no uncompress function `decompress`'
         };
 
 

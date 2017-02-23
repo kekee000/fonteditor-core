@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>woff2ttf</title>
+    <script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/2-0-4/esl.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="./dep/brotli/bundle.js"></script>
+</head>
+<body>
+
+<a class="saveas" href="" download="">保存</a>
+
+<script>
+    require.config({
+        baseUrl: '../src',
+        paths: {
+            demo: '../demo/js',
+        },
+        // packages: [
+        //     {
+        //         name: 'brotli',
+        //         main: 'bundle',
+        //         location: '../demo/dep/brotli'
+        //     }
+        // ]
+    });
+    define('jquery', $);
+</script>
+
+<script>
+    require(['demo/woff22ttf']);
+</script>
+
+</body>
+</html>

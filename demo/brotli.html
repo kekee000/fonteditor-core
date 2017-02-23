@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>brotli解析</title>
+</head>
+
+<body>
+<script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/2-0-4/esl.js"></script>
+<script>
+    require.config({
+        baseUrl: '../src',
+        paths: {
+            'brotli': '../demo/dep/brotli/bundle'
+        }
+    });
+    window.Browser = {T: function () {console.log(arguments)}};
+</script>
+<script type="text/javascript">
+require(['brotli'], function (brotli) {
+    console.log(brotli)
+});
+
+</script>
+</body>
+</html>
