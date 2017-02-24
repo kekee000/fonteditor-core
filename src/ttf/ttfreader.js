@@ -84,10 +84,10 @@ define(
          * @param {Object} ttf ttf对象
          */
         function resolveGlyf(ttf) {
-
+            var options = ttf.readOptions || this.options;
             var codes = ttf.cmap;
             var glyf = ttf.glyf;
-            var subsetMap = ttf.readOptions.subset ? ttf.subsetMap : null; // 当前ttf的子集列表
+            var subsetMap = options.subset ? ttf.subsetMap : null; // 当前ttf的子集列表
 
             // unicode
             Object.keys(codes).forEach(function (c) {
@@ -150,6 +150,7 @@ define(
          * @param {Object} ttf ttf对象
          */
         function cleanTables(ttf) {
+            var options = ttf.readOptions || this.options;
             delete ttf.readOptions;
             delete ttf.tables;
             delete ttf.hmtx;
@@ -159,7 +160,7 @@ define(
             delete ttf.subsetMap;
 
             // 不携带hinting信息则删除hint相关表
-            if (!this.options.hinting) {
+            if (!options.hinting) {
                 delete ttf.fpgm;
                 delete ttf.cvt;
                 delete ttf.prep;
@@ -170,7 +171,7 @@ define(
             }
 
             // 复合字形转简单字形
-            if (this.options.compound2simple && ttf.maxp.maxComponentElements) {
+            if (options.compound2simple && ttf.maxp.maxComponentElements) {
                 ttf.glyf.forEach(function (glyf, index) {
                     if (glyf.compound) {
                         compound2simpleglyf(index, ttf, true);
@@ -202,16 +203,29 @@ define(
 
         /**
          * 获取解析后的ttf文档
-         * @param {ArrayBuffer} buffer buffer对象
          *
+         * @param {ArrayBuffer} buffer buffer对象
          * @return {Object} ttf文档
          */
         TTFReader.prototype.read = function (buffer) {
             this.ttf = read.call(this, buffer);
-            resolveGlyf.call(this, this.ttf);
-            cleanTables.call(this, this.ttf);
+            this.resolve(this.ttf);
             return this.ttf;
         };
+
+        /**
+         * 处理解析后的ttf文档，去除冗余数据
+         *
+         * @param {Object=} ttf ttf对象
+         * @return {Object} ttf文档
+         */
+        TTFReader.prototype.resolve = function (ttf) {
+            ttf = ttf || this.ttf;
+            resolveGlyf.call(this, ttf);
+            cleanTables.call(this, ttf);
+            return this.ttf;
+        };
+
 
         /**
          * 注销

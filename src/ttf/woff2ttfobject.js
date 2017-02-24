@@ -11,7 +11,9 @@ define(function (require) {
     var Reader = require('./reader');
     var Writer = require('./writer');
     var error = require('./error');
-    var woff2 = require('./util/woff2');
+    var woff2Util = require('./util/woff2');
+    var supportTables = require('./table/support');
+    var TTFReader = require('./ttfreader');
 
     /**
      * woff2格式转换成ttf字体格式
@@ -45,7 +47,8 @@ define(function (require) {
         // var privOffset = reader.readUint32(40);
         // var privLength = reader.readUint32(44);
 
-        var tableEntries = [];
+        var tableEntries = {};
+        var tableEntry;
         var i;
         var l;
         var srcOffset = 0;
@@ -60,7 +63,7 @@ define(function (require) {
                 tag = reader.readString(reader.offset, 4)
             }
             else {
-                tag = woff2.getTableTag(flagByte & 0x3f);
+                tag = woff2Util.getTableTag(flagByte & 0x3f);
             }
             var flags = 0
             var xformVersion = (flagByte >> 6) & 0x03;
@@ -75,35 +78,63 @@ define(function (require) {
 
             flags |= xformVersion;
 
-            var origLength = woff2.readUIntBase128(reader);
+            var origLength = woff2Util.readUIntBase128(reader);
             if (origLength === false) {
                 error.raise(10401);
             }
             var transformLength = origLength;
             if ((flags & 256) !== 0) {
-                transformLength = woff2.readUIntBase128(reader);
+                transformLength = woff2Util.readUIntBase128(reader);
             }
 
             if (transformLength < 0) {
                 error.raise(10401);
             }
-            var tableEntry = {
+            tableEntry = {
                 flags: flags,
                 tag: tag,
-                origLength: origLength,
+                length: origLength,
                 transformLength: transformLength
             };
             tableEntry.offset = srcOffset;
             srcOffset += transformLength;
-            tableEntries.push(tableEntry);
+            tableEntries[tableEntry.tag] = tableEntry;
         }
 
-        var compressedOffset = reader.offset;
-        var compressedBytes = reader.readBytes(compressedOffset, totalCompressedSize);
+        var compressedBytes = reader.readBytes(reader.offset, totalCompressedSize);
         var unCompressedBytes = options.decompress(compressedBytes);
-        console.log(unCompressedBytes.length);
 
-        return '';
+        reader = new Reader(new Uint8Array(unCompressedBytes).buffer);
+        var ttf = {
+            version: 0,
+            tables: tableEntries
+        };
+
+        Object.keys(ttf.tables).forEach(function (tag) {
+            if (tag === 'glyf') {
+
+            }
+            else if (tag === 'loca') {
+
+            }
+            else if (tag === 'hmtx') {
+
+            }
+            else {
+                if (supportTables[tag]) {
+                    reader.seek(ttf.tables[tag].offset);
+                    ttf[tag] = new supportTables[tag](ttf.tables[tag].offset).read(reader, ttf);
+                }
+            }
+        });
+
+        delete options.decompress;
+        // FIXME
+        // ttf.glyf = ttf.glyf || [];
+        // ttf.cmap = {};
+        // ttf.hmtx = [];
+        return ttf;
+        //return new TTFReader(options).resolve(ttf);
     }
 
 

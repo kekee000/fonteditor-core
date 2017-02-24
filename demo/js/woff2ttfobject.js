@@ -1,5 +1,5 @@
 /**
- * @file woff22ttf.js
+ * @file woff2ttfobject.js
  * @author mengke01
  * @date
  * @description
@@ -8,10 +8,11 @@
 
 define(
     function(require) {
+        var compress = window.brotli.compress;
         var decompress = window.brotli.decompress;
 
         var ajaxFile = require('common/ajaxFile');
-        var woff22ttf = require('ttf/woff22ttf');
+        var woff2ttfobject = require('ttf/woff2ttfobject');
         var TTFReader = require('ttf/ttfreader');
 
         var ttf2base64 = require('ttf/ttf2base64');
@@ -24,8 +25,9 @@ define(
                 url: './test/icomoon.woff2',
                 onSuccess: function(buffer) {
 
-                    var ttfBuffer = woff22ttf(buffer, {
-                        decompress: decompress
+                    var ttfBuffer = woff2ttfobject(buffer, {
+                        decompress: decompress,
+                        compress: compress
                     });
 
                     // var saveBtn = $('.saveas');
