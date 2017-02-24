@@ -13,6 +13,7 @@ define(function (require) {
     var error = require('./error');
     var woff2Util = require('./util/woff2');
     var supportTables = require('./table/support');
+    var Woff2HmtxTable = require('./table/woff2/hmtx');
     var TTFReader = require('./ttfreader');
 
     /**
@@ -110,7 +111,7 @@ define(function (require) {
             tables: tableEntries
         };
 
-        Object.keys(ttf.tables).forEach(function (tag) {
+        Object.keys(supportTables).forEach(function (tag) {
             if (tag === 'glyf') {
 
             }
@@ -118,11 +119,11 @@ define(function (require) {
 
             }
             else if (tag === 'hmtx') {
-
+                var tableParser = (ttf.tables.hmtx.flags & 0x03) === 0 ? supportTables[tag] : Woff2HmtxTable;
+                ttf[tag] = new tableParser(ttf.tables[tag].offset).read(reader, ttf);
             }
             else {
-                if (supportTables[tag]) {
-                    reader.seek(ttf.tables[tag].offset);
+                if (ttf.tables[tag]) {
                     ttf[tag] = new supportTables[tag](ttf.tables[tag].offset).read(reader, ttf);
                 }
             }
