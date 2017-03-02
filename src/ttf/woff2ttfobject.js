@@ -13,6 +13,7 @@ define(function (require) {
     var error = require('./error');
     var woff2Util = require('./util/woff2');
     var supportTables = require('./table/support');
+    var Woff2GlyfTable = require('./table/woff2/glyf');
     var Woff2HmtxTable = require('./table/woff2/hmtx');
     var TTFReader = require('./ttfreader');
 
@@ -113,7 +114,8 @@ define(function (require) {
 
         Object.keys(supportTables).forEach(function (tag) {
             if (tag === 'glyf') {
-
+                var tableParser = (ttf.tables.glyf.flags & 0x03) !== 0 ? supportTables[tag] : Woff2GlyfTable;
+                ttf[tag] = new tableParser(ttf.tables[tag].offset).read(reader, ttf);
             }
             else if (tag === 'loca') {
 
@@ -128,6 +130,13 @@ define(function (require) {
                 }
             }
         });
+
+        // ttf.hmtx.forEach(function (item, i) {
+        //     ttf.glyf[i].advanceWidth = item.advanceWidth;
+        //     ttf.glyf[i].leftSideBearing = item.leftSideBearing;
+        // });
+        //
+        // delete ttf.hmtx;
 
         delete options.decompress;
         // FIXME
