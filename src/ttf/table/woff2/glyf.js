@@ -13,6 +13,94 @@ define(
         var table = require('../table');
         var woff2Util = require('../../util/woff2');
 
+        function withSign(flag, baseval) {
+            // Precondition: 0 <= baseval < 65536 (to avoid integer overflow)
+            return (flag & 1) ? baseval : -baseval;
+        }
+
+        /**
+         * 解析三元组
+         *
+         * @param {Reader} reader Reader对象
+         * @param {Object} offsets 保存各个流的偏移
+         * @param {number} nPoints 总点数
+         * @return {Object} 字形的三元组
+         */
+        function tripletDecode(reader, offsets, nPoints) {
+            var x = 0;
+            var y = 0;
+            var tripletIndex = 0;
+            var result = [];
+
+            for (var i = 0; i < nPoints; i++) {
+                reader.seek(offsets.flagStream[0]);
+                var flag = reader.readUint8();
+                offsets.flagStream[0] = reader.offset;
+                var onCurve = !(flag >> 7);
+                flag &= 0x7f;
+                var nDataBytes = 0;
+                if (flag < 84) {
+                    nDataBytes = 1;
+                }
+                else if (flag < 120) {
+                    nDataBytes = 2;
+                }
+                else if (flag < 124) {
+                    nDataBytes = 3;
+                }
+                else {
+                    nDataBytes = 4;
+                }
+
+                var dx, dy;
+                reader.seek(offsets.glyphStream[0]);
+                if (flag < 10) {
+                    dx = 0;
+                    dy = withSign(flag, ((flag & 14) << 7) + reader.readUint8());
+                }
+                else if (flag < 20) {
+                    dx = withSign(flag, (((flag - 10) & 14) << 7) + reader.readUint8());
+                    dy = 0;
+                }
+                else if (flag < 84) {
+                    var b0 = flag - 20;
+                    var b1 = reader.readUint8();
+                    dx = withSign(flag, 1 + (b0 & 0x30) + (b1 >> 4));
+                    dy = withSign(flag >> 1, 1 + ((b0 & 0x0c) << 2) + (b1 & 0x0f));
+                }
+                else if (flag < 120) {
+                    var b0 = flag - 84;
+                    dx = withSign(flag, 1 + ((b0 / 12) << 8) + reader.readUint8());
+                    dy = withSign(flag >> 1, 1 + (((b0 % 12) >> 2) << 8) + reader.readUint8());
+                }
+                else if (flag < 124) {
+                    var b1 = reader.readUint8();
+                    var b2 = reader.readUint8();
+                    dx = withSign(flag, (b1 << 4) + (b2 >> 4));
+                    dy = withSign(flag >> 1, ((b2 & 0x0f) << 8) + reader.readUint8());
+                }
+                else {
+                    dx = withSign(flag, (reader.readUint8() << 8) + reader.readUint8());
+                    dy = withSign(flag >> 1, (reader.readUint8() << 8) + reader.readUint8());
+                }
+                tripletIndex += nDataBytes;
+                offsets.glyphStream[0] += nDataBytes;
+
+                // Possible overflow but coordinate values are not security sensitive
+                x += dx;
+                y += dy;
+                var tmp = {
+                    x: x,
+                    y: y
+                }
+                if (onCurve) {
+                    tmp.onCurve = onCurve
+                }
+                result.push(tmp);
+            }
+            return result;
+        }
+
         var glyf = table.create(
             'glyf',
             [],
@@ -143,83 +231,3 @@ define(
         return glyf;
     }
 );
-
-function tripletDecode(reader, offsets, nPoints, endPtsOfContours) {
-    var x = 0;
-    var y = 0;
-    var tripletIndex = 0;
-    var result = [];
-
-    for (var i = 0; i < nPoints; i++) {
-        reader.seek(offsets.flagStream[0]);
-        var flag = reader.readUint8();
-        offsets.flagStream[0] = reader.offset;
-        var onCurve = !(flag >> 7);
-        flag &= 0x7f;
-        var nDataBytes = 0;
-        if (flag < 84) {
-            nDataBytes = 1;
-        }
-        else if (flag < 120) {
-            nDataBytes = 2;
-        }
-        else if (flag < 124) {
-            nDataBytes = 3;
-        }
-        else {
-            nDataBytes = 4;
-        }
-
-        var dx, dy;
-        reader.seek(offsets.glyphStream[0]);
-        if (flag < 10) {
-            dx = 0;
-            dy = withSign(flag, ((flag & 14) << 7) + reader.readUint8());
-        }
-        else if (flag < 20) {
-            dx = withSign(flag, (((flag - 10) & 14) << 7) + reader.readUint8());
-            dy = 0;
-        }
-        else if (flag < 84) {
-            var b0 = flag - 20;
-            var b1 = reader.readUint8();
-            dx = withSign(flag, 1 + (b0 & 0x30) + (b1 >> 4));
-            dy = withSign(flag >> 1, 1 + ((b0 & 0x0c) << 2) + (b1 & 0x0f));
-        }
-        else if (flag < 120) {
-            var b0 = flag - 84;
-            dx = withSign(flag, 1 + ((b0 / 12) << 8) + reader.readUint8());
-            dy = withSign(flag >> 1, 1 + (((b0 % 12) >> 2) << 8) + reader.readUint8());
-        }
-        else if (flag < 124) {
-            var b1 = reader.readUint8();
-            var b2 = reader.readUint8();
-            dx = withSign(flag, (b1 << 4) + (b2 >> 4));
-            dy = withSign(flag >> 1, ((b2 & 0x0f) << 8) + reader.readUint8());
-        }
-        else {
-            dx = withSign(flag, (reader.readUint8() << 8) + reader.readUint8());
-            dy = withSign(flag >> 1, (reader.readUint8() << 8) + reader.readUint8());
-        }
-        tripletIndex += nDataBytes;
-        offsets.glyphStream[0] += nDataBytes;
-
-        // Possible overflow but coordinate values are not security sensitive
-        x += dx;
-        y += dy;
-        var tmp = {
-            x: x,
-            y: y
-        }
-        if (onCurve) {
-            tmp.onCurve = onCurve
-        }
-        result.push(tmp);
-    }
-    return result;
-}
-
-function withSign(flag, baseval) {
-    // Precondition: 0 <= baseval < 65536 (to avoid integer overflow)
-    return (flag & 1) ? baseval : -baseval;
-}
