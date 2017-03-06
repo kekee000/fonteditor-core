@@ -151,9 +151,7 @@ define(
                     var nPointsVec;
 
                     for (var i = 0; i < numGlyphs; i++) {
-                        glyf[i] = {
-                            contours: []
-                        };
+                        glyf[i] = {};
                         var glyph_size = 0;
                         var hasBbox = false;
 
@@ -194,6 +192,27 @@ define(
                             var flagSize = totalNPoints;
                             var triplets = tripletDecode(reader, subStreams, totalNPoints);
 
+                            glyf[i].xMin = Infinity;
+                            glyf[i].yMin = Infinity;
+                            glyf[i].xMax = -Infinity;
+                            glyf[i].yMax = -Infinity;
+                            glyf[i].contours = [];
+
+                            for (var j = 0; j < triplets.length; j++) {
+                                if (triplets[j].x > glyf[i].xMax) {
+                                    glyf[i].xMax = triplets[j].x;
+                                }
+                                if (triplets[j].x < glyf[i].xMin) {
+                                    glyf[i].xMin = triplets[j].x;
+                                }
+                                if (triplets[j].y > glyf[i].yMax) {
+                                    glyf[i].yMax = triplets[j].y;
+                                }
+                                if (triplets[j].y < glyf[i].yMin) {
+                                    glyf[i].yMin = triplets[j].y;
+                                }
+                            }
+
                             glyf[i].contours.push(triplets.slice(0, endPtsOfContours[0] + 1));
 
                             for (var j = 1, length = endPtsOfContours.length; j < length; j++) {
@@ -211,6 +230,9 @@ define(
                             //     glyf[i].instruction.push(reader.readUint8());
                             // }
 
+                        }
+                        else {
+                            glyf[i].contours = [];
                         }
 
                     }

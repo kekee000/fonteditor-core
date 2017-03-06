@@ -107,8 +107,18 @@ define(function (require) {
         var unCompressedBytes = options.decompress(compressedBytes);
 
         reader = new Reader(new Uint8Array(unCompressedBytes).buffer);
+
+        // 写头部
+        var entrySelector = Math.floor(Math.log(numTables) / Math.LN2);
+        var searchRange = Math.pow(2, entrySelector) * 16;
+        var rangeShift = numTables * 16 - searchRange;
+
         var ttf = {
-            version: 0,
+            version: 1,
+            numTables: numTables,
+            searchRange: searchRange,
+            entrySelector: entrySelector,
+            rangeShift: rangeShift,
             tables: tableEntries
         };
 
@@ -131,20 +141,12 @@ define(function (require) {
             }
         });
 
-        // ttf.hmtx.forEach(function (item, i) {
-        //     ttf.glyf[i].advanceWidth = item.advanceWidth;
-        //     ttf.glyf[i].leftSideBearing = item.leftSideBearing;
-        // });
-        //
-        // delete ttf.hmtx;
-
         delete options.decompress;
         // FIXME
         // ttf.glyf = ttf.glyf || [];
         // ttf.cmap = {};
         // ttf.hmtx = [];
-        return ttf;
-        //return new TTFReader(options).resolve(ttf);
+        return new TTFReader(options).resolve(ttf);
     }
 
 
