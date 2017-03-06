@@ -220,13 +220,10 @@ define(
          * @return {Object} ttf文档
          */
         TTFReader.prototype.resolve = function (ttf) {
-            // 标记一下 可能要改
-            ttf = ttf || this.ttf;
+            this.ttf = ttf || this.ttf;
             resolveGlyf.call(this, ttf);
             cleanTables.call(this, ttf);
-            console.log(JSON.stringify(ttf));
-            // return this.ttf;
-            return ttf;
+            return this.ttf;
         };
 
 
