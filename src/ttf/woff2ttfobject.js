@@ -13,6 +13,7 @@ define(function (require) {
     var error = require('./error');
     var woff2Util = require('./util/woff2');
     var supportTables = require('./table/support');
+    var Woff2GlyfTable = require('./table/woff2/glyf');
     var Woff2HmtxTable = require('./table/woff2/hmtx');
     var TTFReader = require('./ttfreader');
 
@@ -106,14 +107,25 @@ define(function (require) {
         var unCompressedBytes = options.decompress(compressedBytes);
 
         reader = new Reader(new Uint8Array(unCompressedBytes).buffer);
+
+        // 写头部
+        var entrySelector = Math.floor(Math.log(numTables) / Math.LN2);
+        var searchRange = Math.pow(2, entrySelector) * 16;
+        var rangeShift = numTables * 16 - searchRange;
+
         var ttf = {
-            version: 0,
+            version: 1,
+            numTables: numTables,
+            searchRange: searchRange,
+            entrySelector: entrySelector,
+            rangeShift: rangeShift,
             tables: tableEntries
         };
 
         Object.keys(supportTables).forEach(function (tag) {
             if (tag === 'glyf') {
-
+                var tableParser = (ttf.tables.glyf.flags & 0x03) !== 0 ? supportTables[tag] : Woff2GlyfTable;
+                ttf[tag] = new tableParser(ttf.tables[tag].offset).read(reader, ttf);
             }
             else if (tag === 'loca') {
 
@@ -134,8 +146,7 @@ define(function (require) {
         // ttf.glyf = ttf.glyf || [];
         // ttf.cmap = {};
         // ttf.hmtx = [];
-        return ttf;
-        //return new TTFReader(options).resolve(ttf);
+        return new TTFReader(options).resolve(ttf);
     }
 
 

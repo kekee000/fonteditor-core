@@ -41,6 +41,25 @@ define(function (require) {
             return false;
         },
 
+        writeUIntBase128: function(writer, value, offset) {
+            if (undefined === offset) {
+                offset = this.offset;
+            }
+            for (var size = 1; value >= 128; n >>= 7) {
+                ++size;
+            }
+
+            for (var i = 0; i < size; i++) {
+                var b = (value >> (7 * (size - i - 1))) & 0x7f;
+                if (i < size - 1) {
+                    b |= 0x80;
+                }
+                writer.writeUint8(b, offset);
+            }
+
+            return writer;
+        },
+
         read255UShort: function(reader) {
             var code;
             var value, value2;
@@ -72,6 +91,32 @@ define(function (require) {
             }
 
             return value;
+        },
+
+        write255UShort(writer, value, offset) {
+            if (undefined === offset) {
+                offset = this.offset;
+            }
+
+            var res = [];
+            if (value < 253) {
+                res.push(value);
+            }
+            else if (value < 506) {
+                res.push(255, value - 253);
+            }
+            else if (value < 762) {
+                res.push(254, value - 506);
+            }
+            else {
+                res.push(253, value >> 8, value & 0xff);
+            }
+
+            for (var i = 0; i < res.length; i++) {
+                writer.writeUint8(res[i], offset);
+            }
+
+            return writer;
         }
     };
 

@@ -44,14 +44,14 @@ define(
                 error.raise(10101);
             }
 
-            // searchRenge
-            ttf.searchRenge = reader.readUint16();
+            // searchRange
+            ttf.searchRange = reader.readUint16();
 
             // entrySelector
             ttf.entrySelector = reader.readUint16();
 
-            // rengeShift
-            ttf.rengeShift = reader.readUint16();
+            // rangeShift
+            ttf.rangeShift = reader.readUint16();
 
             ttf.tables = new Directory(reader.offset).read(reader, ttf);
 
@@ -220,7 +220,7 @@ define(
          * @return {Object} ttf文档
          */
         TTFReader.prototype.resolve = function (ttf) {
-            ttf = ttf || this.ttf;
+            this.ttf = ttf || this.ttf;
             resolveGlyf.call(this, ttf);
             cleanTables.call(this, ttf);
             return this.ttf;

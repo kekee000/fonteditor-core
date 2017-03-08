@@ -30,6 +30,8 @@ define(
                         compress: compress
                     });
 
+                    console.log(ttfBuffer);
+
                     // var saveBtn = $('.saveas');
                     // saveBtn.attr('href', ttf2base64(ttfBuffer));
                     // saveBtn.attr('download', 'save.woff');
