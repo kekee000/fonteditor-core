@@ -66,7 +66,7 @@ define(
                                         if (!parsedGlyfMap[g.glyphIndex]) {
                                             newSubsetMap[g.glyphIndex] = true;
                                         }
-                                    })
+                                    });
                                 }
                             });
 

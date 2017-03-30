@@ -7,7 +7,7 @@
 define(
     function (require) {
 
-        var toString = toString || Object.prototype.toString;
+        var toString = Object.prototype.toString;
 
         function isArray(obj) {
             return obj != null && toString.call(obj).slice(8, -1) === 'Array';
@@ -18,15 +18,17 @@ define(
         }
 
         function isEmptyObject(object) {
-            var name;
-            for (name in object) {
-                return false;
+            for (var name in object) {
+                if (object.hasOwnProperty(name)) {
+                    return false;
+                }
             }
             return true;
         }
 
         /**
          * 为函数提前绑定前置参数（柯里化）
+         *
          * @see http://en.wikipedia.org/wiki/Currying
          * @param {Function} fn 要绑定的函数
          * @return {Function}
@@ -41,10 +43,8 @@ define(
 
 
         /**
-         * 方法静态化
+         * 方法静态化, 反绑定、延迟绑定
          *
-         * 反绑定、延迟绑定
-         * @inner
          * @param {Function} method 待静态化的方法
          * @return {Function} 静态化包装后方法
          */
@@ -82,8 +82,7 @@ define(
          * @return {Function}
          */
         function inherits(subClass, superClass) {
-            var Empty = function () {
-            };
+            var Empty = function () {};
             Empty.prototype = superClass.prototype;
             var selfPrototype = subClass.prototype;
             var proto = subClass.prototype = new Empty();

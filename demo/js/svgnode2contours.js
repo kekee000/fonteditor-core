@@ -28,6 +28,7 @@ define(
                         var path = contours2svg(contours);
 
                         $('#path').attr('d', path);
+                        $('#origin').html(xml.documentElement.outerHTML);
                     },
                     onError: function() {
                         console.error('error read file');

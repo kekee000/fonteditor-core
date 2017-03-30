@@ -200,6 +200,7 @@ define(
 
         /**
          * 解析cff字典数据
+         *
          * @param  {Reader} reader 读取器
          * @param  {number} b0     操作码
          * @return {number}        数据

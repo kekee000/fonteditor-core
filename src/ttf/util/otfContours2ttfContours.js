@@ -11,6 +11,7 @@ define(
 
         /**
          * 转换轮廓
+         *
          * @param  {Array} otfContour otf轮廓
          * @return {Array}            ttf轮廓
          */
@@ -56,6 +57,7 @@ define(
 
         /**
          * otf轮廓转ttf轮廓
+         *
          * @param  {Array} otfContours otf轮廓数组
          * @return {Array} ttf轮廓
          */

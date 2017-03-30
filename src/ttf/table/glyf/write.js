@@ -10,6 +10,7 @@ define(
 
         /**
          * 写glyf
+         *
          * @param  {Object} writer 写入器
          * @param  {Object} ttf    ttf对象
          * @return {Object}        写入器

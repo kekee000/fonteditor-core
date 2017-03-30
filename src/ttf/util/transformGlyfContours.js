@@ -31,7 +31,7 @@ define(function (require) {
         }
 
         var compoundContours = [];
-         glyf.glyfs.forEach(function (g) {
+        glyf.glyfs.forEach(function (g) {
             var glyph = ttf.glyf[g.glyphIndex];
 
             if (!glyph || glyph === glyf) {

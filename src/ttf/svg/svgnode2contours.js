@@ -53,7 +53,6 @@ define(function (require) {
      * @return {Array|false} 轮廓数组
      */
     function svgnode2contours(xmlNodes) {
-
         var i;
         var length;
         var j;
@@ -77,6 +76,24 @@ define(function (require) {
                         params: params,
                         transform: parseTransform(node.getAttribute('transform'))
                     };
+
+                    if (node.parentNode) {
+                        var curNode = node.parentNode;
+                        var transforms = segment.transform || [];
+                        var transAttr;
+                        var iterator = function (t) {
+                            transforms.unshift(t);
+                        };
+                        while (curNode !== null && curNode.tagName !== 'svg') {
+                            transAttr = curNode.getAttribute('transform');
+                            if (transAttr) {
+                                parseTransform(transAttr).reverse().forEach(iterator);
+                            }
+                            curNode = curNode.parentNode;
+                        }
+
+                        segment.transform = transforms.length ? transforms : null;
+                    }
                     parsedSegments.push(segment);
                 }
             }

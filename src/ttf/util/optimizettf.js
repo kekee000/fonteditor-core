@@ -12,6 +12,7 @@ define(
 
         /**
          * 对ttf对象进行优化
+         *
          * @param  {Object} ttf ttf对象
          * @return {true|Object} 错误信息
          */

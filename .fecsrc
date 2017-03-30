@@ -11,6 +11,11 @@
             "max-params": 0,
             "max-depth": 0,
             "fecs-camelcase": 0
+        },
+        "globals": {
+            "ArrayBuffer": true,
+            "DataView": true,
+            "Uint8Array": true
         }
     }
 }

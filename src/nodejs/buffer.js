@@ -3,6 +3,8 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
+/* eslint-disable no-undef */
+
 /**
  * Buffer转换成ArrayBuffer
  *

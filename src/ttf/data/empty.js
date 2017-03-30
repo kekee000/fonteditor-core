@@ -2,6 +2,9 @@
  * @file 空的ttf格式json对象
  * @author mengke01(kekee000@gmail.com)
  */
+
+/* eslint-disable */
+
 define(
     function (require) {
 
