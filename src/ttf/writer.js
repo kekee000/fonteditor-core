@@ -69,7 +69,7 @@ define(
 
 
         /**
-         * 读取器
+         * 写入器
          *
          * @constructor
          * @param {Array.<byte>} buffer 缓冲数组
