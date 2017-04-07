@@ -215,6 +215,17 @@ define(
             },
 
             /**
+             * 拆分
+             *
+             * @param {number} offset 偏移
+             * @param {number} length 长度
+             * @return {Object} Reader
+             */
+            slice: function (offset, length) {
+                return new Reader(this.view.buffer, offset, length, this.littleEndian);
+            },
+
+            /**
              * 注销
              */
             dispose: function () {
@@ -227,4 +238,3 @@ define(
         return Reader;
     }
 );
-
