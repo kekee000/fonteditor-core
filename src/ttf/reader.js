@@ -60,6 +60,7 @@ define(
             }
 
             var size = dataType[type];
+            // console.log(offset);
             this.offset = offset + size;
             return this.view['get' + type](offset, littleEndian);
         }
@@ -88,6 +89,8 @@ define(
             this.littleEndian = littleEndian || false;
 
             this.view = new DataView(buffer, this.offset, this.length);
+
+            this.offset = 0;
         }
 
         Reader.prototype = {
