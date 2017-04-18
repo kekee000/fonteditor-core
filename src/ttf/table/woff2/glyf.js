@@ -3,9 +3,6 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-// 98% of Google Fonts have no glyph above 5k bytes
-// Largest glyph ever observed was 72k bytes
-var defaultGlyphBuf = 5120;
 var MAX_INSTRUCTION_LENGTH = 5000; // 设置instructions阈值防止读取错误
 
 define(
@@ -14,6 +11,7 @@ define(
         var table = require('../table');
         var woff2Util = require('../../util/woff2');
         var componentFlag = require('../../enum/componentFlag');
+        var error = require('../../error');
 
         function withSign(flag, baseval) {
             // Precondition: 0 <= baseval < 65536 (to avoid integer overflow)
@@ -52,7 +50,8 @@ define(
                     nDataBytes = 4;
                 }
 
-                var dx, dy;
+                var dx;
+                var dy;
                 if (flag < 10) {
                     dx = 0;
                     dy = withSign(flag, ((flag & 14) << 7) + glyphStream.readUint8());
@@ -90,9 +89,9 @@ define(
                 var tmp = {
                     x: x,
                     y: y
-                }
+                };
                 if (onCurve) {
-                    tmp.onCurve = onCurve
+                    tmp.onCurve = onCurve;
                 }
                 result.push(tmp);
             }
@@ -226,14 +225,14 @@ define(
 
                     var streamNames = ['nContourStream', 'nPointsStream', 'flagStream', 'glyphStream', 'compositeStream', 'bboxStream', 'instructionStream'];
 
-                    streamNames.forEach(function(key) {
+                    streamNames.forEach(function (key) {
                         var subStreamSize = reader.readUint32();
                         if (subStreamSize > ttf.tables.glyf.transformLength - offset) {
                             console.log('error');
                         }
                         subStreams[key] = reader.slice(start + offset, subStreamSize);
                         offset += subStreamSize;
-                    })
+                    });
 
                     var bboxBitmapSize = ((numGlyphs + 31) >> 5) << 2;
                     var bboxBitmap = new Uint8Array(subStreams.bboxStream.view.buffer, subStreams.bboxStream.offset, bboxBitmapSize);
@@ -242,7 +241,6 @@ define(
 
                     for (var i = 0; i < numGlyphs; i++) {
                         glyf[i] = {};
-                        var glyph_size = 0;
                         var hasBbox = false;
 
                         if (bboxBitmap[i >> 3] & (0x80 >> (i & 7))) {
@@ -272,9 +270,9 @@ define(
                                 endPtsOfContours[j] = j === 0 ? nPointsVec[j] : nPointsVec[j] + endPtsOfContours[j - 1];
                             }
 
-                            endPtsOfContours = endPtsOfContours.map(function(el) {
+                            endPtsOfContours = endPtsOfContours.map(function (el) {
                                 return el - 1;
-                            })
+                            });
 
                             var flagSize = totalNPoints;
                             var flagStreamOffset = subStreams.flagStream.offset;
@@ -289,7 +287,7 @@ define(
                             glyf[i].yMax = -Infinity;
                             glyf[i].contours = [];
 
-                            for (var j = 0; j < triplets.length; j++) {
+                            for (j = 0; j < triplets.length; j++) {
                                 if (triplets[j].x > glyf[i].xMax) {
                                     glyf[i].xMax = triplets[j].x;
                                 }
@@ -306,23 +304,23 @@ define(
 
                             glyf[i].contours.push(triplets.slice(0, endPtsOfContours[0] + 1));
 
-                            for (var j = 1, length = endPtsOfContours.length; j < length; j++) {
+                            for (j = 1, length = endPtsOfContours.length; j < length; j++) {
                                 glyf[i].contours.push(triplets.slice(endPtsOfContours[j - 1] + 1, endPtsOfContours[j] + 1));
                             }
 
                             var instructionSize = woff2Util.read255UShort(subStreams.glyphStream);
                             if (instructionSize > 0) {
                                 glyf[i].instructions = [];
-                                for (var j = 0; j < instructionSize; j++) {
+                                for (j = 0; j < instructionSize; j++) {
                                     glyf[i].instructions.push(subStreams.instructionStream.readUint8());
                                 }
                             }
 
                             if (hasBbox) {
-                                glyf[i].xMin = bboxStream.readInt16();
-                                glyf[i].yMin = bboxStream.readInt16();
-                                glyf[i].xMax = bboxStream.readInt16();
-                                glyf[i].yMax = bboxStream.readInt16();
+                                glyf[i].xMin = subStreams.bboxStream.readInt16();
+                                glyf[i].yMin = subStreams.bboxStream.readInt16();
+                                glyf[i].xMax = subStreams.bboxStream.readInt16();
+                                glyf[i].yMax = subStreams.bboxStream.readInt16();
                             }
                         }
                         else {
