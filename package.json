@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "0.0.40",
+  "version": "1.0.2",
   "description": "fonts (ttf, woff, eot, svg, otf) parse, write, transform. glyph adjust.",
   "keywords": [
     "sfnt",
@@ -43,8 +43,6 @@
     "dependencies": {}
   },
   "dependencies": {
-    "esprima": "^2.7.3",
-    "estraverse": "^4.2.0",
     "xmldom": "~0.1.19"
   },
   "repository": {
