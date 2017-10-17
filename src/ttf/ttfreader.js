@@ -154,8 +154,11 @@ define(
             delete ttf.tables;
             delete ttf.hmtx;
             delete ttf.loca;
-            delete ttf.post.nameIndex;
-            delete ttf.post.names;
+            if (ttf.post) {
+                delete ttf.post.nameIndex;
+                delete ttf.post.names;
+            }
+
             delete ttf.subsetMap;
 
             // 不携带hinting信息则删除hint相关表
