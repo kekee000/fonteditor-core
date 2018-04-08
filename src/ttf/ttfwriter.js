@@ -86,7 +86,7 @@ define(
 
             // 将glyf的代码点按小到大排序
             ttf.glyf.forEach(function (glyf, index) {
-                if (glyf.unicode) {
+                if (glyf && glyf.unicode) {
                     glyf.unicode = glyf.unicode.sort();
 
                     glyf.unicode.forEach(function (u) {
