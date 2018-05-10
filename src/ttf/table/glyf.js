@@ -50,19 +50,20 @@ define(
                         var travelsParse = function travels(subsetMap) {
                             var newSubsetMap = {};
                             Object.keys(subsetMap).forEach(function (i) {
-                                parsedGlyfMap[i] = true;
+                                var index = Number(i)
+                                parsedGlyfMap[index] = true;
                                 // 当前的和下一个一样，或者最后一个无轮廓
-                                if (loca[i] === loca[i + 1]) {
-                                    glyphs[i] = {
+                                if (loca[index] === loca[index + 1]) {
+                                    glyphs[index] = {
                                         contours: []
                                     };
                                 }
                                 else {
-                                    glyphs[i] = parse(reader, ttf, startOffset + loca[i]);
+                                    glyphs[index] = parse(reader, ttf, startOffset + loca[index]);
                                 }
 
-                                if (glyphs[i].compound) {
-                                    glyphs[i].glyfs.forEach(function (g) {
+                                if (glyphs[index].compound) {
+                                    glyphs[index].glyfs.forEach(function (g) {
                                         if (!parsedGlyfMap[g.glyphIndex]) {
                                             newSubsetMap[g.glyphIndex] = true;
                                         }
