@@ -2,6 +2,7 @@
 var fs = require('fs');
 var Font = require('./fonteditor-core').Font;
 var assert = require('assert');
+var md5 = require('./util').md5;
 
 function readttf(file) {
     return fs.readFileSync(file);
@@ -11,14 +12,22 @@ function writettf(buffer) {
     var font = Font.create(buffer, {
         type: 'ttf'
     });
+    var font2 = Font.create(buffer, {
+        type: 'ttf'
+    });
 
     assert(font.data.name.fontFamily === 'Bebas', 'test read ttf');
 
 
     var ttfBuffer = font.write();
-
     // 写ttf
     assert(ttfBuffer.length, 'test write ttf');
+
+
+    var ttfBuffer2 = font2.write();
+    setTimeout(function () {
+        assert(md5(ttfBuffer) === md5(ttfBuffer2), 'test write stable');
+    }, 10);
 
     // 写eot
     var eotBuffer = font.write({
@@ -31,6 +40,13 @@ function writettf(buffer) {
         type: 'woff'
     });
     assert(woffBuffer, 'test write woff');
+
+    var woffBuffer2 = font2.write({
+        type: 'woff'
+    });
+    setTimeout(function () {
+        assert(md5(woffBuffer) === md5(woffBuffer2), 'test write stable');
+    }, 10);
 
     // 写svg
     var svg = font.write({

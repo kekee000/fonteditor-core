@@ -50,7 +50,7 @@ define(
                         var travelsParse = function travels(subsetMap) {
                             var newSubsetMap = {};
                             Object.keys(subsetMap).forEach(function (i) {
-                                var index = Number(i)
+                                var index = +i;
                                 parsedGlyfMap[index] = true;
                                 // 当前的和下一个一样，或者最后一个无轮廓
                                 if (loca[index] === loca[index + 1]) {

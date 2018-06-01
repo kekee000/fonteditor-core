@@ -77,10 +77,20 @@ define(
             ttf.head.magickNumber = 0x5F0F3CF5;
 
             if (typeof ttf.head.created === 'string') {
-                ttf.head.created = /^\d+$/.test(ttf.head.created) ? +ttf.head.created : Date.parse(ttf.head.created);
+                ttf.head.created = /^\d+$/.test(ttf.head.created)
+                    ? +ttf.head.created : Date.parse(ttf.head.created);
             }
-
-            ttf.head.modified = Date.now();
+            if (typeof ttf.head.modified === 'string') {
+                ttf.head.modified = /^\d+$/.test(ttf.head.modified)
+                    ? +ttf.head.modified : Date.parse(ttf.head.modified);
+            }
+            // 重置日期
+            if (!ttf.head.created) {
+                ttf.head.created = Date.now();
+            }
+            if (!ttf.head.modified) {
+                ttf.head.modified = ttf.head.created;
+            }
 
             var checkUnicodeRepeat = {}; // 检查是否有重复代码点
 
