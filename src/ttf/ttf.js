@@ -738,6 +738,9 @@ define(
                 if (head.created) {
                     this.ttf.head.created = head.created;
                 }
+                if (head.modified) {
+                    this.ttf.head.modified = head.modified;
+                }
             }
             return this.ttf.head;
         };
