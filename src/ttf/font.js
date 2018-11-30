@@ -6,7 +6,6 @@
 
 
 define(function (require) {
-    var lang = require('../common/lang');
     var bufferTool = require('../nodejs/buffer');
 
     var getEmptyttfObject = require('./getEmptyttfObject');
@@ -232,7 +231,8 @@ define(function (require) {
     /**
      * 设置 font 对象
      *
-     * @return {Object} ttfObject 对象
+     * @param {Object} data font的ttfObject对象
+     * @return {this}
      */
     Font.prototype.set = function (data) {
         this.data = data;

@@ -44,7 +44,14 @@ define(
          */
         function resolveSVG(svg) {
             // 去除xmlns，防止xmlns导致svg解析错误
-            svg = svg.replace(/\s+xmlns(?:\:[\w-]+)?=("|')[^"']*\1/g, ' ');
+            svg = svg.replace(/\s+xmlns(?:\:[\w-]+)?=("|')[^"']*\1/g, ' ')
+                .replace(/<defs[>\s][\s\S]+?\/defs>/g, function (text) {
+                    if (text.indexOf('</font>') >= 0) {
+                        return text;
+                    }
+                    return '';
+                })
+                .replace(/<use[>\s][\s\S]+?\/use>/g, '');
             return svg;
         }
 

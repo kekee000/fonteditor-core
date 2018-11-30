@@ -155,8 +155,11 @@ define(
             delete ttf.tables;
             delete ttf.hmtx;
             delete ttf.loca;
-            delete ttf.post.nameIndex;
-            delete ttf.post.names;
+            if (ttf.post) {
+                delete ttf.post.nameIndex;
+                delete ttf.post.names;
+            }
+
             delete ttf.subsetMap;
 
             // 不携带hinting信息则删除hint相关表
@@ -193,10 +196,9 @@ define(
          */
         function TTFReader(options) {
             options = options || {};
-
-            options.subset = options.subset || [],       // 子集
-            options.hinting = options.hinting || false, // 不保留hints信息
-            options.compound2simple = options.compound2simple || false // 复合字形转简单字形
+            options.subset = options.subset || [];       // 子集
+            options.hinting = options.hinting || false; // 不保留hints信息
+            options.compound2simple = options.compound2simple || false; // 复合字形转简单字形
 
             this.options = options;
         }

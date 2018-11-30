@@ -22,6 +22,7 @@ define(
             var l;
             var glyphIdArray;
             var startOffset = cmapOffset + subTable.offset;
+            var glyphCount;
             subTable.format = reader.readUint16(startOffset);
 
             // 0～256 紧凑排列
@@ -54,7 +55,7 @@ define(
                 }
 
                 var subHeads = [];
-                for (var i = 0; i <= maxSubHeadKey; i++) {
+                for (i = 0; i <= maxSubHeadKey; i++) {
                     subHeads[i] = {
                         firstCode: reader.readUint16(),
                         entryCount: reader.readUint16(),
@@ -63,9 +64,9 @@ define(
                     };
                 }
 
-                var glyphCount = (startOffset + format2.length - reader.offset) / 2;
+                glyphCount = (startOffset + format2.length - reader.offset) / 2;
                 var glyphs = [];
-                for (var i = 0; i < glyphCount; i++) {
+                for (i = 0; i < glyphCount; i++) {
                     glyphs[i] = reader.readUint16();
                 }
 
@@ -122,7 +123,7 @@ define(
                 format4.idRangeOffset = idRangeOffset;
 
                 // 总长度 - glyphIdArray起始偏移/2
-                var glyphCount = (format4.length - (reader.offset - startOffset)) / 2;
+                glyphCount = (format4.length - (reader.offset - startOffset)) / 2;
 
                 // 记录array offset
                 format4.glyphIdArrayOffset = reader.offset;

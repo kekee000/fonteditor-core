@@ -4,11 +4,8 @@
  */
 
 define(function (require) {
-    var pathAdjust = require('../../graphics/pathAdjust');
+    var matrixUtil = require('../../graphics/matrix');
     var pathTransform = require('../../graphics/pathTransform');
-    var pathRotate = require('../../graphics/pathRotate');
-    var pathSkewX = require('../../graphics/pathSkewX');
-    var pathSkewY = require('../../graphics/pathSkewY');
 
     /**
      * 根据transform参数变换轮廓
@@ -27,31 +24,50 @@ define(function (require) {
             return contours;
         }
 
-        contours.forEach(function (p) {
-            for (var i = 0, l = transforms.length; i < l; i++) {
-                var transform = transforms[i];
-                var params = transform.params;
-                switch (transform.name) {
-                    case 'translate':
-                        pathAdjust(p, 1, 1, params[0], params[1]);
-                        break;
-                    case 'scale':
-                        pathAdjust(p, params[0], params[1]);
-                        break;
-                    case 'matrix':
-                        pathTransform(p, params[0], params[1], params[2], params[3], params[4], params[5]);
-                        break;
-                    case 'rotate':
-                        pathRotate(p, params[0] * Math.PI / 180, params[1], params[2]);
-                        break;
-                    case 'skewX':
-                        pathSkewX(p, params[0] * Math.PI / 180);
-                        break;
-                    case 'skewY':
-                        pathSkewY(p, params[0] * Math.PI / 180);
-                        break;
-                }
+        var matrix = [1, 0, 0, 1, 0, 0];
+        for (var i = 0, l = transforms.length; i < l; i++) {
+            var transform = transforms[i];
+            var params = transform.params;
+            switch (transform.name) {
+                case 'translate':
+                    matrix = matrixUtil.mul(matrix, [1, 0, 0, 1, params[0], params[1]]);
+                    break;
+                case 'scale':
+                    matrix = matrixUtil.mul(matrix, [params[0], 0, 0, params[1], 0, 0]);
+                    break;
+                case 'matrix':
+                    matrix = matrixUtil.mul(matrix,
+                        [params[0], params[1], params[2], params[3], params[4], params[5]]);
+                    break;
+                case 'rotate':
+                    var radian = params[0] * Math.PI / 180;
+                    if (params.length > 1) {
+
+                        matrix = matrixUtil.multiply(
+                            matrix,
+                            [1, 0, 0, 1, -params[1], -params[2]],
+                            [Math.cos(radian), Math.sin(radian), -Math.sin(radian), Math.cos(radian), 0, 0],
+                            [1, 0, 0, 1, params[1], params[2]]
+                        );
+                    }
+                    else {
+                        matrix = matrixUtil.mul(
+                            matrix, [Math.cos(radian), Math.sin(radian), -Math.sin(radian), Math.cos(radian), 0, 0]);
+                    }
+                    break;
+                case 'skewX':
+                    matrix = matrixUtil.mul(matrix,
+                        [1, 0, Math.tan(params[0] * Math.PI / 180), 1, 0, 0]);
+                    break;
+                case 'skewY':
+                    matrix = matrixUtil.mul(matrix,
+                        [1, Math.tan(params[0] * Math.PI / 180), 0, 1, 0, 0]);
+                    break;
             }
+        }
+
+        contours.forEach(function (p) {
+            pathTransform(p, matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
         });
 
         return contours;

@@ -12,6 +12,7 @@ define(
 
         /**
          * 读取ttf中windows字符表的字符
+         *
          * @param {Array} tables cmap表结构
          * @param {Object} ttf ttf对象
          * @return {Object} 字符字典索引，unicode => glyf index
@@ -20,6 +21,7 @@ define(
 
             var codes = {};
             var i;
+            var index;
             var l;
             var start;
             var end;
@@ -86,7 +88,7 @@ define(
                         }
                         // rely on to glyphIndexArray
                         else {
-                            var index = i + format4.idRangeOffset[i] / 2
+                            index = i + format4.idRangeOffset[i] / 2
                                 + (start - format4.startCode[i])
                                 - graphIdArrayIndexOffset;
 
@@ -110,10 +112,10 @@ define(
                 var subHeadKeys = format2.subHeadKeys;
                 var subHeads = format2.subHeads;
                 var glyphs = format2.glyphs;
-                var numGlyphs = ttf.maxp.numGlyphs
-                var index = 0;
+                var numGlyphs = ttf.maxp.numGlyphs;
+                index = 0;
 
-                for (var i = 0; i < 256; i++) {
+                for (i = 0; i < 256; i++) {
                     // 单字节编码
                     if (subHeadKeys[i] === 0) {
                         if (i >= format2.maxPos) {
@@ -144,7 +146,7 @@ define(
                             }
 
                             if (index !== 0 && index < numGlyphs) {
-                                var unicode = ((i <<8) | (j + subHeads[k].firstCode)) % 0xffff;
+                                var unicode = ((i << 8) | (j + subHeads[k].firstCode)) % 0xffff;
                                 codes[unicode] = index;
                             }
 

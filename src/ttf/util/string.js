@@ -51,7 +51,7 @@ define(
                 }
                 return String(str).replace(/[\uff-\uffff]/g, function (c) {
                     return escape(c).replace('%', '\\');
-                })
+                });
             },
 
             /**

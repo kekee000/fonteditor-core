@@ -1,17 +1,17 @@
 /**
  * @file buffer.js
  * @author mengke01
- * @date 
+ * @date
  * @description
  * buffer和ArrayBuffer转换
  */
-
+const crypto = require('crypto');
 
 /**
  * buffer转换成ArrayBuffer
- * 
+ *
  * @param {Buffer} buffer 缓冲数组
- * @return {ArrayBuffer} 
+ * @return {ArrayBuffer}
  */
 function toArrayBuffer(buffer) {
     var length = buffer.length;
@@ -24,9 +24,9 @@ function toArrayBuffer(buffer) {
 
 /**
  * ArrayBuffer转换成Buffer
- * 
+ *
  * @param {ArrayBuffer} arrayBuffer 缓冲数组
- * @return {Buffer} 
+ * @return {Buffer}
  */
 function toBuffer(arrayBuffer) {
     var length = arrayBuffer.byteLength;
@@ -38,7 +38,13 @@ function toBuffer(arrayBuffer) {
     return buffer;
 }
 
+
+function md5(text) {
+    return crypto.createHash('md5').update(text).digest('hex');
+}
+
 module.exports = {
     toArrayBuffer: toArrayBuffer,
-    toBuffer: toBuffer
+    toBuffer: toBuffer,
+    md5: md5
 };

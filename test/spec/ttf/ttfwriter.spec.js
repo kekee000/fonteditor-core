@@ -43,6 +43,8 @@ define(
 
                 expect(ttf.cmap[0]).toBe(1);
                 expect(ttf.cmap[57400]).toBe(16);
+                expect(+ttf.head.created === +fontObject.head.created).toBe(true);
+                expect(+ttf.head.modified === +fontObject.head.modified).toBe(true);
 
             });
 

@@ -19,6 +19,7 @@ define(
         /**
          * 管理国际化字符，根据lang切换语言版本
          *
+         * @class I18n
          * @param {Array} languageList 当前支持的语言列表
          * @param {string=} defaultLanguage 默认语言
          * languageList = [
@@ -64,6 +65,7 @@ define(
 
         /**
          * 获取当前语言字符串
+         *
          * @param  {string} path 语言路径
          * @return {string}      语言字符串
          */

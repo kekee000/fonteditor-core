@@ -25,8 +25,8 @@ define(
 
             // 轮廓点个数
             var numberOfCoordinates = glyf.endPtsOfContours[
-                    glyf.endPtsOfContours.length - 1
-                ] + 1;
+                glyf.endPtsOfContours.length - 1
+            ] + 1;
 
             // 判断坐标是否超过最大个数
             if (numberOfCoordinates > MAX_NUMBER_OF_COORDINATES) {
