@@ -8,7 +8,7 @@ define(
 
         function checkSumArrayBuffer(buffer, offset, length) {
             offset = offset || 0;
-            length = length || buffer.byteLength;
+            length = length == undefined ? buffer.byteLength : length;
 
             if (offset + length > buffer.byteLength) {
                 throw new Error('check sum out of bound');

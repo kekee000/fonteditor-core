@@ -22,6 +22,7 @@ define(
             var contours = [];
             var contour = [];
             var stack = [];
+            var glyfs = [];
             var nStems = 0;
             var haveWidth = false;
             var width = font.defaultWidthX;
@@ -249,9 +250,20 @@ define(
                             }
                             break;
                         case 14: // endchar
-                            if (stack.length > 0 && !haveWidth) {
+                            if (stack.length == 1 && !haveWidth) {
                                 width = stack.shift() + font.nominalWidthX;
                                 haveWidth = true;
+                            }
+                            else if (stack.length == 4) {
+                              glyfs[0] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()])};
+                              glyfs[1] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]), transform: {a:1, b:0, c:0, d:1, f: stack.pop(), e:stack.pop()};
+                            }
+                            else if (stack.length == 5) {
+                              if (!haveWidth)
+                                width = stack.shift() + font.nominalWidthX;
+                              haveWidth = true;
+                              glyfs[0] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()])};
+                              glyfs[1] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]), transform: {a:1, b:0, c:0, d:1, f: stack.pop(), e:stack.pop()};
                             }
 
                             if (open) {
@@ -455,6 +467,8 @@ define(
 
                 advanceWidth: width
             };
+            if (glyfs.length)
+              glyf.glyfs = glyfs;
             return glyf;
         }
 

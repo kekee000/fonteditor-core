@@ -26,7 +26,7 @@ define(
             var signature = reader.readUint32(0);
             var flavor = reader.readUint32(4);
 
-            if (signature !== 0x774F4646 || flavor !== 0x10000) {
+            if (signature !== 0x774F4646 || (flavor !== 0x10000 && flavor !== 0x4f54544f)) {
                 reader.dispose();
                 error.raise(10102);
             }
@@ -76,7 +76,7 @@ define(
             var searchRange = Math.pow(2, entrySelector) * 16;
             var rangeShift = numTables * 16 - searchRange;
 
-            writer.writeFixed(1);
+            writer.writeUint32(flavor);
             writer.writeUint16(numTables);
             writer.writeUint16(searchRange);
             writer.writeUint16(entrySelector);
