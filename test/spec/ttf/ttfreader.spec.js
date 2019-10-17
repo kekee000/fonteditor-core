@@ -1,140 +1,139 @@
+/**
+ * @file ttfreader
+ * @author mengke01(kekee000@gmail.com)
+ */
+import assert from 'assert';
+import TTFReader from 'fonteditor-core/ttf/ttfreader';
 
-define(
-    function (require) {
+describe('读ttf数据', function () {
 
-        var TTFReader = require('ttf/ttfreader');
+    let fontObject = new TTFReader().read(require('testdata/baiduHealth.ttf'));
 
-        describe('读ttf数据', function () {
+    it('test read ttf', function () {
+        assert.equal(fontObject.version, 1);
+        assert.equal(fontObject.numTables, 15);
+        assert.equal(fontObject.rengeShift, 112);
+        assert.equal(fontObject.searchRenge, 128);
+    });
 
-            var fontObject = new TTFReader().read(require('data/baiduHealth.ttf'));
+    it('test read ttf head', function () {
+        assert.equal(fontObject.head.magickNumber, 1594834165);
+        assert.equal(fontObject.head.unitsPerEm, 512);
+        assert.equal(fontObject.head.checkSumAdjustment, 541516270);
+    });
 
-            it('test read ttf', function () {
-                expect(fontObject.version).toBe(1);
-                expect(fontObject.numTables).toBe(15);
-                expect(fontObject.rengeShift).toBe(112);
-                expect(fontObject.searchRenge).toBe(128);
-            });
-
-            it('test read ttf head', function () {
-                expect(fontObject.head.magickNumber).toBe(1594834165);
-                expect(fontObject.head.unitsPerEm).toBe(512);
-                expect(fontObject.head.checkSumAdjustment).toBe(541516270);
-            });
-
-            it('test read ttf name', function () {
-                expect(fontObject.name.fontFamily).toBe('baiduHealth');
-                expect(fontObject.name.fontSubFamily).toBe('Regular');
-                expect(fontObject.name.fullName).toBe('baiduHealth');
-            });
+    it('test read ttf name', function () {
+        assert.equal(fontObject.name.fontFamily, 'baiduHealth');
+        assert.equal(fontObject.name.fontSubFamily, 'Regular');
+        assert.equal(fontObject.name.fullName, 'baiduHealth');
+    });
 
 
-            it('test read ttf post', function () {
-                expect(fontObject.post.format).toBe(2);
-                expect(fontObject.post.underlinePosition).toBe(0);
-                expect(fontObject.post.underlineThickness).toBe(0);
-            });
+    it('test read ttf post', function () {
+        assert.equal(fontObject.post.format, 2);
+        assert.equal(fontObject.post.underlinePosition, 0);
+        assert.equal(fontObject.post.underlineThickness, 0);
+    });
 
-            it('test read ttf hhea', function () {
-                expect(fontObject.hhea.advanceWidthMax).toBe(682);
-                expect(fontObject.hhea.ascent).toBe(480);
-                expect(fontObject.hhea.descent).toBe(-33);
-            });
+    it('test read ttf hhea', function () {
+        assert.equal(fontObject.hhea.advanceWidthMax, 682);
+        assert.equal(fontObject.hhea.ascent, 480);
+        assert.equal(fontObject.hhea.descent, -33);
+    });
 
-            it('test read ttf maxp', function () {
-                expect(fontObject.maxp.version).toBe(1);
-                expect(fontObject.maxp.numGlyphs).toBe(17);
-            });
+    it('test read ttf maxp', function () {
+        assert.equal(fontObject.maxp.version, 1);
+        assert.equal(fontObject.maxp.numGlyphs, 17);
+    });
 
-            it('test read ttf glyf', function () {
-                expect(fontObject.glyf[0].advanceWidth).toBe(512);
-                expect(fontObject.glyf[0].leftSideBearing).toBe(0);
-                expect(fontObject.glyf[0].name).toBe('.notdef');
-                expect(fontObject.glyf[3].contours[0].length).toBe(31);
-                expect(fontObject.glyf[16].compound).toBe(true);
-                expect(fontObject.glyf[16].glyfs.length).toBe(2);
-            });
+    it('test read ttf glyf', function () {
+        assert.equal(fontObject.glyf[0].advanceWidth, 512);
+        assert.equal(fontObject.glyf[0].leftSideBearing, 0);
+        assert.equal(fontObject.glyf[0].name, '.notdef');
+        assert.equal(fontObject.glyf[3].contours[0].length, 31);
+        assert.equal(fontObject.glyf[16].compound, true);
+        assert.equal(fontObject.glyf[16].glyfs.length, 2);
+    });
 
-            it('test read ttf cmap', function () {
-                expect(fontObject.cmap[0]).toBe(1);
-                expect(fontObject.cmap[57400]).toBe(16);
-            });
+    it('test read ttf cmap', function () {
+        assert.equal(fontObject.cmap[0], 1);
+        assert.equal(fontObject.cmap[57400], 16);
+    });
+});
+
+describe('转换compound到simple', function () {
+
+    let fontObject = new TTFReader({
+        compound2simple: true
+    }).read(require('testdata/baiduHealth.ttf'));
+
+    it('test read ttf glyf', function () {
+        assert.equal(!!fontObject.glyf[16].compound, false);
+        assert.equal(!!fontObject.glyf[16].glyfs, false);
+        assert.equal(fontObject.glyf[16].contours.length, 4);
+    });
+});
+
+describe('读ttf hinting数据', function () {
+    let fontObject = new TTFReader({
+        hinting: true
+    }).read(require('testdata/baiduHealth-hinting.ttf'));
+
+    it('test read hinting', function () {
+        assert.equal(fontObject.cvt.length, 24);
+        assert.equal(fontObject.fpgm.length, 371);
+        assert.equal(fontObject.prep.length, 204);
+        assert.equal(fontObject.gasp.length, 8);
+    });
+
+});
+
+describe('ttf subset', function () {
+    let fontObject = new TTFReader({
+        subset: [
+            65, 0xe003, 0xe00d
+        ]
+    }).read(require('testdata/baiduHealth.ttf'));
+
+    it('test read subset', function () {
+        assert.equal(fontObject.glyf.length, 3);
+        assert.equal(fontObject.glyf[0].name, '.notdef');
+        assert.equal(fontObject.glyf[1].unicode[0], 0xe003);
+        assert.equal(fontObject.glyf[2].unicode[0], 0xe00d);
+        assert.equal(fontObject.subsetMap, null);
+    });
+});
+
+describe('ttf subset with compound', function () {
+    let fontObject = new TTFReader({
+        subset: [
+            65, 0x21, 0x22
+        ]
+    }).read(require('testdata/wingdings3.ttf'));
+
+    it('test read hinting', function () {
+        assert.equal(fontObject.glyf.length, 3);
+        assert.equal(fontObject.glyf[0].name, '.notdef');
+        assert.equal(fontObject.glyf[1].unicode[0], 0x21);
+        assert.equal(fontObject.glyf[1].compound, null);
+        assert.equal(fontObject.glyf[2].unicode[0], 0x22);
+        assert.equal(fontObject.glyf[2].contours.length, 1);
+        assert.equal(fontObject.glyf[2].compound, null);
+        assert.equal(fontObject.subsetMap, null);
+    });
+});
+
+describe('读错误ttf数据', function () {
+
+    it('test read version error', function () {
+        assert.throws(function () {
+            new TTFReader().read(new Uint8Array([0, 1, 0, 0, 25, 4, 11]).buffer);
         });
+    });
 
-        describe('转换compound到simple', function () {
-
-            var fontObject = new TTFReader({
-                compound2simple: true
-            }).read(require('data/baiduHealth.ttf'));
-
-            it('test read ttf glyf', function () {
-                expect(!!fontObject.glyf[16].compound).toBe(false);
-                expect(!!fontObject.glyf[16].glyfs).toBe(false);
-                expect(fontObject.glyf[16].contours.length).toBe(4);
-            });
+    it('test read range error', function () {
+        assert.throws(function () {
+            new TTFReader().read(new Uint8Array([0, 1, 0, 0, 0, 10, 11, 45, 8]).buffer);
         });
-
-        describe('读ttf hinting数据', function () {
-            var fontObject = new TTFReader({
-                hinting: true
-            }).read(require('data/baiduHealth-hinting.ttf'));
-
-            it('test read hinting', function () {
-                expect(fontObject.cvt.length).toBe(24);
-                expect(fontObject.fpgm.length).toBe(371);
-                expect(fontObject.prep.length).toBe(204);
-                expect(fontObject.gasp.length).toBe(8);
-            });
-
-        });
-
-        describe('ttf subset', function () {
-            var fontObject = new TTFReader({
-                subset: [
-                    65, 0xe003, 0xe00d
-                ]
-            }).read(require('data/baiduHealth.ttf'));
-
-            it('test read subset', function () {
-                expect(fontObject.glyf.length).toBe(3);
-                expect(fontObject.glyf[0].name).toBe('.notdef');
-                expect(fontObject.glyf[1].unicode[0]).toBe(0xe003);
-                expect(fontObject.glyf[2].unicode[0]).toBe(0xe00d);
-                expect(fontObject.subsetMap).toBeUndefined();
-            });
-        });
-
-        describe('ttf subset with compound', function () {
-            var fontObject = new TTFReader({
-                subset: [
-                    65, 0x21, 0x22
-                ]
-            }).read(require('data/wingdings3.ttf'));
-
-            it('test read hinting', function () {
-                expect(fontObject.glyf.length).toBe(3);
-                expect(fontObject.glyf[0].name).toBe('.notdef');
-                expect(fontObject.glyf[1].unicode[0]).toBe(0x21);
-                expect(fontObject.glyf[1].compound).toBeUndefined();
-                expect(fontObject.glyf[2].unicode[0]).toBe(0x22);
-                expect(fontObject.glyf[2].contours.length).toBe(1);
-                expect(fontObject.glyf[2].compound).toBeUndefined();
-                expect(fontObject.subsetMap).toBeUndefined();
-            });
-        });
-
-        describe('读错误ttf数据', function () {
-
-            it('test read version error', function () {
-                expect(function () {
-                    new TTFReader().read(new Uint8Array([0, 1, 0, 0, 25, 4, 11]).buffer);
-                }).toThrow();
-            });
-
-            it('test read range error', function () {
-                expect(function () {
-                    new TTFReader().read(new Uint8Array([0, 1, 0, 0, 0, 10, 11, 45, 8]).buffer);
-                }).toThrow();
-            });
-        });
-    }
-);
+    });
+});

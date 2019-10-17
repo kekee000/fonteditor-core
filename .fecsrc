@@ -6,16 +6,21 @@
         },
 
         "rules": {
-            "no-console": 0,
-            "fecs-max-statements": 0,
-            "max-params": 0,
-            "max-depth": 0,
-            "fecs-camelcase": 0
+            "no-console": false,
+            "fecs-max-statements": false,
+            "max-params": false,
+            "max-depth": false,
+            "fecs-camelcase": false,
+            "fecs-use-computed-property": false,
+            "fecs-prefer-destructure": false,
+            "fecs-export-on-declare": false,
+            "fecs-use-computed-property": false
         },
         "globals": {
             "ArrayBuffer": true,
             "DataView": true,
-            "Uint8Array": true
+            "Uint8Array": true,
+            "Int8Array": true
         }
     }
 }

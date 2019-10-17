@@ -3,9 +3,7 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-const btoa = typeof window !== 'undefined' ? window.btoa : function (str) {
-    return Buffer.from(str, 'binary').toString('base64');
-};
+/* globals btoa */
 
 /**
  * 二进制byte流转base64编码
@@ -33,5 +31,10 @@ export default function bytes2base64(buffer) {
         }
     }
 
-    return btoa(str);
+    if (!str) {
+        return '';
+    }
+    return typeof btoa !== 'undefined'
+        ? btoa(str)
+        : Buffer.from(str, 'binary').toString('base64');
 }

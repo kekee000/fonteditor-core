@@ -1,25 +1,27 @@
-
-var fs = require('fs');
-var TTFWriter = require('./fonteditor-core').TTFWriter;
-var svg2ttfobject = require('./fonteditor-core').svg2ttfobject;
+/**
+ * @file svg2ttf
+ * @author mengke01(kekee000@gmail.com)
+ */
+const assert = require('assert');
+const fs = require('fs');
+const TTFWriter = require('./fonteditor-core').TTFWriter;
+const svg2ttfobject = require('./fonteditor-core').svg2ttfobject;
+const util = require('./util');
 
 function getEmpty() {
-    var data = fs.readFileSync(__dirname + '/empty.json');
+    let data = fs.readFileSync(__dirname + '/empty.json');
     return JSON.parse(data);
 }
 
-var util = require('./util');
+describe('svg2ttf', function () {
+    it('svg2ttf', function () {
 
-
-var svg = fs.readFileSync(__dirname + '/../data/iconmoon.svg');
-var emptyTTFObject = getEmpty();
-ttfObject = svg2ttfobject(String(svg));
-
-emptyTTFObject.glyf = ttfObject.glyf;
-
-var ttfBuffer = new TTFWriter().write(emptyTTFObject);
-
-var assert = require('assert');
-
-// test
-assert(util.toBuffer(ttfBuffer).length, 'test svg2ttf');
+        let svg = fs.readFileSync(__dirname + '/../data/iconmoon.svg');
+        let emptyTTFObject = getEmpty();
+        let ttfObject = svg2ttfobject(String(svg));
+        emptyTTFObject.glyf = ttfObject.glyf;
+        let ttfBuffer = new TTFWriter().write(emptyTTFObject);
+        // test
+        assert.ok(util.toBuffer(ttfBuffer).length, 'test svg2ttf');
+    });
+});

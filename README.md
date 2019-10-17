@@ -17,12 +17,12 @@
 
 ```js
 // read font file
-var Font = require('fonteditor-core').Font;
-var fs = require('fs');
-var buffer = fs.readFileSync('font.ttf');
+let Font = require('fonteditor-core').Font;
+let fs = require('fs');
+let buffer = fs.readFileSync('font.ttf');
 
 // read font data
-var font = Font.create(buffer, {
+let font = Font.create(buffer, {
   type: 'ttf', // support ttf,woff,eot,otf,svg
   subset: [65, 66], // only read `a`, `b` glyf
   hinting: true, // save font hinting
@@ -30,7 +30,7 @@ var font = Font.create(buffer, {
   inflate: null, // inflate function for woff
   combinePath: false, // for svg path
 });
-var fontObject = font.get();
+let fontObject = font.get();
 console.log(Object.keys(fontObject));
 /* => [ 'version',
   'numTables',
@@ -52,7 +52,7 @@ console.log(Object.keys(fontObject));
 */
 
 // write font file
-var buffer = font.write({
+let buffer = font.write({
   type: 'woff', // support ttf,woff,eot,otf,svg
   hinting: true, // save font hinting
   deflate: null, // deflate function for woff
@@ -74,10 +74,10 @@ font.compound2simple()
 font.sort()
 
 // find glyf
-var result = font.find({
+let result = font.find({
   unicode: [65]
 });
-var result = font.find({
+let result = font.find({
   filter: function (glyf) {
     return glyf.name == 'icon'
   }
@@ -93,10 +93,20 @@ font.merge(font1, {
 ## Demo
 
 ```
-edp webserver
+npm run dev
 ```
 
-open <http://127.0.0.1:9999/demo>
+## build
+
+```
+npm run build
+```
+
+## support
+
+Node.js:>= 8.0
+
+Browser: Chrome, Safari
 
 ## Related
 

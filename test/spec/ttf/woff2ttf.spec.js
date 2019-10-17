@@ -1,53 +1,51 @@
+/**
+ * @file woff2ttf
+ * @author mengke01(kekee000@gmail.com)
+ */
 
-define(
-    function (require) {
+import TTFReader from 'fonteditor-core/ttf/ttfreader';
+import ttf2woff from 'fonteditor-core/ttf/ttf2woff';
+import woff2ttf from 'fonteditor-core/ttf/woff2ttf';
+import assert from 'assert';
 
-        var TTFReader = require('ttf/ttfreader');
-        var ttf2woff = require('ttf/ttf2woff');
-        var woff2ttf = require('ttf/woff2ttf');
+describe('woff 转 ttf', function () {
+    let woffBuffer = ttf2woff(require('testdata/baiduHealth-hinting.ttf'));
+    let ttf = new TTFReader({
+        hinting: true
+    }).read(woff2ttf(woffBuffer));
 
-        describe('woff 转 ttf', function () {
+    it('test read ttf2woff', function () {
 
-            var woffBuffer = ttf2woff(require('data/baiduHealth-hinting.ttf'))
-            var ttf = new TTFReader({
-                hinting: true
-            }).read(woff2ttf(woffBuffer));
+        assert.equal(ttf.version, 1);
 
-            it('test read ttf2woff', function () {
+        assert.equal(ttf.head.magickNumber, 1594834165);
+        assert.equal(ttf.head.unitsPerEm, 512);
 
-                expect(ttf.version).toBe(1);
+        assert.equal(ttf.post.format, 2);
+        assert.equal(ttf.post.underlinePosition, 0);
+        assert.equal(ttf.post.underlineThickness, 0);
 
-                expect(ttf.head.magickNumber).toBe(1594834165);
-                expect(ttf.head.unitsPerEm).toBe(512);
+        assert.equal(ttf.hhea.advanceWidthMax, 682);
+        assert.equal(ttf.hhea.ascent, 480);
+        assert.equal(ttf.hhea.descent, -32);
 
-                expect(ttf.post.format).toBe(2);
-                expect(ttf.post.underlinePosition).toBe(0);
-                expect(ttf.post.underlineThickness).toBe(0);
+        assert.equal(ttf.maxp.version, 1);
+        assert.equal(ttf.maxp.numGlyphs, 17);
 
-                expect(ttf.hhea.advanceWidthMax).toBe(682);
-                expect(ttf.hhea.ascent).toBe(480);
-                expect(ttf.hhea.descent).toBe(-32);
+        assert.equal(ttf.glyf[0].advanceWidth, 512);
+        assert.equal(ttf.glyf[0].leftSideBearing, 0);
+        assert.equal(ttf.glyf[0].name, '.notdef');
+        assert.equal(ttf.glyf[3].contours[0].length, 31);
 
-                expect(ttf.maxp.version).toBe(1);
-                expect(ttf.maxp.numGlyphs).toBe(17);
+        assert.equal(ttf.cmap[0], 1);
+        assert.equal(ttf.cmap[57400], 16);
+    });
 
-                expect(ttf.glyf[0].advanceWidth).toBe(512);
-                expect(ttf.glyf[0].leftSideBearing).toBe(0);
-                expect(ttf.glyf[0].name).toBe('.notdef');
-                expect(ttf.glyf[3].contours[0].length).toBe(31);
+    it('test read hinting', function () {
+        assert.equal(ttf.cvt.length, 24);
+        assert.equal(ttf.fpgm.length, 371);
+        assert.equal(ttf.prep.length, 204);
+        assert.equal(ttf.gasp.length, 8);
+    });
 
-                expect(ttf.cmap[0]).toBe(1);
-                expect(ttf.cmap[57400]).toBe(16);
-            });
-
-            it('test read hinting', function () {
-                expect(ttf.cvt.length).toBe(24);
-                expect(ttf.fpgm.length).toBe(371);
-                expect(ttf.prep.length).toBe(204);
-                expect(ttf.gasp.length).toBe(8);
-            });
-
-        });
-
-    }
-);
+});

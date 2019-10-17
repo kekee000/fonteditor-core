@@ -1,221 +1,222 @@
-
-define(
-    function (require) {
-
-        var lang = require('common/lang');
-
-        describe('测试overwrite', function () {
-
-            it('test normal object', function () {
-                var result = lang.overwrite(
-                    {
-                        x: 1
-                    },
-                    {
-                        x: 2
-                    }
-                );
-                expect(result.x).toBe(2);
-            });
-
-            it('test null object', function () {
-                var result = lang.overwrite(
-                    {
-                        x: 1
-                    },
-                    null
-                );
-                expect(result.x).toBe(1);
-
-                var result = lang.overwrite(
-                    {
-                        x: 1
-                    },
-                    undefined
-                );
-                expect(result.x).toBe(1);
-
-                var result = lang.overwrite(
-                    {
-                        x: 1
-                    },
-                    false
-                );
-                expect(result.x).toBe(1);
-            });
-
-            it('test fields', function () {
-                var result = lang.overwrite(
-                    {
-                        x: 1
-                    },
-                    {
-                        x: 2
-                    },
-                    ['x']
-                );
-                expect(result.x).toBe(2);
-
-                var result = lang.overwrite(
-                    {
-                        x: 1
-                    },
-                    {
-                        x: 2
-                    },
-                    ['y']
-                );
-                expect(result.x).toBe(1);
-
-            });
-
-            it('test deep overwrite', function () {
-                var result = lang.overwrite(
-                    {
-                        level1: {
-                            x: 1
-                        }
-                    },
-                    {
-                        level1: {
-                            y: 3
-                        }
-                    }
-                );
-                expect(result.level1.y).toBe(3);
-
-                var result = lang.overwrite(
-                    {
-                        level1: {
-                            x: 1
-                        }
-                    },
-                    {
-                        level1: {
-                            x: 2
-                        }
-                    }
-                );
-                expect(result.level1.x).toBe(2);
-
-            });
+/**
+ * @file lang
+ * @author mengke01(kekee000@gmail.com)
+ */
+import assert from 'assert';
+import * as lang from 'fonteditor-core/common/lang';
 
 
-            it('test null overwrite', function () {
-                var result = lang.overwrite(
-                    {
-                        level1: {
-                            x: 1
-                        }
-                    },
-                    {
-                        level1: {
-                            x: null
-                        }
-                    }
-                );
-                expect(result.level1.x).toBeNull();
-            });
+describe('测试overwrite', function () {
 
-            it('test string overwrite', function () {
-                var result = lang.overwrite(
-                    'abcde',
-                    {
-                        0: 'f'
-                    }
-                );
-                expect(result['0']).toBe('a');
-            });
+    it('test normal object', function () {
+        let result = lang.overwrite(
+            {
+                x: 1
+            },
+            {
+                x: 2
+            }
+        );
+        assert.equal(result.x, 2);
+    });
+
+    it('test null object', function () {
+        let result = lang.overwrite(
+            {
+                x: 1
+            },
+            null
+        );
+        assert.equal(result.x, 1);
+
+        result = lang.overwrite(
+            {
+                x: 1
+            },
+            undefined
+        );
+        assert.equal(result.x, 1);
+
+        result = lang.overwrite(
+            {
+                x: 1
+            },
+            false
+        );
+        assert.equal(result.x, 1);
+    });
+
+    it('test fields', function () {
+        let result = lang.overwrite(
+            {
+                x: 1
+            },
+            {
+                x: 2
+            },
+            ['x']
+        );
+        assert.equal(result.x, 2);
+
+        result = lang.overwrite(
+            {
+                x: 1
+            },
+            {
+                x: 2
+            },
+            ['y']
+        );
+        assert.equal(result.x, 1);
+
+    });
+
+    it('test deep overwrite', function () {
+        let result = lang.overwrite(
+            {
+                level1: {
+                    x: 1
+                }
+            },
+            {
+                level1: {
+                    y: 3
+                }
+            }
+        );
+        assert.equal(result.level1.y, 3);
+
+        result = lang.overwrite(
+            {
+                level1: {
+                    x: 1
+                }
+            },
+            {
+                level1: {
+                    x: 2
+                }
+            }
+        );
+        assert.equal(result.level1.x, 2);
+
+    });
+
+
+    it('test null overwrite', function () {
+        let result = lang.overwrite(
+            {
+                level1: {
+                    x: 1
+                }
+            },
+            {
+                level1: {
+                    x: null
+                }
+            }
+        );
+        assert.equal(result.level1.x, null);
+    });
+
+    it('test string overwrite', function () {
+        assert.throws(function () {
+            lang.overwrite(
+                'abcde',
+                {
+                    0: 'f'
+                }
+            );
         });
+    });
+});
 
 
 
-        describe('测试equals', function () {
+describe('测试equals', function () {
 
-            it('test normal object', function () {
-                var result = lang.equals(
-                    {
-                        x: 1
-                    },
-                    {
-                        x: 2
-                    }
-                );
-                expect(result).toBeFalsy();
+    it('test normal object', function () {
+        let result = lang.equals(
+            {
+                x: 1
+            },
+            {
+                x: 2
+            }
+        );
+        assert.equal(result, false);
 
 
-                var result = lang.equals(
-                    {
-                        x: null
-                    },
-                    {
-                        x: undefined
-                    }
-                );
-                expect(result).toBeFalsy();
+        result = lang.equals(
+            {
+                x: null
+            },
+            {
+                x: undefined
+            }
+        );
+        assert.equal(result, false);
 
-                var result = lang.equals(
-                    {
-                        x: 1
-                    },
-                    {
-                        x: '1'
-                    }
-                );
-                expect(result).toBeFalsy();
+        result = lang.equals(
+            {
+                x: 1
+            },
+            {
+                x: '1'
+            }
+        );
+        assert.equal(result, false);
 
-            });
+    });
 
-            it('test basic type', function () {
-                var result = lang.equals(
-                    null,
-                    undefined
-                );
-                expect(result).toBeTruthy();
+    it('test basic type', function () {
+        let result = lang.equals(
+            null,
+            undefined
+        );
+        assert.equal(result, true);
 
-                var result = lang.equals(
-                    1,
-                    2
-                );
-                expect(result).toBeFalsy();
+        result = lang.equals(
+            1,
+            2
+        );
+        assert.equal(result, false);
 
-                var result = lang.equals(
-                    1,
-                    '1'
-                );
-                expect(result).toBeFalsy();
+        result = lang.equals(
+            1,
+            '1'
+        );
+        assert.equal(result, false);
 
-            });
+    });
 
-            it('test deep equals', function () {
-                var result = lang.equals(
-                    {
-                        level1: {
-                            x: 1
-                        }
-                    },
-                    {
-                        level1: {
-                            y: 1
-                        }
-                    }
-                );
-                expect(result).toBeFalsy();
+    it('test deep equals', function () {
+        let result = lang.equals(
+            {
+                level1: {
+                    x: 1
+                }
+            },
+            {
+                level1: {
+                    y: 1
+                }
+            }
+        );
+        assert.equal(result, false);
 
-                var result = lang.equals(
-                    {
-                        level1: {
-                            x: 1
-                        }
-                    },
-                    {
-                        level1: {
-                            x: 1
-                        }
-                    }
-                );
-                expect(result).toBeTruthy();
-            });
-        });
-    }
-);
+        result = lang.equals(
+            {
+                level1: {
+                    x: 1
+                }
+            },
+            {
+                level1: {
+                    x: 1
+                }
+            }
+        );
+        assert.equal(result, true);
+    });
+});

@@ -1,7 +1,11 @@
-
-var fs = require('fs');
-var TTFReader = require('./fonteditor-core').TTFReader;
-var util = require('./util');
+/**
+ * @file readttf
+ * @author mengke01(kekee000@gmail.com)
+ */
+const assert = require('assert');
+const fs = require('fs');
+const TTFReader = require('./fonteditor-core').TTFReader;
+const util = require('./util');
 
 
 
@@ -12,9 +16,12 @@ function readttf(file) {
     return ttfObject;
 }
 
-var fontObject = readttf(__dirname + '/../data/bebas.ttf');
+describe('readttf', function () {
+    it('readttf', function () {
+        let fontObject = readttf(__dirname + '/../data/bebas.ttf');
+        // test
+        assert.ok(fontObject.name.fontFamily === 'Bebas', 'test readotf');
+    });
+});
 
-var assert = require('assert');
 
-// test
-assert(fontObject.name.fontFamily === 'Bebas', 'test readotf');

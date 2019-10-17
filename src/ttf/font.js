@@ -183,7 +183,7 @@ export default class Font {
      * @param {ArrayBuffer} buffer  如果提供了buffer数据则使用 buffer数据, 否则转换现有的 font
      * @return {Buffer|ArrayBuffer|string}
      */
-    toBase64(options, buffer = {}) {
+    toBase64(options, buffer) {
         if (!options.type) {
             options.type = this.type;
         }
@@ -340,7 +340,7 @@ Font.create = function (buffer, options) {
 Font.toBase64 = function (buffer) {
     if (typeof buffer === 'string') {
         // node 环境中没有 btoa 函数
-        if (!btoa) {
+        if (typeof btoa === 'undefined') {
             return Buffer.from(buffer, 'binary').toString('base64');
         }
 
