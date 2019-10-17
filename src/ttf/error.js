@@ -3,16 +3,17 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-define(function (require) {
+import string from '../common/string';
+import i18n from './i18n';
 
-    var string = require('../common/string');
-
-    var error = require('./i18n').lang;
+export default {
 
     /**
      * 抛出一个异常
      *
      * @param  {Object} e 异常号或者异常对象
+     * @param  {...Array} fargs args 参数
+     *
      * 例如：
      * e = 1001
      * e = {
@@ -20,9 +21,9 @@ define(function (require) {
      *     data: 错误数据
      * }
      */
-    error.raise = function (e) {
-        var number;
-        var data;
+    raise(e, ...fargs) {
+        let number;
+        let data;
         if (typeof e === 'object') {
             number = e.number || 0;
             data = e.data;
@@ -31,22 +32,22 @@ define(function (require) {
             number = e;
         }
 
-        var message = error[number];
-        if (arguments.length > 1) {
-            var args = typeof arguments[1] === 'object'
-                ? arguments[1]
-                : Array.prototype.slice.call(arguments, 1);
+        let message = i18n.lang[number];
+        if (fargs.length > 0) {
+            let args = typeof fargs[0] === 'object'
+                ? fargs[0]
+                : fargs;
             message = string.format(message, args);
         }
 
-        var event = new Error(message);
+        let event = new Error(message);
         event.number = number;
         if (data) {
             event.data = data;
         }
 
         throw event;
-    };
+    }
+};
 
-    return error;
-});
+

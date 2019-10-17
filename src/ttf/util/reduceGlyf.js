@@ -3,39 +3,31 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
+import reducePath from '../../graphics/reducePath';
 
-define(
-    function (require) {
+/**
+ * 缩减glyf，去除冗余节点
+ *
+ * @param {Object} glyf glyf对象
+ * @return {Object} glyf对象
+ */
+export default function reduceGlyf(glyf) {
 
-        var reducePath = require('../../graphics/reducePath');
+    let contours = glyf.contours;
+    let contour;
+    for (let j = contours.length - 1; j >= 0; j--) {
+        contour = reducePath(contours[j]);
 
-        /**
-         * 缩减glyf，去除冗余节点
-         *
-         * @param {Object} glyf glyf对象
-         * @return {Object} glyf对象
-         */
-        function reduceGlyf(glyf) {
-
-            var contours = glyf.contours;
-            var contour;
-            for (var j = contours.length - 1; j >= 0; j--) {
-                contour = reducePath(contours[j]);
-
-                // 空轮廓
-                if (contour.length <= 2) {
-                    contours.splice(j, 1);
-                    continue;
-                }
-            }
-
-            if (0 === glyf.contours.length) {
-                delete glyf.contours;
-            }
-
-            return glyf;
+        // 空轮廓
+        if (contour.length <= 2) {
+            contours.splice(j, 1);
+            continue;
         }
-
-        return reduceGlyf;
     }
-);
+
+    if (0 === glyf.contours.length) {
+        delete glyf.contours;
+    }
+
+    return glyf;
+}

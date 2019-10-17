@@ -5,34 +5,27 @@
  * reference: https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6gasp.html
  */
 
+import table from './table';
 
-define(
-    function (require) {
+export default table.create(
+    'gasp',
+    [],
+    {
 
-        var table = require('./table');
+        read(reader, ttf) {
+            let length = ttf.tables.gasp.length;
+            return reader.readBytes(this.offset, length);
+        },
 
-        var gasp = table.create(
-            'gasp',
-            [],
-            {
-
-                read: function (reader, ttf) {
-                    var length = ttf.tables.gasp.length;
-                    return reader.readBytes(this.offset, length);
-                },
-
-                write: function (writer, ttf) {
-                    if (ttf.gasp) {
-                        writer.writeBytes(ttf.gasp, ttf.gasp.length);
-                    }
-                },
-
-                size: function (ttf) {
-                    return ttf.gasp ? ttf.gasp.length : 0;
-                }
+        write(writer, ttf) {
+            if (ttf.gasp) {
+                writer.writeBytes(ttf.gasp, ttf.gasp.length);
             }
-        );
+        },
 
-        return gasp;
+        size(ttf) {
+            return ttf.gasp ? ttf.gasp.length : 0;
+        }
     }
 );
+

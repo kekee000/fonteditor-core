@@ -7,45 +7,36 @@
  * https://github.com/ynakajima/ttf.js
  */
 
+import contours2svg from './contours2svg';
+import transformGlyfContours from './transformGlyfContours';
 
-define(
-    function (require) {
+/**
+ * glyf转换svg
+ *
+ * @param {Object} glyf 解析后的glyf结构
+ * @param {Object} ttf ttf对象
+ * @return {string} svg文本
+ */
+export default function glyf2svg(glyf, ttf) {
 
-        var contours2svg = require('./contours2svg');
-        var transformGlyfContours = require('./transformGlyfContours');
+    if (!glyf) {
+        return '';
+    }
 
+    let pathArray = [];
 
-        /**
-         * glyf转换svg
-         *
-         * @param {Object} glyf 解析后的glyf结构
-         * @param {Object} ttf ttf对象
-         * @return {string} svg文本
-         */
-        function glyf2svg(glyf, ttf) {
-
-            if (!glyf) {
-                return '';
-            }
-
-            var pathArray = [];
-
-            if (!glyf.compound) {
-                if (glyf.contours && glyf.contours.length) {
-                    pathArray.push(contours2svg(glyf.contours));
-                }
-
-            }
-            else {
-                var contours = transformGlyfContours(glyf, ttf);
-                if (contours && contours.length) {
-                    pathArray.push(contours2svg(contours));
-                }
-            }
-
-            return pathArray.join(' ');
+    if (!glyf.compound) {
+        if (glyf.contours && glyf.contours.length) {
+            pathArray.push(contours2svg(glyf.contours));
         }
 
-        return glyf2svg;
     }
-);
+    else {
+        let contours = transformGlyfContours(glyf, ttf);
+        if (contours && contours.length) {
+            pathArray.push(contours2svg(contours));
+        }
+    }
+
+    return pathArray.join(' ');
+}

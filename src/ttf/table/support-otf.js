@@ -3,21 +3,24 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-define(
-    function (require) {
+import head from './head';
+import maxp from './maxp';
+import cmap from './cmap';
+import name from './name';
+import hhea from './hhea';
+import hmtx from './hmtx';
+import post from './post';
+import OS2 from './OS2';
+import CFF from './CFF';
 
-        var support = {
-            'head': require('./head'),
-            'maxp': require('./maxp'),
-            'cmap': require('./cmap'),
-            'name': require('./name'),
-            'hhea': require('./hhea'),
-            'hmtx': require('./hmtx'),
-            'post': require('./post'),
-            'OS/2': require('./OS2'),
-            'CFF': require('./CFF')
-        };
-
-        return support;
-    }
-);
+export default {
+    head,
+    maxp,
+    cmap,
+    name,
+    hhea,
+    hmtx,
+    post,
+    'OS/2': OS2,
+    CFF
+};

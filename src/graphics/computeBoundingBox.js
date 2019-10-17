@@ -6,194 +6,185 @@
  * zrender
  * https://github.com/ecomfe/zrender/blob/master/src/tool/computeBoundingBox.js
  */
+import pathIterator from './pathIterator';
 
-define(
-    function (require) {
+/**
+ * 计算包围盒
+ *
+ * @param {Array} points 点集
+ * @return {Object} bounding box
+ */
+function computeBoundingBox(points) {
 
-        var pathIterator = require('./pathIterator');
+    if (points.length === 0) {
+        return false;
+    }
 
-        /**
-         * 计算包围盒
-         *
-         * @param {Array} points 点集
-         * @return {Object} bounding box
-         */
-        function computeBoundingBox(points) {
+    let left = points[0].x;
+    let right = points[0].x;
+    let top = points[0].y;
+    let bottom = points[0].y;
 
-            if (points.length === 0) {
-                return false;
-            }
+    for (let i = 1; i < points.length; i++) {
+        let p = points[i];
 
-            var left = points[0].x;
-            var right = points[0].x;
-            var top = points[0].y;
-            var bottom = points[0].y;
-
-            for (var i = 1; i < points.length; i++) {
-                var p = points[i];
-
-                if (p.x < left) {
-                    left = p.x;
-                }
-
-                if (p.x > right) {
-                    right = p.x;
-                }
-
-                if (p.y < top) {
-                    top = p.y;
-                }
-
-                if (p.y > bottom) {
-                    bottom = p.y;
-                }
-            }
-
-            return {
-                x: left,
-                y: top,
-                width: right - left,
-                height: bottom - top
-            };
+        if (p.x < left) {
+            left = p.x;
         }
 
-        /**
-         * 计算二阶贝塞尔曲线的包围盒
-         * http://pissang.net/blog/?p=91
-         *
-         * @param {Object} p0 p0
-         * @param {Object} p1 p1
-         * @param {Object} p2 p2
-         * @return {Object} bound对象
-         */
-        function computeQuadraticBezierBoundingBox(p0, p1, p2) {
-            // Find extremities, where derivative in x dim or y dim is zero
-            var tmp = (p0.x + p2.x - 2 * p1.x);
-            // p1 is center of p0 and p2 in x dim
-            var t1;
-            if (tmp === 0) {
-                t1 = 0.5;
-            }
-            else {
-                t1 = (p0.x - p1.x) / tmp;
-            }
-
-            tmp = (p0.y + p2.y - 2 * p1.y);
-            // p1 is center of p0 and p2 in y dim
-            var t2;
-            if (tmp === 0) {
-                t2 = 0.5;
-            }
-            else {
-                t2 = (p0.y - p1.y) / tmp;
-            }
-
-            t1 = Math.max(Math.min(t1, 1), 0);
-            t2 = Math.max(Math.min(t2, 1), 0);
-
-            var ct1 = 1 - t1;
-            var ct2 = 1 - t2;
-
-            var x1 = ct1 * ct1 * p0.x + 2 * ct1 * t1 * p1.x + t1 * t1 * p2.x;
-            var y1 = ct1 * ct1 * p0.y + 2 * ct1 * t1 * p1.y + t1 * t1 * p2.y;
-
-            var x2 = ct2 * ct2 * p0.x + 2 * ct2 * t2 * p1.x + t2 * t2 * p2.x;
-            var y2 = ct2 * ct2 * p0.y + 2 * ct2 * t2 * p1.y + t2 * t2 * p2.y;
-
-            return computeBoundingBox(
-                [
-                    p0,
-                    p2,
-                    {
-                        x: x1,
-                        y: y1
-                    },
-                    {
-                        x: x2,
-                        y: y2
-                    }
-                ]
-            );
+        if (p.x > right) {
+            right = p.x;
         }
 
-        /**
-         * 计算曲线包围盒
-         *
-         * @private
-         * @param {Array} path 坐标点集, 支持多个path
-         * @return {Object} {x, y, width, height}
-         */
-        function computePathBoundingBox(path) {
+        if (p.y < top) {
+            top = p.y;
+        }
 
-            var points = [];
-            var iterator = function (c, p0, p1, p2) {
-                if (c === 'L') {
-                    points.push(p0);
-                    points.push(p1);
-                }
-                else if (c === 'Q') {
-                    var bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
+        if (p.y > bottom) {
+            bottom = p.y;
+        }
+    }
 
-                    points.push(bound);
-                    points.push({
-                        x: bound.x + bound.width,
-                        y: bound.y + bound.height
-                    });
-                }
-            };
+    return {
+        x: left,
+        y: top,
+        width: right - left,
+        height: bottom - top
+    };
+}
 
-            if (arguments.length === 1) {
-                pathIterator(path, function (c, p0, p1, p2) {
-                    if (c === 'L') {
-                        points.push(p0);
-                        points.push(p1);
-                    }
-                    else if (c === 'Q') {
-                        var bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
+/**
+ * 计算二阶贝塞尔曲线的包围盒
+ * http://pissang.net/blog/?p=91
+ *
+ * @param {Object} p0 p0
+ * @param {Object} p1 p1
+ * @param {Object} p2 p2
+ * @return {Object} bound对象
+ */
+function computeQuadraticBezierBoundingBox(p0, p1, p2) {
+    // Find extremities, where derivative in x dim or y dim is zero
+    let tmp = (p0.x + p2.x - 2 * p1.x);
+    // p1 is center of p0 and p2 in x dim
+    let t1;
+    if (tmp === 0) {
+        t1 = 0.5;
+    }
+    else {
+        t1 = (p0.x - p1.x) / tmp;
+    }
 
-                        points.push(bound);
-                        points.push({
-                            x: bound.x + bound.width,
-                            y: bound.y + bound.height
-                        });
-                    }
+    tmp = (p0.y + p2.y - 2 * p1.y);
+    // p1 is center of p0 and p2 in y dim
+    let t2;
+    if (tmp === 0) {
+        t2 = 0.5;
+    }
+    else {
+        t2 = (p0.y - p1.y) / tmp;
+    }
+
+    t1 = Math.max(Math.min(t1, 1), 0);
+    t2 = Math.max(Math.min(t2, 1), 0);
+
+    let ct1 = 1 - t1;
+    let ct2 = 1 - t2;
+
+    let x1 = ct1 * ct1 * p0.x + 2 * ct1 * t1 * p1.x + t1 * t1 * p2.x;
+    let y1 = ct1 * ct1 * p0.y + 2 * ct1 * t1 * p1.y + t1 * t1 * p2.y;
+
+    let x2 = ct2 * ct2 * p0.x + 2 * ct2 * t2 * p1.x + t2 * t2 * p2.x;
+    let y2 = ct2 * ct2 * p0.y + 2 * ct2 * t2 * p1.y + t2 * t2 * p2.y;
+
+    return computeBoundingBox(
+        [
+            p0,
+            p2,
+            {
+                x: x1,
+                y: y1
+            },
+            {
+                x: x2,
+                y: y2
+            }
+        ]
+    );
+}
+
+/**
+ * 计算曲线包围盒
+ *
+ * @private
+ * @param {...Array} args 坐标点集, 支持多个path
+ * @return {Object} {x, y, width, height}
+ */
+function computePathBoundingBox(...args) {
+
+    let points = [];
+    let iterator = function (c, p0, p1, p2) {
+        if (c === 'L') {
+            points.push(p0);
+            points.push(p1);
+        }
+        else if (c === 'Q') {
+            let bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
+
+            points.push(bound);
+            points.push({
+                x: bound.x + bound.width,
+                y: bound.y + bound.height
+            });
+        }
+    };
+
+    if (args.length === 1) {
+        pathIterator(args[0], function (c, p0, p1, p2) {
+            if (c === 'L') {
+                points.push(p0);
+                points.push(p1);
+            }
+            else if (c === 'Q') {
+                let bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
+
+                points.push(bound);
+                points.push({
+                    x: bound.x + bound.width,
+                    y: bound.y + bound.height
                 });
             }
-            else {
-                for (var i = 0, l = arguments.length; i < l; i++) {
-                    pathIterator(arguments[i], iterator);
-                }
-            }
-
-            return computeBoundingBox(points);
-        }
-
-
-        /**
-         * 计算曲线点边界
-         *
-         * @private
-         * @param {Array} path path对象, 支持多个path
-         * @return {Object} {x, y, width, height}
-         */
-        function computePathBox(path) {
-            var points = [];
-            if (arguments.length === 1) {
-                points = path;
-            }
-            else {
-                for (var i = 0, l = arguments.length; i < l; i++) {
-                    Array.prototype.splice.apply(points, [points.length, 0].concat(arguments[i]));
-                }
-            }
-            return computeBoundingBox(points);
-        }
-
-        return {
-            computeBounding: computeBoundingBox,
-            quadraticBezier: computeQuadraticBezierBoundingBox,
-            computePath: computePathBoundingBox,
-            computePathBox: computePathBox
-        };
+        });
     }
-);
+    else {
+        for (let i = 0, l = args.length; i < l; i++) {
+            pathIterator(args[i], iterator);
+        }
+    }
+
+    return computeBoundingBox(points);
+}
+
+
+/**
+ * 计算曲线点边界
+ *
+ * @private
+ * @param {...Array} args path对象, 支持多个path
+ * @return {Object} {x, y, width, height}
+ */
+export function computePathBox(...args) {
+    let points = [];
+    if (args.length === 1) {
+        points = args[0];
+    }
+    else {
+        for (let i = 0, l = args.length; i < l; i++) {
+            Array.prototype.splice.apply(points, [points.length, 0].concat(args[i]));
+        }
+    }
+    return computeBoundingBox(points);
+}
+
+export const computeBounding = computeBoundingBox;
+export const quadraticBezier = computeQuadraticBezierBoundingBox;
+export const computePath = computePathBoundingBox;
