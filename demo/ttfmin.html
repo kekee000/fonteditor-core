@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>ttf字体缩减</title>
-    <script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/2-0-4/esl.js"></script>
     <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
 
     <style id="font-with-hitting" type="text/css"></style>
@@ -51,19 +50,6 @@
 <div>
     不带hinting的字体：<span class="ttf-text ttf-min-without-hitting"></span>
 </div>
-<script>
-    require.config({
-        baseUrl: '../src',
-        paths: {
-            demo: '../demo/js',
-        }
-    });
-    define('jquery', $);
-</script>
-
-<script>
-    require(['demo/ttfmin']);
-</script>
 
 </body>
 </html>

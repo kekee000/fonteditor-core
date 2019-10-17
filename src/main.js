@@ -3,26 +3,43 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
+import Font from './ttf/font';
+import TTF from './ttf/ttf';
+import TTFReader from './ttf/ttfreader';
+import TTFWriter from './ttf/ttfwriter';
+import ttf2eot from './ttf/ttf2eot';
+import eot2ttf from './ttf/eot2ttf';
+import ttf2woff from './ttf/ttf2woff';
+import woff2ttf from './ttf/woff2ttf';
+import ttf2svg from './ttf/ttf2svg';
+import svg2ttfobject from './ttf/svg2ttfobject';
+import Reader from './ttf/reader';
+import Writer from './ttf/writer';
+import OTFReader from './ttf/otfreader';
+import otf2ttfobject from './ttf/otf2ttfobject';
+import ttf2base64 from './ttf/ttf2base64';
+import ttf2icon from './ttf/ttf2icon';
 
-define(
-    function (require) {
-        return {
-            Font: require('./ttf/font'),
-            TTF: require('./ttf/ttf'),
-            TTFReader: require('./ttf/ttfreader'),
-            TTFWriter: require('./ttf/ttfwriter'),
-            ttf2eot: require('./ttf/ttf2eot'),
-            eot2ttf: require('./ttf/eot2ttf'),
-            ttf2woff: require('./ttf/ttf2woff'),
-            woff2ttf: require('./ttf/woff2ttf'),
-            ttf2svg: require('./ttf/ttf2svg'),
-            svg2ttfobject: require('./ttf/svg2ttfobject'),
-            Reader: require('./ttf/reader'),
-            Writer: require('./ttf/writer'),
-            OTFReader: require('./ttf/otfreader'),
-            otf2ttfobject: require('./ttf/otf2ttfobject'),
-            ttf2base64: require('./ttf/ttf2base64'),
-            ttf2icon: require('./ttf/ttf2icon')
-        };
-    }
-);
+const modules = {
+    Font,
+    TTF,
+    TTFReader,
+    TTFWriter,
+    ttf2eot,
+    eot2ttf,
+    ttf2woff,
+    woff2ttf,
+    ttf2svg,
+    svg2ttfobject,
+    Reader,
+    Writer,
+    OTFReader,
+    otf2ttfobject,
+    ttf2base64,
+    ttf2icon
+};
+
+export default modules;
+if (typeof exports !== 'undefined') {
+    module.exports = modules;
+}

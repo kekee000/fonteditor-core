@@ -6,23 +6,18 @@
  * https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6cmap.html
  */
 
-define(
-    function (require) {
-        var table = require('./table');
-        var parse = require('./cmap/parse');
-        var write = require('./cmap/write');
-        var sizeof = require('./cmap/sizeof');
+import table from './table';
+import parse from './cmap/parse';
+import write from './cmap/write';
+import sizeof from './cmap/sizeof';
 
-        var cmap = table.create(
-            'cmap',
-            [],
-            {
-                read: parse,
-                write: write,
-                size: sizeof
-            }
-        );
-
-        return cmap;
+export default table.create(
+    'cmap',
+    [],
+    {
+        read: parse,
+        write: write,
+        size: sizeof
     }
 );
+

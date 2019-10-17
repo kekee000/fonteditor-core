@@ -5,33 +5,26 @@
  * @reference: http://www.microsoft.com/typography/otspec140/prep.htm
  */
 
-define(
-    function (require) {
+import table from './table';
 
-        var table = require('./table');
+export default table.create(
+    'prep',
+    [],
+    {
 
-        var prep = table.create(
-            'prep',
-            [],
-            {
+        read(reader, ttf) {
+            let length = ttf.tables.prep.length;
+            return reader.readBytes(this.offset, length);
+        },
 
-                read: function (reader, ttf) {
-                    var length = ttf.tables.prep.length;
-                    return reader.readBytes(this.offset, length);
-                },
-
-                write: function (writer, ttf) {
-                    if (ttf.prep) {
-                        writer.writeBytes(ttf.prep, ttf.prep.length);
-                    }
-                },
-
-                size: function (ttf) {
-                    return ttf.prep ? ttf.prep.length : 0;
-                }
+        write(writer, ttf) {
+            if (ttf.prep) {
+                writer.writeBytes(ttf.prep, ttf.prep.length);
             }
-        );
+        },
 
-        return prep;
+        size(ttf) {
+            return ttf.prep ? ttf.prep.length : 0;
+        }
     }
 );

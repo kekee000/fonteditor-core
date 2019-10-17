@@ -1,9 +1,7 @@
-
-var fs = require('fs');
-var OTFReader = require('./fonteditor-core').OTFReader;
-var util = require('./util');
-
-
+const assert = require('assert');
+const fs = require('fs');
+const OTFReader = require('./fonteditor-core').OTFReader;
+const util = require('./util');
 
 function readotf(file) {
     var data = fs.readFileSync(file);
@@ -12,9 +10,11 @@ function readotf(file) {
     return fontObject;
 }
 
-var fontObject = readotf(__dirname + '/../data/BalladeContour.otf');
+describe('readotf', function () {
+    it('readotf', function () {
+        let fontObject = readotf(__dirname + '/../data/BalladeContour.otf');
+        // test
+        assert.ok(fontObject.name.fontFamily === 'Ballade Contour', 'test readotf');
+    });
+});
 
-var assert = require('assert');
-
-// test
-assert(fontObject.name.fontFamily === 'Ballade Contour', 'test readotf');

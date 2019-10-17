@@ -3,15 +3,7 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-/* eslint-disable no-undef */
-
-if (typeof exports !== 'undefined') {
-    module.exports = require('xmldom').DOMParser;
-}
-else {
-    define(
-        function (require) {
-            return window.DOMParser;
-        }
-    );
-}
+/* eslint-disable no-undef, fecs-no-require */
+export default typeof exports !== 'undefined'
+    ? require('xmldom').DOMParser
+    : window.DOMParser;

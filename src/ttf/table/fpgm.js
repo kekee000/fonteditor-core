@@ -5,33 +5,27 @@
  * reference: https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6fpgm.html
  */
 
-define(
-    function (require) {
+import table from './table';
 
-        var table = require('./table');
+export default table.create(
+    'fpgm',
+    [],
+    {
 
-        var fpgm = table.create(
-            'fpgm',
-            [],
-            {
+        read(reader, ttf) {
+            let length = ttf.tables.fpgm.length;
+            return reader.readBytes(this.offset, length);
+        },
 
-                read: function (reader, ttf) {
-                    var length = ttf.tables.fpgm.length;
-                    return reader.readBytes(this.offset, length);
-                },
-
-                write: function (writer, ttf) {
-                    if (ttf.fpgm) {
-                        writer.writeBytes(ttf.fpgm, ttf.fpgm.length);
-                    }
-                },
-
-                size: function (ttf) {
-                    return ttf.fpgm ? ttf.fpgm.length : 0;
-                }
+        write(writer, ttf) {
+            if (ttf.fpgm) {
+                writer.writeBytes(ttf.fpgm, ttf.fpgm.length);
             }
-        );
+        },
 
-        return fpgm;
+        size(ttf) {
+            return ttf.fpgm ? ttf.fpgm.length : 0;
+        }
     }
 );
+

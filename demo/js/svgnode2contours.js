@@ -6,39 +6,33 @@
  * svg转ttfobject
  */
 
-define(
-    function(require) {
-        var ajaxFile = require('common/ajaxFile');
-        var svgnode2contours = require('ttf/svg/svgnode2contours');
-        var contours2svg = require('ttf/util/contours2svg');
+import ajaxFile from 'fonteditor-core/common/ajaxFile';
+import svgnode2contours from 'fonteditor-core/ttf/svg/svgnode2contours';
+import contours2svg from 'fonteditor-core/ttf/util/contours2svg';
 
-        var entry = {
+let entry = {
 
-            /**
-             * 初始化
-             */
-            init: function () {
+    /**
+     * 初始化
+     */
+    init() {
 
-                ajaxFile({
-                    type: 'xml',
-                    url: './test/svgnodes.svg',
-                    onSuccess: function(xml) {
+        ajaxFile({
+            type: 'xml',
+            url: './test/svgnodes.svg',
+            onSuccess(xml) {
 
-                        var contours = svgnode2contours(xml.getElementsByTagName('*'));
-                        var path = contours2svg(contours);
+                let contours = svgnode2contours(xml.getElementsByTagName('*'));
+                let path = contours2svg(contours);
 
-                        $('#path').attr('d', path);
-                        $('#origin').html(xml.documentElement.outerHTML);
-                    },
-                    onError: function() {
-                        console.error('error read file');
-                    }
-                });
+                $('#path').attr('d', path);
+                $('#origin').html(xml.documentElement.outerHTML);
+            },
+            onError() {
+                console.error('error read file');
             }
-        };
-
-        entry.init();
-
-        return entry;
+        });
     }
-);
+};
+
+entry.init();

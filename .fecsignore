@@ -4,6 +4,3 @@ node_modules
 release
 test
 tool
-edp-build-config.js
-edp-build-config-node.js
-edp-webserver-config.js

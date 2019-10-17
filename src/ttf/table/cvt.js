@@ -5,33 +5,26 @@
  * @reference: https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6cvt.html
  */
 
-define(
-    function (require) {
+import table from './table';
 
-        var table = require('./table');
+export default table.create(
+    'cvt',
+    [],
+    {
 
-        var cvt = table.create(
-            'cvt',
-            [],
-            {
+        read(reader, ttf) {
+            let length = ttf.tables.cvt.length;
+            return reader.readBytes(this.offset, length);
+        },
 
-                read: function (reader, ttf) {
-                    var length = ttf.tables.cvt.length;
-                    return reader.readBytes(this.offset, length);
-                },
-
-                write: function (writer, ttf) {
-                    if (ttf.cvt) {
-                        writer.writeBytes(ttf.cvt, ttf.cvt.length);
-                    }
-                },
-
-                size: function (ttf) {
-                    return ttf.cvt ? ttf.cvt.length : 0;
-                }
+        write(writer, ttf) {
+            if (ttf.cvt) {
+                writer.writeBytes(ttf.cvt, ttf.cvt.length);
             }
-        );
+        },
 
-        return cvt;
+        size(ttf) {
+            return ttf.cvt ? ttf.cvt.length : 0;
+        }
     }
 );

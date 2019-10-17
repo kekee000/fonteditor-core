@@ -1,97 +1,95 @@
+/**
+ * @file writer
+ * @author mengke01(kekee000@gmail.com)
+ */
+import assert from 'assert';
+import Writer from 'fonteditor-core/ttf/writer';
+import Reader from 'fonteditor-core/ttf/reader';
 
-define(
-    function (require) {
+describe('写基本数据', function () {
 
-        var Writer = require('ttf/writer');
-        var Reader = require('ttf/reader');
+    let buffer = new ArrayBuffer(100);
 
-        describe('写基本数据', function () {
+    it('test write basic datatype', function () {
+        let writer = new Writer(buffer, 0, 100);
 
-            var buffer = new ArrayBuffer(100);
+        // 基本类型
+        writer.writeInt8(10);
+        writer.writeInt16(2442);
+        writer.writeInt32(-10);
+        writer.writeUint8(10);
+        writer.writeUint16(2442);
+        writer.writeUint32(5375673);
 
-            it('test write basic datatype', function () {
-                var writer = new Writer(buffer, 0, 100);
+        writer.writeUint8(55.45444444);
+        writer.writeUint16(55.45444444);
+        writer.writeUint32(55.45444444);
 
-                // 基本类型
-                writer.writeInt8(10);
-                writer.writeInt16(2442);
-                writer.writeInt32(-10);
-                writer.writeUint8(10);
-                writer.writeUint16(2442);
-                writer.writeUint32(5375673);
+        let reader = new Reader(buffer, 0, 100);
 
-                writer.writeUint8(55.45444444);
-                writer.writeUint16(55.45444444);
-                writer.writeUint32(55.45444444);
+        assert.equal(reader.readInt8(), 10);
+        assert.equal(reader.readInt16(), 2442);
+        assert.equal(reader.readInt32(), -10);
+        assert.equal(reader.readUint8(), 10);
+        assert.equal(reader.readUint16(), 2442);
+        assert.equal(reader.readUint32(), 5375673);
 
-                var reader = new Reader(buffer, 0, 100);
+        assert.equal(reader.readUint8(), 55);
+        assert.equal(reader.readUint16(), 55);
+        assert.equal(reader.readUint32(), 55);
+    });
 
-                expect(reader.readInt8()).toBe(10);
-                expect(reader.readInt16()).toBe(2442);
-                expect(reader.readInt32()).toBe(-10);
-                expect(reader.readUint8()).toBe(10);
-                expect(reader.readUint16()).toBe(2442);
-                expect(reader.readUint32()).toBe(5375673);
+    it('test write decimals', function () {
+        let writer = new Writer(buffer, 0, 100);
 
-                expect(reader.readUint8()).toBe(55);
-                expect(reader.readUint16()).toBe(55);
-                expect(reader.readUint32()).toBe(55);
-            });
+        // 基本类型
+        writer.writeInt8(-55.99999);
+        writer.writeInt16(-55.99999);
+        writer.writeInt32(-55.999999);
 
-            it('test write decimals', function () {
-                var writer = new Writer(buffer, 0, 100);
+        writer.writeUint8(55.45444444);
+        writer.writeUint16(55.45444444);
+        writer.writeUint32(55.45444444);
 
-                // 基本类型
-                writer.writeInt8(-55.99999);
-                writer.writeInt16(-55.99999);
-                writer.writeInt32(-55.999999);
-
-                writer.writeUint8(55.45444444);
-                writer.writeUint16(55.45444444);
-                writer.writeUint32(55.45444444);
-
-                var reader = new Reader(buffer, 0, 100);
-
-
-                expect(reader.readInt8()).toBe(-55);
-                expect(reader.readInt16()).toBe(-55);
-                expect(reader.readInt32()).toBe(-55);
-
-                expect(reader.readUint8()).toBe(55);
-                expect(reader.readUint16()).toBe(55);
-                expect(reader.readUint32()).toBe(55);
-            });
+        let reader = new Reader(buffer, 0, 100);
 
 
-            it('test write extend datatype', function () {
-                var writer = new Writer(buffer, 0, 100);
-                var now = Math.round(new Date().getTime() / 1000) * 1000;
+        assert.equal(reader.readInt8(), -55);
+        assert.equal(reader.readInt16(), -55);
+        assert.equal(reader.readInt32(), -55);
 
-                // 扩展类型
-                writer.writeString('baidu');
-                writer.writeFixed(12.36);
-                writer.writeLongDateTime(now);
-                writer.writeBytes([3, 4, 5]);
+        assert.equal(reader.readUint8(), 55);
+        assert.equal(reader.readUint16(), 55);
+        assert.equal(reader.readUint32(), 55);
+    });
 
-                var reader = new Reader(buffer, 0, 100);
 
-                expect(reader.readString(0, 5)).toEqual('baidu');
-                expect(reader.readFixed()).toBeCloseTo(12.36, 2);
-                expect(reader.readLongDateTime().getTime()).toEqual(now);
-                expect(reader.readBytes(3)).toEqual([3, 4, 5]);
-            });
+    it('test write extend datatype', function () {
+        let writer = new Writer(buffer, 0, 100);
+        let now = Math.round(new Date().getTime() / 1000) * 1000;
 
-            it('test seek', function () {
-                var writer = new Writer(buffer, 0, 100);
-                // 测试seek
-                writer.seek(50);
-                writer.writeFixed(12.36);
+        // 扩展类型
+        writer.writeString('baidu');
+        writer.writeFixed(12.36);
+        writer.writeLongDateTime(now);
+        writer.writeBytes([3, 4, 5]);
 
-                var reader = new Reader(buffer, 0, 100);
-                reader.seek(50);
-                expect(reader.readFixed()).toBeCloseTo(12.36, 2);
-            });
-        });
+        let reader = new Reader(buffer, 0, 100);
 
-    }
-);
+        assert.equal(reader.readString(0, 5), 'baidu');
+        assert.equal(reader.readFixed().toFixed(2), 12.36);
+        assert.equal(reader.readLongDateTime().getTime(), now);
+        assert.deepEqual(reader.readBytes(3), [3, 4, 5]);
+    });
+
+    it('test seek', function () {
+        let writer = new Writer(buffer, 0, 100);
+        // 测试seek
+        writer.seek(50);
+        writer.writeFixed(12.36);
+
+        let reader = new Reader(buffer, 0, 100);
+        reader.seek(50);
+        assert.equal(reader.readFixed().toFixed(2), 12.36);
+    });
+});

@@ -31,7 +31,7 @@ function toArrayBuffer(buffer) {
 function toBuffer(arrayBuffer) {
     var length = arrayBuffer.byteLength;
     var view = new DataView(arrayBuffer, 0, length);
-    var buffer = new Buffer(length);
+    var buffer = Buffer.alloc(length);
     for (var i = 0, l = length; i < l; i++) {
         buffer[i] = view.getUint8(i, false);
     }

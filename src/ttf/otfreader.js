@@ -3,173 +3,171 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
+/* eslint-disable fecs-use-computed-property */
 
-define(
-    function (require) {
-        var Directory = require('./table/directory');
-        var supportTables = require('./table/support-otf');
-        var Reader = require('./reader');
-        var error = require('./error');
+import Directory from './table/directory';
+import supportTables from './table/support-otf';
+import Reader from './reader';
+import error from './error';
 
+export default class OTFReader {
 
-        /**
-         * 初始化
-         *
-         * @param {ArrayBuffer} buffer buffer对象
-         * @return {Object} ttf对象
-         */
-        function read(buffer) {
-
-            var reader = new Reader(buffer, 0, buffer.byteLength, false);
-
-            var font = {};
-
-            // version
-            font.version = reader.readString(0, 4);
-
-            if (font.version !== 'OTTO') {
-                error.raise(10301);
-            }
-
-            // num tables
-            font.numTables = reader.readUint16();
-
-            if (font.numTables <= 0 || font.numTables > 100) {
-                error.raise(10302);
-            }
-
-            // searchRenge
-            font.searchRenge = reader.readUint16();
-
-            // entrySelector
-            font.entrySelector = reader.readUint16();
-
-            // rengeShift
-            font.rengeShift = reader.readUint16();
-
-            font.tables = new Directory(reader.offset).read(reader, font);
-
-            if (!font.tables.head || !font.tables.cmap || !font.tables.CFF) {
-                error.raise(10302);
-            }
-
-            font.readOptions = this.options;
-
-            // 读取支持的表数据
-            Object.keys(supportTables).forEach(function (tableName) {
-                if (font.tables[tableName]) {
-                    var offset = font.tables[tableName].offset;
-                    font[tableName] = new supportTables[tableName](offset).read(reader, font);
-                }
-            });
-
-            if (!font.CFF.glyf) {
-                error.raise(10303);
-            }
-
-            reader.dispose();
-
-            return font;
-        }
-
-        /**
-         * 关联glyf相关的信息
-         * @param {Object} font font对象
-         */
-        function resolveGlyf(font) {
-
-            var codes = font.cmap;
-            var glyf = font.CFF.glyf;
-            var subsetMap = font.readOptions.subset ? font.subsetMap : null; // 当前ttf的子集列表
-            // unicode
-            Object.keys(codes).forEach(function (c) {
-                var i = codes[c];
-                if (subsetMap && !subsetMap[i]) {
-                    return;
-                }
-                if (!glyf[i].unicode) {
-                    glyf[i].unicode = [];
-                }
-                glyf[i].unicode.push(+c);
-            });
-
-            // leftSideBearing
-            font.hmtx.forEach(function (item, i) {
-                if (subsetMap && !subsetMap[i]) {
-                    return;
-                }
-                glyf[i].advanceWidth = glyf[i].advanceWidth || item.advanceWidth || 0;
-                glyf[i].leftSideBearing = item.leftSideBearing;
-            });
-
-            // 设置了subsetMap之后需要选取subset中的字形
-            if (subsetMap) {
-                var subGlyf = [];
-                Object.keys(subsetMap).forEach(function (i) {
-                    subGlyf.push(glyf[+i]);
-                });
-                glyf = subGlyf;
-            }
-
-            font.glyf = glyf;
-        }
-
-
-        /**
-         * 清除非必须的表
-         * @param {Object} font font对象
-         */
-        function cleanTables(font) {
-            delete font.readOptions;
-            delete font.tables;
-            delete font.hmtx;
-            delete font.post.glyphNameIndex;
-            delete font.post.names;
-            delete font.subsetMap;
-
-            // 删除无用的表
-            var cff = font.CFF;
-            delete cff.glyf;
-            delete cff.charset;
-            delete cff.encoding;
-            delete cff.gsubrs;
-            delete cff.gsubrsBias;
-            delete cff.subrs;
-            delete cff.subrsBias;
-        }
-
-        /**
-         * OTF读取函数
-         * @param {Object} options 写入参数
-         * @constructor
-         */
-        function OTFReader(options) {
-            options = options || {};
-            options.subset = options.subset || [];
-            this.options = options;
-        }
-
-        /**
-         * 获取解析后的ttf文档
-         * @param {ArrayBuffer} buffer buffer对象
-         *
-         * @return {Object} ttf文档
-         */
-        OTFReader.prototype.read = function (buffer) {
-            this.font = read.call(this, buffer);
-            resolveGlyf.call(this, this.font);
-            cleanTables.call(this, this.font);
-            return this.font;
-        };
-
-        /**
-         * 注销
-         */
-        OTFReader.prototype.dispose = function () {
-            delete this.font;
-            delete this.options;
-        };
-
-        return OTFReader;
+    /**
+     * OTF读取函数
+     *
+     * @param {Object} options 写入参数
+     * @constructor
+     */
+    constructor(options = {}) {
+        options.subset = options.subset || [];
+        this.options = options;
     }
-);
+
+   /**
+     * 初始化
+     *
+     * @param {ArrayBuffer} buffer buffer对象
+     * @return {Object} ttf对象
+     */
+    readBuffer(buffer) {
+
+        let reader = new Reader(buffer, 0, buffer.byteLength, false);
+        let font = {};
+
+        // version
+        font.version = reader.readString(0, 4);
+
+        if (font.version !== 'OTTO') {
+            error.raise(10301);
+        }
+
+        // num tables
+        font.numTables = reader.readUint16();
+
+        if (font.numTables <= 0 || font.numTables > 100) {
+            error.raise(10302);
+        }
+
+        // searchRenge
+        font.searchRenge = reader.readUint16();
+
+        // entrySelector
+        font.entrySelector = reader.readUint16();
+
+        // rengeShift
+        font.rengeShift = reader.readUint16();
+
+        font.tables = new Directory(reader.offset).read(reader, font);
+
+        if (!font.tables.head || !font.tables.cmap || !font.tables.CFF) {
+            error.raise(10302);
+        }
+
+        font.readOptions = this.options;
+
+        // 读取支持的表数据
+        Object.keys(supportTables).forEach(function (tableName) {
+            if (font.tables[tableName]) {
+                let offset = font.tables[tableName].offset;
+                font[tableName] = new supportTables[tableName](offset).read(reader, font);
+            }
+        });
+
+        if (!font.CFF.glyf) {
+            error.raise(10303);
+        }
+
+        reader.dispose();
+
+        return font;
+    }
+
+    /**
+     * 关联glyf相关的信息
+     *
+     * @param {Object} font font对象
+     */
+    resolveGlyf(font) {
+
+        let codes = font.cmap;
+        let glyf = font.CFF.glyf;
+        let subsetMap = font.readOptions.subset ? font.subsetMap : null; // 当前ttf的子集列表
+        // unicode
+        Object.keys(codes).forEach(function (c) {
+            let i = codes[c];
+            if (subsetMap && !subsetMap[i]) {
+                return;
+            }
+            if (!glyf[i].unicode) {
+                glyf[i].unicode = [];
+            }
+            glyf[i].unicode.push(+c);
+        });
+
+        // leftSideBearing
+        font.hmtx.forEach(function (item, i) {
+            if (subsetMap && !subsetMap[i]) {
+                return;
+            }
+            glyf[i].advanceWidth = glyf[i].advanceWidth || item.advanceWidth || 0;
+            glyf[i].leftSideBearing = item.leftSideBearing;
+        });
+
+        // 设置了subsetMap之后需要选取subset中的字形
+        if (subsetMap) {
+            let subGlyf = [];
+            Object.keys(subsetMap).forEach(function (i) {
+                subGlyf.push(glyf[+i]);
+            });
+            glyf = subGlyf;
+        }
+
+        font.glyf = glyf;
+    }
+
+    /**
+     * 清除非必须的表
+     *
+     * @param {Object} font font对象
+     */
+    cleanTables(font) {
+        delete font.readOptions;
+        delete font.tables;
+        delete font.hmtx;
+        delete font.post.glyphNameIndex;
+        delete font.post.names;
+        delete font.subsetMap;
+
+        // 删除无用的表
+        let cff = font.CFF;
+        delete cff.glyf;
+        delete cff.charset;
+        delete cff.encoding;
+        delete cff.gsubrs;
+        delete cff.gsubrsBias;
+        delete cff.subrs;
+        delete cff.subrsBias;
+    }
+
+    /**
+     * 获取解析后的ttf文档
+     *
+     * @param {ArrayBuffer} buffer buffer对象
+     *
+     * @return {Object} ttf文档
+     */
+    read(buffer) {
+        this.font = this.readBuffer(buffer);
+        this.resolveGlyf(this.font);
+        this.cleanTables(this.font);
+        return this.font;
+    }
+
+    /**
+     * 注销
+     */
+    dispose() {
+        delete this.font;
+        delete this.options;
+    }
+}

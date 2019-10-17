@@ -4,37 +4,38 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
+import bufferTool from '../nodejs/buffer';
 
-define(function (require) {
-    var bufferTool = require('../nodejs/buffer');
+import getEmptyttfObject from './getEmptyttfObject';
+import TTF from './ttf';
 
-    var getEmptyttfObject = require('./getEmptyttfObject');
-    var TTF = require('./ttf');
+import woff2ttf from './woff2ttf';
+import otf2ttfobject from './otf2ttfobject';
+import eot2ttf from './eot2ttf';
+import svg2ttfobject from './svg2ttfobject';
+import TTFReader from './ttfreader';
 
-    var woff2ttf = require('./woff2ttf');
-    var otf2ttfobject = require('./otf2ttfobject');
-    var eot2ttf = require('./eot2ttf');
-    var svg2ttfobject = require('./svg2ttfobject');
-    var TTFReader = require('./ttfreader');
+import TTFWriter from './ttfwriter';
+import ttf2eot from './ttf2eot';
+import ttf2woff from './ttf2woff';
+import ttf2svg from './ttf2svg';
+import ttf2symbol from './ttf2symbol';
 
-    var TTFWriter = require('./ttfwriter');
-    var ttf2eot = require('./ttf2eot');
-    var ttf2woff = require('./ttf2woff');
-    var ttf2svg = require('./ttf2svg');
-    var ttf2symbol = require('./ttf2symbol');
+import ttf2base64 from './ttf2base64';
+import eot2base64 from './eot2base64';
+import woff2base64 from './woff2base64';
+import svg2base64 from './svg2base64';
+import bytes2base64 from './util/bytes2base64';
 
-    var ttf2base64 = require('./ttf2base64');
-    var eot2base64 = require('./eot2base64');
-    var woff2base64 = require('./woff2base64');
-    var svg2base64 = require('./svg2base64');
-    var bytes2base64 = require('./util/bytes2base64');
+import optimizettf from './util/optimizettf';
 
-    var optimizettf = require('./util/optimizettf');
-    // 必须是nodejs环境下的Buffer对象才能触发buffer转换
-    var SUPPORT_BUFFER = typeof process === 'object'
-        && typeof process.versions === 'object'
-        && typeof process.versions.node !== 'undefined'
-        && typeof Buffer === 'function';
+// 必须是nodejs环境下的Buffer对象才能触发buffer转换
+const SUPPORT_BUFFER = typeof process === 'object'
+    && typeof process.versions === 'object'
+    && typeof process.versions.node !== 'undefined'
+    && typeof Buffer === 'function';
+
+export default class Font {
 
     /**
      * 字体对象构造函数
@@ -42,11 +43,7 @@ define(function (require) {
      * @param {ArrayBuffer|Buffer|string} buffer  字体数据
      * @param {Object} options  读取参数
      */
-    function Font(buffer, options) {
-        options = options || {
-            type: 'ttf'
-        };
-
+    constructor(buffer, options = {type: 'ttf'}) {
         // 字形对象
         if (typeof buffer === 'object' && buffer.glyf) {
             this.set(buffer);
@@ -66,10 +63,10 @@ define(function (require) {
      *
      * @return {Font}
      */
-    Font.prototype.readEmpty = function () {
+    readEmpty() {
         this.data = getEmptyttfObject();
         return this;
-    };
+    }
 
     /**
      * 读取字体数据
@@ -89,7 +86,7 @@ define(function (require) {
      * @param {boolean} options.combinePath 是否合并成单个字形，仅限于普通svg导入
      * @return {Font}
      */
-    Font.prototype.read = function (buffer, options) {
+    read(buffer, options) {
         // nodejs buffer
         if (SUPPORT_BUFFER) {
             if (buffer instanceof Buffer) {
@@ -120,7 +117,7 @@ define(function (require) {
 
         this.type = options.type;
         return this;
-    };
+    }
 
     /**
      * 写入字体数据
@@ -139,13 +136,12 @@ define(function (require) {
      * @param {Object} options.deflate 压缩相关函数
      * @return {Buffer|ArrayBuffer|string}
      */
-    Font.prototype.write = function (options) {
-        options = options || {};
+    write(options = {}) {
         if (!options.type) {
             options.type = this.type;
         }
 
-        var buffer = null;
+        let buffer = null;
         if (options.type === 'ttf') {
             buffer = new TTFWriter(options).write(this.data);
         }
@@ -174,7 +170,7 @@ define(function (require) {
         }
 
         return buffer;
-    };
+    }
 
     /**
      * 转换成 base64编码
@@ -182,13 +178,12 @@ define(function (require) {
      * @param {Object} options  写入参数
      * @param {string} options.type   字体类型, 默认 ttf
      * 其他 options参数, 参考 write
-     * @see Font.prototype.write
+     * @see write
      *
      * @param {ArrayBuffer} buffer  如果提供了buffer数据则使用 buffer数据, 否则转换现有的 font
      * @return {Buffer|ArrayBuffer|string}
      */
-    Font.prototype.toBase64 = function (options, buffer) {
-        options = options || {};
+    toBase64(options, buffer) {
         if (!options.type) {
             options.type = this.type;
         }
@@ -205,7 +200,7 @@ define(function (require) {
             buffer = this.write(options);
         }
 
-        var base64Str;
+        let base64Str;
         if (options.type === 'ttf') {
             base64Str = ttf2base64(buffer);
         }
@@ -226,7 +221,7 @@ define(function (require) {
         }
 
         return base64Str;
-    };
+    }
 
     /**
      * 设置 font 对象
@@ -234,19 +229,19 @@ define(function (require) {
      * @param {Object} data font的ttfObject对象
      * @return {this}
      */
-    Font.prototype.set = function (data) {
+    set(data) {
         this.data = data;
         return this;
-    };
+    }
 
     /**
      * 获取 font 数据
      *
      * @return {Object} ttfObject 对象
      */
-    Font.prototype.get = function () {
+    get() {
         return this.data;
-    };
+    }
 
     /**
      * 对字形数据进行优化
@@ -255,37 +250,37 @@ define(function (require) {
      * @param  {boolean|Object} out.result `true` 或者有问题的地方
      * @return {Font}
      */
-    Font.prototype.optimize = function (out) {
-        var result = optimizettf(this.data);
+    optimize(out) {
+        let result = optimizettf(this.data);
         if (out) {
             out.result = result;
         }
         return this;
-    };
+    }
 
     /**
      * 将字体中的复合字形转为简单字形
      *
      * @return {this}
      */
-    Font.prototype.compound2simple = function () {
-        var ttf = new TTF(this.data);
+    compound2simple() {
+        let ttf = new TTF(this.data);
         ttf.compound2simple();
         this.data = ttf.get();
         return this;
-    };
+    }
 
     /**
      * 对字形按照unicode编码排序
      *
      * @return {this}
      */
-    Font.prototype.sort = function () {
-        var ttf = new TTF(this.data);
+    sort() {
+        let ttf = new TTF(this.data);
         ttf.sortGlyf();
         this.data = ttf.get();
         return this;
-    };
+    }
 
     /**
      * 查找相关字形
@@ -295,16 +290,16 @@ define(function (require) {
      * @param  {string} condition.name glyf名字，例如`uniE001`, `uniE`
      * @param  {Function} condition.filter 自定义过滤器
      * @example
-     *     condition.filter = function (glyf) {
+     *     condition.filter(glyf) {
      *         return glyf.name === 'logo';
      *     }
      * @return {Array}  glyf字形列表
      */
-    Font.prototype.find = function (condition) {
-        var ttf = new TTF(this.data);
-        var indexList = ttf.findGlyf(condition);
+    find(condition) {
+        let ttf = new TTF(this.data);
+        let indexList = ttf.findGlyf(condition);
         return indexList.length ? ttf.getGlyf(indexList) : indexList;
-    };
+    }
 
     /**
      * 合并 font 到当前的 font
@@ -317,43 +312,39 @@ define(function (require) {
      *
      * @return {Font}
      */
-    Font.prototype.merge = function (font, options) {
-        var ttf = new TTF(this.data);
+    merge(font, options) {
+        let ttf = new TTF(this.data);
         ttf.mergeGlyf(font.get(), options);
         this.data = ttf.get();
         return this;
-    };
+    }
+}
 
-    /**
-     * 读取字体数据
-     *
-     * @param {ArrayBuffer|Buffer|string} buffer 字体数据
-     * @param {Object} options  读取参数
-     * @return {Font}
-     */
-    Font.create = function (buffer, options) {
-        return new Font(buffer, options);
-    };
+/**
+ * 读取字体数据
+ *
+ * @param {ArrayBuffer|Buffer|string} buffer 字体数据
+ * @param {Object} options  读取参数
+ * @return {Font}
+ */
+Font.create = function (buffer, options) {
+    return new Font(buffer, options);
+};
 
-    /**
-     * base64序列化buffer 数据
-     *
-     * @param {ArrayBuffer|Buffer|string} buffer 字体数据
-     * @return {Font}
-     */
-    Font.toBase64 = function (buffer) {
-        if (typeof buffer === 'string') {
-            // node 环境中没有 btoa 函数
-            if (!btoa) {
-                return new Buffer(buffer, 'binary').toString('base64');
-            }
-
-            return btoa(buffer);
+/**
+ * base64序列化buffer 数据
+ *
+ * @param {ArrayBuffer|Buffer|string} buffer 字体数据
+ * @return {Font}
+ */
+Font.toBase64 = function (buffer) {
+    if (typeof buffer === 'string') {
+        // node 环境中没有 btoa 函数
+        if (typeof btoa === 'undefined') {
+            return Buffer.from(buffer, 'binary').toString('base64');
         }
-        else {
-            return bytes2base64(buffer);
-        }
-    };
 
-    return Font;
-});
+        return btoa(buffer);
+    }
+    return bytes2base64(buffer);
+};

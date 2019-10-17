@@ -6,38 +6,32 @@
  * ttfwriter 入口
  */
 
-define(
-    function(require) {
-        var TTFReader = require('ttf/ttfreader');
-        var TTFWriter = require('ttf/ttfwriter');
-        var ttf2base64 = require('ttf/ttf2base64');
+import TTFReader from 'fonteditor-core/ttf/ttfreader';
+import TTFWriter from 'fonteditor-core/ttf/ttfwriter';
+import ttf2base64 from 'fonteditor-core/ttf/ttf2base64';
 
-        var entry = {
+let entry = {
 
-            /**
-             * 初始化
-             */
-            init: function () {
-                $.getJSON('./data/baiduHealth.json', function(ttf) {
+    /**
+     * 初始化
+     */
+    init() {
+        $.getJSON('./data/baiduHealth.json', function (ttf) {
 
-                    var reader = new TTFReader();
-                    var writer = new TTFWriter();
-                    var buffer = writer.write(ttf);
+            let reader = new TTFReader();
+            let writer = new TTFWriter();
+            let buffer = writer.write(ttf);
 
-                    var ttfData = reader.read(buffer);
+            let ttfData = reader.read(buffer);
 
-                    console.log(ttfData);
+            console.log(ttfData);
 
-                    var base64str = ttf2base64(buffer);
-                    var saveBtn = $('.saveas');
-                    saveBtn.attr('href', base64str);
-                    saveBtn.attr('download', 'save.ttf');
-                });
-            }
-        };
-
-        entry.init();
-
-        return entry;
+            let base64str = ttf2base64(buffer);
+            let saveBtn = $('.saveas');
+            saveBtn.attr('href', base64str);
+            saveBtn.attr('download', 'save.ttf');
+        });
     }
-);
+};
+
+entry.init();

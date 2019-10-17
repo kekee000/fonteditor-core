@@ -1,37 +1,36 @@
+/**
+ * @file ttf2svg
+ * @author mengke01(kekee000@gmail.com)
+ */
 
-define(
-    function (require) {
+import assert from 'assert';
+import TTFReader from 'fonteditor-core/ttf/ttfreader';
+import ttf2svg from 'fonteditor-core/ttf/ttf2svg';
+import svg2ttfobject from 'fonteditor-core/ttf/svg2ttfobject';
 
-        var TTFReader = require('ttf/ttfreader');
-        var ttf2svg = require('ttf/ttf2svg');
-        var svg2ttfobject = require('ttf/svg2ttfobject');
+describe('ttf 转 svg', function () {
 
-        describe('ttf 转 svg', function () {
+    let fontObject = new TTFReader().read(require('testdata/baiduHealth.ttf'));
+    let svg = ttf2svg(fontObject);
+    let ttf = svg2ttfobject(svg);
 
-            var fontObject = new TTFReader().read(require('data/baiduHealth.ttf'));
-            var svg = ttf2svg(fontObject);
-            var ttf = svg2ttfobject(svg);
+    it('test genrate svg font', function () {
+        assert.ok(svg.length > 1000);
+    });
 
-            it('test genrate svg font', function () {
-                expect(svg.length).toBeGreaterThan(1000);
-            });
+    it('test read svg font', function () {
+        assert.equal(ttf.from, 'svgfont');
+        assert.equal(ttf.name.fontFamily, 'baiduHealth');
 
-            it('test read svg font', function () {
-                expect(ttf.from).toBe('svgfont');
-                expect(ttf.name.fontFamily).toBe('baiduHealth');
+        assert.equal(ttf.head.unitsPerEM, fontObject.head.unitsPerEM);
+        assert.equal(ttf.head.xMax, fontObject.head.xMax);
+        assert.equal(ttf.head.yMax, fontObject.head.yMax);
 
-                expect(ttf.head.unitsPerEM).toBe(fontObject.head.unitsPerEM);
-                expect(ttf.head.xMax).toBe(fontObject.head.xMax);
-                expect(ttf.head.yMax).toBe(fontObject.head.yMax);
+        assert.equal(ttf.hhea.ascent, fontObject.hhea.ascent);
+        assert.equal(ttf.hhea.descent, fontObject.hhea.descent);
 
-                expect(ttf.hhea.ascent).toBe(fontObject.hhea.ascent);
-                expect(ttf.hhea.descent).toBe(fontObject.hhea.descent);
-
-                expect(ttf.glyf.length).toBe(14);
-                expect(ttf.glyf[3].contours.length).toBe(3);
-                expect(ttf.glyf[3].unicode[0]).toBe(57357);
-            });
-        });
-
-    }
-);
+        assert.equal(ttf.glyf.length, 14);
+        assert.equal(ttf.glyf[3].contours.length, 3);
+        assert.equal(ttf.glyf[3].unicode[0], 57357);
+    });
+});
