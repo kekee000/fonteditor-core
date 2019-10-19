@@ -3,11 +3,12 @@
  * @author mengke01(kekee000@gmail.com)
  */
 import assert from 'assert';
+import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 
 describe('读ttf数据', function () {
 
-    let fontObject = new TTFReader().read(require('testdata/baiduHealth.ttf'));
+    let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
 
     it('test read ttf', function () {
         assert.equal(fontObject.version, 1);
@@ -65,7 +66,7 @@ describe('转换compound到simple', function () {
 
     let fontObject = new TTFReader({
         compound2simple: true
-    }).read(require('testdata/baiduHealth.ttf'));
+    }).read(readData('baiduHealth.ttf'));
 
     it('test read ttf glyf', function () {
         assert.equal(!!fontObject.glyf[16].compound, false);
@@ -77,7 +78,7 @@ describe('转换compound到simple', function () {
 describe('读ttf hinting数据', function () {
     let fontObject = new TTFReader({
         hinting: true
-    }).read(require('testdata/baiduHealth-hinting.ttf'));
+    }).read(readData('baiduHealth-hinting.ttf'));
 
     it('test read hinting', function () {
         assert.equal(fontObject.cvt.length, 24);
@@ -93,7 +94,7 @@ describe('ttf subset', function () {
         subset: [
             65, 0xe003, 0xe00d
         ]
-    }).read(require('testdata/baiduHealth.ttf'));
+    }).read(readData('baiduHealth.ttf'));
 
     it('test read subset', function () {
         assert.equal(fontObject.glyf.length, 3);
@@ -109,7 +110,7 @@ describe('ttf subset with compound', function () {
         subset: [
             65, 0x21, 0x22
         ]
-    }).read(require('testdata/wingdings3.ttf'));
+    }).read(readData('wingdings3.ttf'));
 
     it('test read hinting', function () {
         assert.equal(fontObject.glyf.length, 3);

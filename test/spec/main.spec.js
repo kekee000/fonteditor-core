@@ -24,6 +24,8 @@ describe('main', function () {
         assert.ok(fonteditor.otf2ttfobject, 'exports');
         assert.ok(fonteditor.ttf2base64, 'exports');
         assert.ok(fonteditor.ttf2icon, 'exports');
+        assert.ok(fonteditor.ttftowoff2, 'exports');
+        assert.ok(fonteditor.woff2tottf, 'exports');
     });
 });
 

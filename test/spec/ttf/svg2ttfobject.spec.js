@@ -3,11 +3,12 @@
  * @author mengke01(kekee000@gmail.com)
  */
 import assert from 'assert';
+import {readData} from '../data';
 import svg2ttfobject from 'fonteditor-core/ttf/svg2ttfobject';
 
 describe('svg转ttf对象', function () {
 
-    let ttfObject = svg2ttfobject(require('testdata/iconfont-xin.svg'));
+    let ttfObject = svg2ttfobject(readData('iconfont-xin.svg'));
 
     it('test svg glyf', function () {
         assert.equal(ttfObject.from, 'svg');
@@ -16,7 +17,7 @@ describe('svg转ttf对象', function () {
         assert.equal(ttfObject.glyf[1].contours.length, 1);
     });
 
-    let fontObject = svg2ttfobject(require('testdata/icomoon.svg'));
+    let fontObject = svg2ttfobject(readData('icomoon.svg'));
 
     it('test svg font', function () {
         assert.equal(fontObject.from, 'svgfont');

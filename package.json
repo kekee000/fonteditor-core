@@ -1,13 +1,14 @@
 {
   "name": "fonteditor-core",
-  "version": "2.0.1",
-  "description": "fonts (ttf, woff, eot, svg, otf) parse, write, transform. glyph adjust.",
+  "version": "2.0.3",
+  "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform. glyph adjust.",
   "keywords": [
     "sfnt",
     "font",
     "editor",
     "ttf",
     "woff",
+    "woff2",
     "svg",
     "eot",
     "otf"
@@ -49,7 +50,8 @@
   },
   "files": [
     "lib",
-    "src"
+    "src",
+    "woff2"
   ],
   "main": "./lib/main.js",
   "devDependencies": {

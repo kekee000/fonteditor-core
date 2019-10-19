@@ -9,13 +9,14 @@
 ## Feature
 
 - sfnt parse
-- read, write, transform fonts (ttf, woff, eot, svg, otf)
+- read, write, transform fonts (ttf, woff, woff2, eot, svg, otf)
 - ttf glyph adjust
 - svg to glyph
 
 ## Usage
 
 ```js
+
 // read font file
 let Font = require('fonteditor-core').Font;
 let fs = require('fs');
@@ -23,7 +24,7 @@ let buffer = fs.readFileSync('font.ttf');
 
 // read font data
 let font = Font.create(buffer, {
-  type: 'ttf', // support ttf,woff,eot,otf,svg
+  type: 'ttf', // support ttf, woff, woff2, eot, otf, svg
   subset: [65, 66], // only read `a`, `b` glyf
   hinting: true, // save font hinting
   compound2simple: true, // transform ttf compound glyf to simple
@@ -32,6 +33,7 @@ let font = Font.create(buffer, {
 });
 let fontObject = font.get();
 console.log(Object.keys(fontObject));
+
 /* => [ 'version',
   'numTables',
   'searchRenge',
@@ -53,7 +55,7 @@ console.log(Object.keys(fontObject));
 
 // write font file
 let buffer = font.write({
-  type: 'woff', // support ttf,woff,eot,otf,svg
+  type: 'woff', // support ttf, woff, woff2, eot, otf, svg
   hinting: true, // save font hinting
   deflate: null, // deflate function for woff
 });
@@ -61,7 +63,7 @@ let buffer = font.write({
 
 // to base64 str
 font.toBase64({
-  type: 'ttf' // support ttf,woff,eot,svg
+  type: 'ttf' // support ttf, woff, woff2, eot, svg
 });
 
 // optimize glyf
@@ -89,6 +91,24 @@ font.merge(font1, {
 });
 
 ```
+
+### woff2
+
+Notice: woff2 use wasm build of google woff2, before read and write `woff2`, you should first call `woff2.init()`.
+
+```javascript
+let woff2 = require('fonteditor-core').woff2;
+
+woff2.init().then(() => {
+  let font = Font.create(buffer, {
+    type: 'woff2'
+  });
+  font.write({type: 'woff2'});
+});
+
+```
+
+
 
 ## Demo
 

@@ -2,10 +2,11 @@
  * @file font
  * @author mengke01(kekee000@gmail.com)
  */
-/* globals Int8Array */
+/* globals Int8Array, before */
 const assert = require('assert');
 const fs = require('fs');
 const Font = require('./fonteditor-core').Font;
+const woff2 = require('./fonteditor-core').woff2;
 const md5 = require('./util').md5;
 
 function readttf(file) {
@@ -13,6 +14,28 @@ function readttf(file) {
 }
 
 describe('font', function () {
+
+    this.timeout(2000);
+    before(function (done) {
+        woff2.init().then(() => done());
+    });
+
+
+    it('write ttf', function () {
+        let buffer = readttf(__dirname + '/../data/bebas.ttf');
+        let font = Font.create(buffer, {
+            type: 'ttf'
+        });
+        assert.ok(font.data.name.fontFamily === 'Bebas', 'test read ttf');
+
+        let font2 = Font.create(buffer, {
+            type: 'ttf'
+        });
+        let ttfBuffer = font.write();
+        let ttfBuffer2 = font2.write();
+        assert.ok(md5(ttfBuffer) === md5(ttfBuffer2), 'test write stable');
+    });
+
     it('write ttf', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
         let font = Font.create(buffer, {
@@ -57,6 +80,27 @@ describe('font', function () {
 
         let woffBuffer2 = font2.write({
             type: 'woff'
+        });
+        assert.ok(md5(woffBuffer) === md5(woffBuffer2), 'test write stable');
+    });
+
+    it('write woff2', function () {
+        let buffer = readttf(__dirname + '/../data/bebas.ttf');
+        let font = Font.create(buffer, {
+            type: 'ttf'
+        });
+        // 写woff
+        let woffBuffer = font.write({
+            type: 'woff2'
+        });
+        assert.ok(woffBuffer, 'test write woff2');
+
+        let font2 = Font.create(buffer, {
+            type: 'ttf'
+        });
+
+        let woffBuffer2 = font2.write({
+            type: 'woff2'
         });
         assert.ok(md5(woffBuffer) === md5(woffBuffer2), 'test write stable');
     });

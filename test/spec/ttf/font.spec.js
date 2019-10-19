@@ -3,10 +3,14 @@
  * @author mengke01(kekee000@gmail.com)
  */
 /* eslint-disable fecs-no-require */
+/* globals before */
 import assert from 'assert';
+import {readData} from '../data';
 import Font from 'fonteditor-core/ttf/font';
+import main from 'fonteditor-core/main';
 
 describe('测试 Font 对象============================', function () {
+
     it('test create empty', function () {
         let font = Font.create();
         assert.equal(font.data.version, 1);
@@ -24,7 +28,7 @@ describe('测试 Font 对象============================', function () {
 });
 
 describe('读ttf数据', function () {
-    let font = Font.create(require('testdata/baiduHealth.ttf'), {
+    let font = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     });
     it('test read ttf', function () {
@@ -34,7 +38,7 @@ describe('读ttf数据', function () {
 });
 
 describe('转换compound到simple', function () {
-    let font = Font.create(require('testdata/baiduHealth.ttf'), {
+    let font = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf',
         compound2simple: true
     });
@@ -46,7 +50,7 @@ describe('转换compound到simple', function () {
 });
 
 describe('读otf数据', function () {
-    let font = Font.create(require('testdata/BalladeContour.otf.js'), {
+    let font = Font.create(readData('BalladeContour.otf'), {
         type: 'otf'
     });
     it('test read otf', function () {
@@ -58,7 +62,7 @@ describe('读otf数据', function () {
 });
 
 describe('读取 woff 数据', function () {
-    let buffer = Font.create(require('testdata/baiduHealth.ttf'), {
+    let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
         type: 'woff'
@@ -74,8 +78,29 @@ describe('读取 woff 数据', function () {
     });
 });
 
+describe('读取 woff2 数据', function () {
+    this.timeout(2000);
+    before(function (done) {
+        main.woff2.init().then(() => done());
+    });
+
+    it('test read woff2', function () {
+        let buffer = Font.create(readData('baiduHealth.ttf'), {
+            type: 'ttf'
+        }).write({
+            type: 'woff2'
+        });
+        let font = Font.create(buffer, {
+            type: 'woff2'
+        });
+        assert.equal(font.data.version, 1);
+        assert.equal(font.data.head.magickNumber, 1594834165);
+        assert.equal(font.data.head.unitsPerEm, 512);
+    });
+});
+
 describe('读取 eot 数据', function () {
-    let buffer = Font.create(require('testdata/baiduHealth.ttf'), {
+    let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
         type: 'eot'
@@ -92,7 +117,7 @@ describe('读取 eot 数据', function () {
 });
 
 describe('读取 svg 文件', function () {
-    let font = Font.create(require('testdata/iconfont-xin.svg'), {
+    let font = Font.create(readData('iconfont-xin.svg'), {
         type: 'svg'
     });
     it('test read svg', function () {
@@ -104,7 +129,7 @@ describe('读取 svg 文件', function () {
 });
 
 describe('读取 svg 字体', function () {
-    let font = Font.create(require('testdata/icomoon.svg'), {
+    let font = Font.create(readData('icomoon.svg'), {
         type: 'svg'
     });
     it('test read svg font', function () {
@@ -128,7 +153,7 @@ describe('读取 svg 字体', function () {
 describe('写ttf数据', function () {
 
     it('test write ttf', function () {
-        let buffer = Font.create(require('testdata/baiduHealth.ttf'), {
+        let buffer = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         }).write();
         assert.ok(buffer.byteLength > 1000);
@@ -143,7 +168,7 @@ describe('写ttf数据', function () {
     });
 
     it('test write ttf hinting', function () {
-        let buffer = Font.create(require('testdata/baiduHealth-hinting.ttf'), {
+        let buffer = Font.create(readData('baiduHealth-hinting.ttf'), {
             type: 'ttf',
             hinting: true
         }).write({
@@ -164,7 +189,7 @@ describe('写ttf数据', function () {
 });
 
 describe('写eot数据', function () {
-    let buffer = Font.create(require('testdata/baiduHealth.ttf'), {
+    let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
         type: 'eot'
@@ -185,7 +210,7 @@ describe('写eot数据', function () {
 });
 
 describe('写woff数据', function () {
-    let buffer = Font.create(require('testdata/baiduHealth.ttf'), {
+    let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
         type: 'woff'
@@ -205,9 +230,34 @@ describe('写woff数据', function () {
     });
 });
 
+describe('写woff2数据', function () {
+    this.timeout(2000);
+    before(function (done) {
+        main.woff2.init().then(() => done());
+    });
+
+    it('test read woff2', function () {
+        let buffer = Font.create(readData('baiduHealth.ttf'), {
+            type: 'ttf'
+        }).write({
+            type: 'woff2'
+        });
+        it('test woff format', function () {
+            assert.ok(buffer.byteLength > 1000);
+            assert.ok(buffer.byteLength < 10000);
+        });
+    
+        let font = Font.create(buffer, {
+            type: 'woff2'
+        });
+        assert.equal(font.data.version, 1);
+        assert.equal(font.data.head.magickNumber, 1594834165);
+        assert.equal(font.data.head.unitsPerEm, 512);
+    });
+});
 
 describe('写svg数据', function () {
-    let font = Font.create(require('testdata/baiduHealth.ttf'), {
+    let font = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     });
     let svg = font.write({
@@ -226,8 +276,13 @@ describe('写svg数据', function () {
 });
 
 describe('toBase64', function () {
+    this.timeout(2000);
+    before(function (done) {
+        main.woff2.init().then(() => done());
+    });
+
     it('test ttf to toBase64', function () {
-        let base64Str = Font.create(require('testdata/baiduHealth.ttf'), {
+        let base64Str = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         }).toBase64({
             type: 'ttf'
@@ -238,7 +293,7 @@ describe('toBase64', function () {
     });
 
     it('test woff to toBase64', function () {
-        let base64Str = Font.create(require('testdata/baiduHealth.ttf'), {
+        let base64Str = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         }).toBase64({
             type: 'woff'
@@ -248,8 +303,19 @@ describe('toBase64', function () {
         assert.ok(base64Str.length < 10000);
     });
 
+    it('test woff2 to toBase64', function () {
+        let base64Str = Font.create(readData('baiduHealth.ttf'), {
+            type: 'ttf'
+        }).toBase64({
+            type: 'woff2'
+        });
+        assert.equal(base64Str.indexOf('data:font/woff2;'), 0);
+        assert.ok(base64Str.length > 1000);
+        assert.ok(base64Str.length < 10000);
+    });
+
     it('test eot to toBase64', function () {
-        let base64Str = Font.create(require('testdata/baiduHealth.ttf'), {
+        let base64Str = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         }).toBase64({
             type: 'eot'
@@ -260,7 +326,7 @@ describe('toBase64', function () {
     });
 
     it('test svg to toBase64', function () {
-        let base64Str = Font.create(require('testdata/baiduHealth.ttf'), {
+        let base64Str = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         }).toBase64({
             type: 'svg'
@@ -271,7 +337,7 @@ describe('toBase64', function () {
     });
 
     it('test svg symbol to toBase64', function () {
-        let base64Str = Font.create(require('testdata/baiduHealth.ttf'), {
+        let base64Str = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         }).toBase64({
             type: 'symbol'
@@ -284,7 +350,7 @@ describe('toBase64', function () {
 
 describe('font method', function () {
     it('compound2simple', function () {
-        let font = Font.create(require('testdata/baiduHealth.ttf'), {
+        let font = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         });
         font.compound2simple();
@@ -294,7 +360,7 @@ describe('font method', function () {
     });
 
     it('optimize', function () {
-        let font = Font.create(require('testdata/baiduHealth.ttf'), {
+        let font = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         });
         font.compound2simple();
@@ -304,7 +370,7 @@ describe('font method', function () {
     });
 
     it('sort', function () {
-        let font = Font.create(require('testdata/baiduHealth.ttf'), {
+        let font = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         });
         font.sort();
@@ -314,7 +380,7 @@ describe('font method', function () {
     });
 
     it('find', function () {
-        let font = Font.create(require('testdata/baiduHealth.ttf'), {
+        let font = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         });
         let list = font.find({
@@ -337,10 +403,10 @@ describe('font method', function () {
     });
 
     it('merge', function () {
-        let font = Font.create(require('testdata/baiduHealth.ttf'), {
+        let font = Font.create(readData('baiduHealth.ttf'), {
             type: 'ttf'
         });
-        let font1 = Font.create(require('testdata/icomoon.svg'), {
+        let font1 = Font.create(readData('icomoon.svg'), {
             type: 'svg'
         });
         font1.optimize();
