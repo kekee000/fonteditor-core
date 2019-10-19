@@ -4,13 +4,14 @@
  */
 
 import assert from 'assert';
+import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2svg from 'fonteditor-core/ttf/ttf2svg';
 import svg2ttfobject from 'fonteditor-core/ttf/svg2ttfobject';
 
 describe('ttf 转 svg', function () {
 
-    let fontObject = new TTFReader().read(require('testdata/baiduHealth.ttf'));
+    let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
     let svg = ttf2svg(fontObject);
     let ttf = svg2ttfobject(svg);
 

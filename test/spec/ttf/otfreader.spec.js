@@ -4,11 +4,12 @@
  */
 
 import assert from 'assert';
+import {readData} from '../data';
 import OTFReader from 'fonteditor-core/ttf/otfreader';
 
 describe('读otf数据', function () {
 
-    let fontObject = new OTFReader().read(require('testdata/BalladeContour.otf.js'));
+    let fontObject = new OTFReader().read(readData('BalladeContour.otf'));
 
     it('test read otf', function () {
         assert.equal(fontObject.version, 'OTTO');
@@ -66,7 +67,7 @@ describe('读otf数据', function () {
     it('test read otf subset', function () {
         let fontObject = new OTFReader({
             subset: [0x31, 0x32, 0xe001]
-        }).read(require('testdata/BalladeContour.otf.js'));
+        }).read(readData('BalladeContour.otf'));
         assert.equal(fontObject.glyf.length, 3);
         assert.equal(fontObject.glyf[0].name, '.notdef');
         assert.equal(fontObject.glyf[1].unicode[0], 0x31);

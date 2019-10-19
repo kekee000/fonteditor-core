@@ -3,13 +3,14 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
+import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2woff from 'fonteditor-core/ttf/ttf2woff';
 import woff2ttf from 'fonteditor-core/ttf/woff2ttf';
 import assert from 'assert';
 
 describe('woff 转 ttf', function () {
-    let woffBuffer = ttf2woff(require('testdata/baiduHealth-hinting.ttf'));
+    let woffBuffer = ttf2woff(readData('baiduHealth-hinting.ttf'));
     let ttf = new TTFReader({
         hinting: true
     }).read(woff2ttf(woffBuffer));

@@ -3,13 +3,14 @@
  * @author mengke01(kekee000@gmail.com)
  */
 import assert from 'assert';
+import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import TTFWriter from 'fonteditor-core/ttf/ttfwriter';
 
 
 describe('写ttf数据', function () {
 
-    let fontObject = new TTFReader().read(require('testdata/baiduHealth.ttf'));
+    let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
 
     it('test write ttf', function () {
         let buffer = new TTFWriter().write(fontObject);
@@ -75,7 +76,7 @@ describe('写ttf hinting数据', function () {
 
     let fontObject = new TTFReader({
         hinting: true
-    }).read(require('testdata/baiduHealth-hinting.ttf'));
+    }).read(readData('baiduHealth-hinting.ttf'));
 
     it('test write ttf hinting', function () {
         let buffer = new TTFWriter({

@@ -4,13 +4,14 @@
  */
 
 import assert from 'assert';
+import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2woff from 'fonteditor-core/ttf/ttf2woff';
 import woff2ttf from 'fonteditor-core/ttf/woff2ttf';
 
 describe('ttf 转 woff', function () {
 
-    let woffBuffer = ttf2woff(require('testdata/baiduHealth.ttf'));
+    let woffBuffer = ttf2woff(readData('baiduHealth.ttf'));
 
     it('test woff format', function () {
         assert.ok(woffBuffer.byteLength > 1000);

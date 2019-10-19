@@ -20,12 +20,15 @@ import ttf2eot from './ttf2eot';
 import ttf2woff from './ttf2woff';
 import ttf2svg from './ttf2svg';
 import ttf2symbol from './ttf2symbol';
+import ttftowoff2 from './ttftowoff2';
+import woff2tottf from './woff2tottf';
 
 import ttf2base64 from './ttf2base64';
 import eot2base64 from './eot2base64';
 import woff2base64 from './woff2base64';
 import svg2base64 from './svg2base64';
 import bytes2base64 from './util/bytes2base64';
+import woff2tobase64 from './woff2tobase64';
 
 import optimizettf from './util/optimizettf';
 
@@ -108,6 +111,10 @@ export default class Font {
             buffer = woff2ttf(buffer, options);
             this.data = new TTFReader(options).read(buffer);
         }
+        else if (options.type === 'woff2') {
+            buffer = woff2tottf(buffer, options);
+            this.data = new TTFReader(options).read(buffer);
+        }
         else if (options.type === 'svg') {
             this.data = svg2ttfobject(buffer, options);
         }
@@ -152,6 +159,10 @@ export default class Font {
         else if (options.type === 'woff') {
             buffer = new TTFWriter(options).write(this.data);
             buffer = ttf2woff(buffer, options);
+        }
+        else if (options.type === 'woff2') {
+            buffer = new TTFWriter(options).write(this.data);
+            buffer = ttftowoff2(buffer, options);
         }
         else if (options.type === 'svg') {
             buffer = ttf2svg(this.data, options);
@@ -209,6 +220,9 @@ export default class Font {
         }
         else if (options.type === 'woff') {
             base64Str = woff2base64(buffer);
+        }
+        else if (options.type === 'woff2') {
+            base64Str = woff2tobase64(buffer);
         }
         else if (options.type === 'svg') {
             base64Str = svg2base64(buffer);

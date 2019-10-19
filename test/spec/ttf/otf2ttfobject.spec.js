@@ -4,12 +4,13 @@
  */
 
 import assert from 'assert';
+import {readData} from '../data';
 import OTFReader from 'fonteditor-core/ttf/otfreader';
 import otf2ttfobject from 'fonteditor-core/ttf/otf2ttfobject';
 
 describe('otf 转ttf object', function () {
 
-    let fontObject = new OTFReader().read(require('testdata/BalladeContour.otf.js'));
+    let fontObject = new OTFReader().read(readData('BalladeContour.otf'));
     let numGlyphs = fontObject.maxp.numGlyphs;
     let glyfContours = fontObject.glyf[3].contours.length;
     let glyfAdvanceWidth = fontObject.glyf[3].advanceWidth;

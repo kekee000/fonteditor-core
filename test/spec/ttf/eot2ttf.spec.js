@@ -3,13 +3,14 @@
  * @author mengke01(kekee000@gmail.com)
  */
 import assert from 'assert';
+import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2eot from 'fonteditor-core/ttf/ttf2eot';
 import eot2ttf from 'fonteditor-core/ttf/eot2ttf';
 
 describe('eot 转 ttf', function () {
 
-    let eotBuffer = ttf2eot(require('testdata/baiduHealth-hinting.ttf'))
+    let eotBuffer = ttf2eot(readData('baiduHealth-hinting.ttf'));
     let ttf = new TTFReader({
         hinting: true
     }).read(eot2ttf(eotBuffer));
