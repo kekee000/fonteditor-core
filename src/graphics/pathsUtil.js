@@ -16,12 +16,12 @@ import pathRotate from './pathRotate';
  * @return {Array} 变换后的路径
  */
 function mirrorPaths(paths, xScale, yScale) {
-    let {x, y, w, h} = computePath.apply(null, paths);
+    let {x, y, width, height} = computePath.apply(null, paths);
 
     if (xScale === -1) {
         paths.forEach(function (p) {
             pathAdjust(p, -1, 1, -x, 0);
-            pathAdjust(p, 1, 1, x + w, 0);
+            pathAdjust(p, 1, 1, x + width, 0);
             p.reverse();
         });
 
@@ -30,7 +30,7 @@ function mirrorPaths(paths, xScale, yScale) {
     if (yScale === -1) {
         paths.forEach(function (p) {
             pathAdjust(p, 1, -1, 0, -y);
-            pathAdjust(p, 1, 1, 0, y + h);
+            pathAdjust(p, 1, 1, 0, y + height);
             p.reverse();
         });
     }
