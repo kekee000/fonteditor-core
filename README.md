@@ -18,10 +18,10 @@
 ```js
 
 // read font file
-let Font = require('fonteditor-core').Font;
-let fs = require('fs');
-let buffer = fs.readFileSync('font.ttf');
+const Font = require('fonteditor-core').Font;
+const fs = require('fs');
 
+let buffer = fs.readFileSync('font.ttf');
 // read font data
 let font = Font.create(buffer, {
   type: 'ttf', // support ttf, woff, woff2, eot, otf, svg
@@ -94,15 +94,19 @@ font.merge(font1, {
 
 ### woff2
 
-Notice: woff2 use wasm build of google woff2, before read and write `woff2`, you should first call `woff2.init()`.
+Notice: woff2 use wasm build of google woff2, before read and write `woff2`,
+you should first call `woff2.init()`.
 
 ```javascript
-let woff2 = require('fonteditor-core').woff2;
+const Font = require('fonteditor-core').Font;
+const woff2 = require('fonteditor-core').woff2;
 
 woff2.init().then(() => {
+  // read
   let font = Font.create(buffer, {
     type: 'woff2'
   });
+  // write
   font.write({type: 'woff2'});
 });
 
@@ -120,6 +124,12 @@ npm run dev
 
 ```
 npm run build
+```
+
+## test
+
+```
+npm run test
 ```
 
 ## support

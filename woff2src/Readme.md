@@ -1,9 +1,10 @@
 # wasm version of google woff2
 
 modify from https://github.com/alimilhim/woff2-wasm
-thanks to `woff2-wasm`
+
 add woff2Enc and woff2Dec support
 
+thanks to `woff2-wasm`
 
 ## usage
 
