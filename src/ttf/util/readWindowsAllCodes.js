@@ -18,52 +18,62 @@
 export default function readWindowsAllCodes(tables, ttf) {
 
     let codes = {};
-    let i;
-    let l;
 
     // 读取windows unicode 编码段
-    let format0 = tables.filter(function (item) {
+    let format0 = tables.find(function (item) {
         return item.format === 0;
     });
 
-    if (format0.length) {
-        format0 = format0[0];
-        for (i = 0, l = format0.glyphIdArray.length; i < l; i++) {
+    // 读取windows unicode 编码段
+    let format12 = tables.find(function (item) {
+        return item.platformID === 3
+            && item.encodingID === 10
+            && item.format === 12;
+    });
+
+    let format4 = tables.find(function (item) {
+        return item.platformID === 3
+            && item.encodingID === 1
+            && item.format === 4;
+    });
+
+    let format2 = tables.find(function (item) {
+        return item.platformID === 3
+            && item.encodingID === 3
+            && item.format === 2;
+    });
+
+    let format14 = tables.find(function (item) {
+        return item.platformID === 0
+            && item.encodingID === 5
+            && item.format === 14;
+    });
+
+    if (format0) {
+        for (let i = 0, l = format0.glyphIdArray.length; i < l; i++) {
             if (format0.glyphIdArray[i]) {
                 codes[i] = format0.glyphIdArray[i];
             }
         }
     }
 
-    // 读取windows unicode 编码段
-    let format12 = tables.filter(function (item) {
-        return item.platformID === 3
-            && item.encodingID === 10
-            && item.format === 12;
-    })[0];
+    // format 14 support
+    if (format14) {
+        for (let i = 0, l = format14.groups.length; i < l; i++) {
+            let {unicode, glyphId} = format14.groups[i];
+            if (unicode) {
+                codes[unicode] = glyphId;
+            }
+        }
+    }
 
-    let format4 = tables.filter(function (item) {
-        return item.platformID === 3
-            && item.encodingID === 1
-            && item.format === 4;
-    })[0];
-
-    let format2 = tables.filter(function (item) {
-        return item.platformID === 3
-            && item.encodingID === 3
-            && item.format === 2;
-    })[0];
-
-    let start;
-    let end;
-    let index;
     // 读取format12表
     if (format12) {
-        for (i = 0, l = format12.nGroups; i < l; i++) {
+        for (let i = 0, l = format12.nGroups; i < l; i++) {
             let group = format12.groups[i];
             let startId = group.startId;
-            start = group.start;
-            end = group.end;
+            let start = group.start;
+            let end = group.end;
             for (;start <= end;) {
                 codes[start++] = startId++;
             }
@@ -75,16 +85,16 @@ export default function readWindowsAllCodes(tables, ttf) {
         // graphIdArray 和idRangeOffset的偏移量
         let graphIdArrayIndexOffset = (format4.glyphIdArrayOffset - format4.idRangeOffsetOffset) / 2;
 
-        for (i = 0; i < segCount; ++i) {
+        for (let i = 0; i < segCount; ++i) {
             // 读取单个字符
-            for (start = format4.startCode[i], end = format4.endCode[i]; start <= end; ++start) {
+            for (let start = format4.startCode[i], end = format4.endCode[i]; start <= end; ++start) {
                 // range offset = 0
                 if (format4.idRangeOffset[i] === 0) {
                     codes[start] = (start + format4.idDelta[i]) % 0x10000;
                 }
                 // rely on to glyphIndexArray
                 else {
-                    index = i + format4.idRangeOffset[i] / 2
+                    let index = i + format4.idRangeOffset[i] / 2
                         + (start - format4.startCode[i])
                         - graphIdArrayIndexOffset;
 
@@ -109,9 +119,9 @@ export default function readWindowsAllCodes(tables, ttf) {
         let subHeads = format2.subHeads;
         let glyphs = format2.glyphs;
         let numGlyphs = ttf.maxp.numGlyphs;
-        index = 0;
+        let index = 0;
 
-        for (i = 0; i < 256; i++) {
+        for (let i = 0; i < 256; i++) {
             // 单字节编码
             if (subHeadKeys[i] === 0) {
                 if (i >= format2.maxPos) {

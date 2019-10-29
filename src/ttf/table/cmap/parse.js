@@ -174,6 +174,44 @@ function readSubTable(reader, ttf, subTable, cmapOffset) {
         }
         format12.groups = groups;
     }
+    // format 14
+    else if (subTable.format === 14) {
+        let format14 = subTable;
+        format14.length = reader.readUint32();
+        let numVarSelectorRecords = reader.readUint32();
+        let groups = [];
+        for (let i = 0; i < numVarSelectorRecords; i++) {
+            let varSelector = reader.readUint24();
+            let defaultUVSOffset = reader.readUint32();
+            let nonDefaultUVSOffset = reader.readUint32();
+
+            if (defaultUVSOffset) {
+                let numUnicodeValueRanges = reader.readUint32(startOffset + defaultUVSOffset);
+                for (let j = 0; j < numUnicodeValueRanges; j++) {
+                    let startUnicode = reader.readUint24();
+                    let additionalCount = reader.readUint8();
+                    groups.push({
+                        start: startUnicode,
+                        end: startUnicode + additionalCount,
+                        varSelector
+                    });
+                }
+            }
+            if (nonDefaultUVSOffset) {
+                let numUVSMappings = reader.readUint32(startOffset + nonDefaultUVSOffset);
+                for (let j = 0; j < numUVSMappings; j++) {
+                    let unicode = reader.readUint24();
+                    let glyphId = reader.readUint16();
+                    groups.push({
+                        unicode,
+                        glyphId,
+                        varSelector
+                    });
+                }
+            }
+        }
+        format14.groups = groups;
+    }
     else {
         console.warn('not support cmap format:' + subTable.format);
     }
