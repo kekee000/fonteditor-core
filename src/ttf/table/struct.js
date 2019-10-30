@@ -23,7 +23,8 @@ const struct = {
     // extend data type
     Char: 13,
     String: 14,
-    Bytes: 15
+    Bytes: 15,
+    Uint24: 20
 };
 
 // 反转名字查找

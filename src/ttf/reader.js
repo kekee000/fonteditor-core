@@ -146,6 +146,17 @@ export default class Reader {
     }
 
     /**
+     * 读取一个uint24整形
+     *
+     * @param {number} offset 偏移
+     * @return {number}
+     */
+    readUint24(offset) {
+        let [i, j, k] = this.readBytes(offset || this.offset, 3);
+        return (i << 16) + (j << 8) + k;
+    }
+
+    /**
      * 读取fixed类型
      *
      * @param {number} offset 偏移
