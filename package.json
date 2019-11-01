@@ -1,7 +1,7 @@
 {
   "name": "fonteditor-core",
-  "version": "2.0.5",
-  "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform. glyph adjust.",
+  "version": "2.0.6",
+  "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform, glyph adjust.",
   "keywords": [
     "sfnt",
     "font",

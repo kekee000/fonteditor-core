@@ -9,7 +9,13 @@
 ## Feature
 
 - sfnt parse
-- read, write, transform fonts (ttf, woff, woff2, eot, svg, otf)
+- read, write, transform fonts
+  - ttf (read and write)
+  - woff (read and write)
+  - woff2 (read and write)
+  - eot (read and write)
+  - svg (read and write)
+  - otf (only read)
 - ttf glyph adjust
 - svg to glyph
 
@@ -55,7 +61,7 @@ console.log(Object.keys(fontObject));
 
 // write font file
 let buffer = font.write({
-  type: 'woff', // support ttf, woff, woff2, eot, otf, svg
+  type: 'woff', // support ttf, woff, woff2, eot, svg
   hinting: true, // save font hinting
   deflate: null, // deflate function for woff
 });
