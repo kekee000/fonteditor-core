@@ -1,20 +1,20 @@
+/**
+ * @file ttf2symbol
+ * @author mengke01(kekee000@gmail.com)
+ */
 
-define(
-    function (require) {
+import assert from 'assert';
+import {readData} from '../data';
+import TTFReader from 'fonteditor-core/ttf/ttfreader';
+import ttf2symbol from 'fonteditor-core/ttf/ttf2symbol';
 
-        var TTFReader = require('ttf/ttfreader');
-        var ttf2symbol = require('ttf/ttf2symbol');
+describe('ttf 转 symbol', function () {
 
-        describe('ttf 转 symbol', function () {
+    let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
+    let svg = ttf2symbol(fontObject);
 
-            var fontObject = new TTFReader().read(require('data/baiduHealth.ttf'));
-            var svg = ttf2symbol(fontObject);
-
-            it('test genrate svg symbol', function () {
-                expect(svg.length).toBeGreaterThan(1000);
-                expect(svg.match(/<symbol\s/g).length).toBe(14);
-            });
-        });
-
-    }
-);
+    it('test genrate svg symbol', function () {
+        assert.ok(svg.length > 1000);
+        assert.equal(svg.match(/<symbol\s/g).length, 14);
+    });
+});

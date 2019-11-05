@@ -3,21 +3,14 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-
-define(
-    function (require) {
-        var lang = require('../common/lang');
-        var emptyttf = require('./data/empty');
-        var config = require('./data/default');
+import {clone} from '../common/lang';
+import emptyttf from './data/empty';
+import config from './data/default';
 
 
-        function getEmpty() {
-            var ttf = lang.clone(emptyttf);
-            lang.extend(ttf.name, config.name);
-            ttf.head.created = ttf.head.modified = Date.now();
-            return ttf;
-        }
-
-        return getEmpty;
-    }
-);
+export default function getEmpty() {
+    let ttf = clone(emptyttf);
+    Object.assign(ttf.name, config.name);
+    ttf.head.created = ttf.head.modified = Date.now();
+    return ttf;
+}

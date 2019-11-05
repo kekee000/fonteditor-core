@@ -5,53 +5,46 @@
  * https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6.html
  */
 
+import table from './table';
 
-define(
-    function (require) {
-        var table = require('./table');
+export default table.create(
+    'directory',
+    [],
+    {
+        read(reader, ttf) {
+            let tables = {};
+            let numTables = ttf.numTables;
+            let offset = this.offset;
 
-        var directory = table.create(
-            'directory',
-            [],
-            {
-                read: function (reader, ttf) {
-                    var tables = {};
-                    var numTables = ttf.numTables;
-                    var offset = this.offset;
+            for (let i = offset, l = numTables * 16; i < l; i += 16) {
+                let name = reader.readString(i, 4).trim();
 
-                    for (var i = offset, l = numTables * 16; i < l; i += 16) {
-                        var name = reader.readString(i, 4).trim();
-
-                        tables[name] = {
-                            name: name,
-                            checkSum: reader.readUint32(i + 4),
-                            offset: reader.readUint32(i + 8),
-                            length: reader.readUint32(i + 12)
-                        };
-                    }
-
-                    return tables;
-                },
-
-                write: function (writer, ttf) {
-
-                    var tables = ttf.support.tables;
-                    for (var i = 0, l = tables.length; i < l; i++) {
-                        writer.writeString((tables[i].name + '    ').slice(0, 4));
-                        writer.writeUint32(tables[i].checkSum);
-                        writer.writeUint32(tables[i].offset);
-                        writer.writeUint32(tables[i].length);
-                    }
-
-                    return writer;
-                },
-
-                size: function (ttf) {
-                    return ttf.numTables * 16;
-                }
+                tables[name] = {
+                    name: name,
+                    checkSum: reader.readUint32(i + 4),
+                    offset: reader.readUint32(i + 8),
+                    length: reader.readUint32(i + 12)
+                };
             }
-        );
 
-        return directory;
+            return tables;
+        },
+
+        write(writer, ttf) {
+
+            let tables = ttf.support.tables;
+            for (let i = 0, l = tables.length; i < l; i++) {
+                writer.writeString((tables[i].name + '    ').slice(0, 4));
+                writer.writeUint32(tables[i].checkSum);
+                writer.writeUint32(tables[i].offset);
+                writer.writeUint32(tables[i].length);
+            }
+
+            return writer;
+        },
+
+        size(ttf) {
+            return ttf.numTables * 16;
+        }
     }
 );

@@ -6,34 +6,25 @@
  * svg转ttfobject
  */
 
-define(
-    function(require) {
+import svg2ttfobject from 'fonteditor-core/ttf/svg2ttfobject';
 
-        var svg2ttfobject = require('ttf/svg2ttfobject');
-        var ttf2base64 = require('ttf/ttf2base64');
-        var TTFWriter = require('ttf/ttfwriter');
+let entry = {
 
-        var entry = {
+    /**
+     * 初始化
+     */
+    init() {
 
-            /**
-             * 初始化
-             */
-            init: function () {
+        $.ajax({
+            url: './test/iconfont-chunvzuo.svg',
+            dataType: 'text'
+        }).done(function (data) {
 
-                $.ajax({
-                    url: './test/iconfont-chunvzuo.svg',
-                    dataType: 'text'
-                }).done(function(data) {
+            let ttfObject = svg2ttfobject(data);
+            console.log(ttfObject);
+        });
 
-                    var ttfObject = svg2ttfobject(data);
-                    console.log(ttfObject);
-                });
-
-            }
-        };
-
-        entry.init();
-
-        return entry;
     }
-);
+};
+
+entry.init();

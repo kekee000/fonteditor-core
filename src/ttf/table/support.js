@@ -3,26 +3,35 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-define(
-    function (require) {
+import head from './head';
+import maxp from './maxp';
+import loca from './loca';
+import cmap from './cmap';
+import glyf from './glyf';
+import name from './name';
+import hhea from './hhea';
+import hmtx from './hmtx';
+import post from './post';
+import OS2 from './OS2';
+import fpgm from './fpgm';
+import cvt from './cvt';
+import prep from './prep';
+import gasp from './gasp';
 
-        var support = {
-            'head': require('./head'),
-            'maxp': require('./maxp'),
-            'loca': require('./loca'),
-            'cmap': require('./cmap'),
-            'glyf': require('./glyf'),
-            'name': require('./name'),
-            'hhea': require('./hhea'),
-            'hmtx': require('./hmtx'),
-            'post': require('./post'),
-            'OS/2': require('./OS2'),
-            'fpgm': require('./fpgm'),
-            'cvt': require('./cvt'),
-            'prep': require('./prep'),
-            'gasp': require('./gasp')
-        };
 
-        return support;
-    }
-);
+export default {
+    head,
+    maxp,
+    loca,
+    cmap,
+    glyf,
+    name,
+    hhea,
+    hmtx,
+    post,
+    'OS/2': OS2,
+    fpgm,
+    cvt,
+    prep,
+    gasp
+};

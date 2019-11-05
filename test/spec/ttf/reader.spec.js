@@ -1,50 +1,49 @@
+/**
+ * @file reader
+ * @author mengke01(kekee000@gmail.com)
+ */
 
-define(
-    function (require) {
+import assert from 'assert';
+import Writer from 'fonteditor-core/ttf/writer';
+import Reader from 'fonteditor-core/ttf/reader';
 
-        var Writer = require('ttf/writer');
-        var Reader = require('ttf/reader');
+describe('读数据', function () {
+    let buffer = new ArrayBuffer(100);
+    let writer = new Writer(buffer, 0, 100);
+    let now = Math.round(new Date().getTime() / 1000) * 1000;
 
-        describe('读数据', function () {
-            var buffer = new ArrayBuffer(100);
-            var writer = new Writer(buffer, 0, 100);
-            var now = Math.round(new Date().getTime() / 1000) * 1000;
-
-            // 基本类型
-            writer.writeInt8(10);
-            writer.writeInt16(2442);
-            writer.writeInt32(-10);
-            writer.writeUint8(10);
-            writer.writeUint16(2442);
-            writer.writeUint32(5375673);
-            // 扩展类型
-            writer.writeString('baidu');
-            writer.writeFixed(12.36);
-            writer.writeLongDateTime(now);
-            writer.writeBytes([3, 4, 5]);
+    // 基本类型
+    writer.writeInt8(10);
+    writer.writeInt16(2442);
+    writer.writeInt32(-10);
+    writer.writeUint8(10);
+    writer.writeUint16(2442);
+    writer.writeUint32(5375673);
+    // 扩展类型
+    writer.writeString('baidu');
+    writer.writeFixed(12.36);
+    writer.writeLongDateTime(now);
+    writer.writeBytes([3, 4, 5]);
 
 
 
-            it('test read basic datatype', function () {
-                var reader = new Reader(buffer, 0, 100);
-                expect(reader.readInt8()).toBe(10);
-                expect(reader.readInt16()).toBe(2442);
-                expect(reader.readInt32()).toBe(-10);
-                expect(reader.readUint8()).toBe(10);
-                expect(reader.readUint16()).toBe(2442);
-                expect(reader.readUint32()).toBe(5375673);
-            });
+    it('test read basic datatype', function () {
+        let reader = new Reader(buffer, 0, 100);
+        assert.equal(reader.readInt8(), 10);
+        assert.equal(reader.readInt16(), 2442);
+        assert.equal(reader.readInt32(), -10);
+        assert.equal(reader.readUint8(), 10);
+        assert.equal(reader.readUint16(), 2442);
+        assert.equal(reader.readUint32(), 5375673);
+    });
 
-            it('test read extend datatype', function () {
-                var reader = new Reader(buffer, 0, 100);
-                reader.seek(14);
-                expect(reader.readString(5)).toEqual('baidu');
-                expect(reader.readFixed()).toBeCloseTo(12.36, 2);
-                expect(reader.readLongDateTime().getTime()).toEqual(now);
-                expect(reader.readBytes(3)).toEqual([3, 4, 5]);
-            });
+    it('test read extend datatype', function () {
+        let reader = new Reader(buffer, 0, 100);
+        reader.seek(14);
+        assert.equal(reader.readString(5), 'baidu');
+        assert.equal(reader.readFixed().toFixed(2), 12.36);
+        assert.equal(reader.readLongDateTime().getTime(), now);
+        assert.deepEqual(reader.readBytes(3), [3, 4, 5]);
+    });
 
-        });
-
-    }
-);
+});

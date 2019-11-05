@@ -9,29 +9,37 @@
 ## Feature
 
 - sfnt parse
-- read, write, transform fonts (ttf, woff, eot, svg, otf)
+- read, write, transform fonts
+  - ttf (read and write)
+  - woff (read and write)
+  - woff2 (read and write)
+  - eot (read and write)
+  - svg (read and write)
+  - otf (only read)
 - ttf glyph adjust
 - svg to glyph
 
 ## Usage
 
 ```js
-// read font file
-var Font = require('fonteditor-core').Font;
-var fs = require('fs');
-var buffer = fs.readFileSync('font.ttf');
 
+// read font file
+const Font = require('fonteditor-core').Font;
+const fs = require('fs');
+
+let buffer = fs.readFileSync('font.ttf');
 // read font data
-var font = Font.create(buffer, {
-  type: 'ttf', // support ttf,woff,eot,otf,svg
+let font = Font.create(buffer, {
+  type: 'ttf', // support ttf, woff, woff2, eot, otf, svg
   subset: [65, 66], // only read `a`, `b` glyf
   hinting: true, // save font hinting
   compound2simple: true, // transform ttf compound glyf to simple
   inflate: null, // inflate function for woff
   combinePath: false, // for svg path
 });
-var fontObject = font.get();
+let fontObject = font.get();
 console.log(Object.keys(fontObject));
+
 /* => [ 'version',
   'numTables',
   'searchRenge',
@@ -52,8 +60,8 @@ console.log(Object.keys(fontObject));
 */
 
 // write font file
-var buffer = font.write({
-  type: 'woff', // support ttf,woff,eot,otf,svg
+let buffer = font.write({
+  type: 'woff', // support ttf, woff, woff2, eot, svg
   hinting: true, // save font hinting
   deflate: null, // deflate function for woff
 });
@@ -61,7 +69,7 @@ var buffer = font.write({
 
 // to base64 str
 font.toBase64({
-  type: 'ttf' // support ttf,woff,eot,svg
+  type: 'ttf' // support ttf, woff, woff2, eot, svg
 });
 
 // optimize glyf
@@ -74,10 +82,10 @@ font.compound2simple()
 font.sort()
 
 // find glyf
-var result = font.find({
+let result = font.find({
   unicode: [65]
 });
-var result = font.find({
+let result = font.find({
   filter: function (glyf) {
     return glyf.name == 'icon'
   }
@@ -90,13 +98,51 @@ font.merge(font1, {
 
 ```
 
+### woff2
+
+Notice: woff2 use wasm build of google woff2, before read and write `woff2`,
+you should first call `woff2.init()`.
+
+```javascript
+const Font = require('fonteditor-core').Font;
+const woff2 = require('fonteditor-core').woff2;
+
+woff2.init().then(() => {
+  // read
+  let font = Font.create(buffer, {
+    type: 'woff2'
+  });
+  // write
+  font.write({type: 'woff2'});
+});
+
+```
+
+
+
 ## Demo
 
 ```
-edp webserver
+npm run dev
 ```
 
-open <http://127.0.0.1:9999/demo>
+## build
+
+```
+npm run build
+```
+
+## test
+
+```
+npm run test
+```
+
+## support
+
+Node.js:>= 8.0
+
+Browser: Chrome, Safari
 
 ## Related
 
