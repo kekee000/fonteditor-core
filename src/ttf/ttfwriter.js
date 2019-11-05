@@ -198,7 +198,7 @@ export default class TTFWriter {
         ttf.writeOptions = {};
         // hinting tables direct copy
         if (this.options.hinting) {
-            ['cvt', 'fpgm', 'prep', 'gasp'].forEach(function (table) {
+            ['cvt', 'fpgm', 'prep', 'gasp', 'GPOS', 'kern'].forEach(function (table) {
                 if (ttf[table]) {
                     tables.push(table);
                 }
