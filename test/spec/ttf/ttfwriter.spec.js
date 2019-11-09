@@ -89,5 +89,6 @@ describe('写ttf hinting数据', function () {
         assert.equal(fontObject.fpgm.length, 371);
         assert.equal(fontObject.prep.length, 204);
         assert.equal(fontObject.gasp.length, 8);
+        assert.equal(fontObject.GPOS.length, 18);
     });
 });

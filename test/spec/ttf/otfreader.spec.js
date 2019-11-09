@@ -77,6 +77,14 @@ describe('读otf数据', function () {
 
 });
 
+describe('读otf hinting GPOS kern', function () {
+    let fontObject = new OTFReader().read(readData('SFNSDisplayCondensed-Black.otf'));
+
+    it('test read hinting', function () {
+        assert.equal(fontObject.GPOS.length, 57290);
+    });
+
+});
 
 describe('读错误otf数据', function () {
 

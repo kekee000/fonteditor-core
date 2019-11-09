@@ -85,6 +85,23 @@ describe('读ttf hinting数据', function () {
         assert.equal(fontObject.fpgm.length, 371);
         assert.equal(fontObject.prep.length, 204);
         assert.equal(fontObject.gasp.length, 8);
+        assert.equal(fontObject.GPOS.length, 18);
+        fontObject.kern && assert.equal(fontObject.kern.length, 8);
+    });
+
+});
+
+describe('读ttf hinting GPOS kern', function () {
+    let fontObject = new TTFReader({
+        hinting: true
+    }).read(readData('baiduHealth-hinting.ttf'));
+
+    it('test read hinting', function () {
+        assert.equal(fontObject.cvt.length, 24);
+        assert.equal(fontObject.fpgm.length, 371);
+        assert.equal(fontObject.prep.length, 204);
+        assert.equal(fontObject.gasp.length, 8);
+        assert.equal(fontObject.GPOS.length, 18);
     });
 
 });

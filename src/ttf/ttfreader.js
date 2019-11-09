@@ -180,7 +180,8 @@ export default class TTFReader {
             delete ttf.fpgm;
             delete ttf.cvt;
             delete ttf.prep;
-
+            delete ttf.GPOS;
+            delete ttf.kern;
             ttf.glyf.forEach(function (glyf) {
                 delete glyf.instructions;
             });
