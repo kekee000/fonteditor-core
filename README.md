@@ -64,6 +64,7 @@ let buffer = font.write({
   type: 'woff', // support ttf, woff, woff2, eot, svg
   hinting: true, // save font hinting
   deflate: null, // deflate function for woff
+  support: {head: {}, hhea: {}} // for user to overwrite head.xMin, head.xMax, head.yMin, head.yMax, hhea etc.
 });
 // fs.writeFileSync('font.woff', buffer);
 

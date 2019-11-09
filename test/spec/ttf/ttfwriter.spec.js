@@ -49,6 +49,67 @@ describe('写ttf数据', function () {
 
     });
 
+    it('test write ttf with support', function () {
+        let buffer = new TTFWriter({
+            support: {
+                head: {
+                    xMin: 1,
+                    yMin: -30,
+                    xMax: 610,
+                    yMax: 485,
+                    minLeftSideBearing: 1,
+                    minRightSideBearing: 1
+                },
+                hhea: {
+                    advanceWidthMax: 1000,
+                    xMaxExtent: 1000,
+                    minLeftSideBearing: 1,
+                    minRightSideBearing: 1
+                }
+            }
+        }).write(fontObject);
+
+        assert.ok(buffer.byteLength > 1000);
+        assert.ok(buffer.byteLength < 10000);
+
+        let ttf = new TTFReader().read(buffer);
+
+        assert.equal(ttf.version, 1);
+
+        assert.equal(ttf.head.magickNumber, 1594834165);
+        assert.equal(ttf.head.unitsPerEm, 512);
+
+        assert.equal(ttf.post.format, 2);
+        assert.equal(ttf.post.underlinePosition, 0);
+        assert.equal(ttf.post.underlineThickness, 0);
+
+        assert.equal(ttf.hhea.ascent, 480);
+        assert.equal(ttf.hhea.descent, -33);
+
+        assert.equal(ttf.maxp.version, 1);
+        assert.equal(ttf.maxp.numGlyphs, 17);
+
+        assert.equal(ttf.glyf[0].advanceWidth, 512);
+        assert.equal(ttf.glyf[0].leftSideBearing, 0);
+        assert.equal(ttf.glyf[0].name, '.notdef');
+        assert.equal(ttf.glyf[3].contours[0].length, 31);
+        assert.equal(ttf.glyf[16].compound, true);
+        assert.equal(ttf.glyf[16].glyfs.length, 2);
+
+        assert.equal(ttf.cmap[0], 1);
+        assert.equal(ttf.cmap[57400], 16);
+        assert.equal(+ttf.head.created === +fontObject.head.created, true);
+        assert.equal(+ttf.head.modified === +fontObject.head.modified, true);
+        assert.equal(ttf.head.xMin, 1);
+        assert.equal(ttf.head.yMin, -30);
+        assert.equal(ttf.head.xMax, 610);
+        assert.equal(ttf.head.yMax, 485);
+        assert.equal(ttf.hhea.advanceWidthMax, 1000);
+        assert.equal(ttf.hhea.xMaxExtent, 1000);
+        assert.equal(ttf.hhea.minLeftSideBearing, 1);
+        assert.equal(ttf.hhea.minRightSideBearing, 1);
+    });
+
     it('test write ttf error', function () {
         assert.throws(function () {
             let ttf = Object.assign({}, fontObject);

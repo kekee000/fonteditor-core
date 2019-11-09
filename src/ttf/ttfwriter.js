@@ -26,7 +26,8 @@ const SUPPORT_TABLES = [
 export default class TTFWriter {
     constructor(options = {}) {
         this.options = {
-            hinting: options.hinting || false // 不保留hints信息
+            hinting: options.hinting || false, // 不保留hints信息
+            support: options.support // 自定义的导出表结构，可以自己修改某些表项目
         };
     }
 
@@ -96,7 +97,7 @@ export default class TTFWriter {
     dump(ttf) {
 
         // 用来做写入缓存的对象，用完后删掉
-        ttf.support = {};
+        ttf.support = Object.assign({}, this.options.support);
 
         // head + directory
         let ttfSize = 12 + ttf.numTables * 16;

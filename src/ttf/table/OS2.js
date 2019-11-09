@@ -265,6 +265,39 @@ export default table.create(
             ttf.head.xMax = xMax;
             ttf.head.yMax = yMax;
 
+            // head rewrite
+            if (ttf.support.head) {
+                let {xMin, yMin, xMax, yMax} = ttf.support.head;
+                if (xMin != null) {
+                    ttf.head.xMin = xMin;
+                }
+                if (yMin != null) {
+                    ttf.head.yMin = yMin;
+                }
+                if (xMax != null) {
+                    ttf.head.xMax = xMax;
+                }
+                if (yMax != null) {
+                    ttf.head.yMax = yMax;
+                }
+
+            }
+            // hhea rewrite
+            if (ttf.support.hhea) {
+                let {advanceWidthMax, xMaxExtent, minLeftSideBearing, minRightSideBearing} = ttf.support.hhea;
+                if (advanceWidthMax != null) {
+                    ttf.hhea.advanceWidthMax = advanceWidthMax;
+                }
+                if (xMaxExtent != null) {
+                    ttf.hhea.xMaxExtent = xMaxExtent;
+                }
+                if (minLeftSideBearing != null) {
+                    ttf.hhea.minLeftSideBearing = minLeftSideBearing;
+                }
+                if (minRightSideBearing != null) {
+                    ttf.hhea.minRightSideBearing = minRightSideBearing;
+                }
+            }
             // 这里根据存储的maxp来设置新的maxp，避免重复计算maxp
             ttf.maxp = ttf.maxp || {};
             ttf.support.maxp = {
