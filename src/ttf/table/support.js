@@ -17,6 +17,8 @@ import fpgm from './fpgm';
 import cvt from './cvt';
 import prep from './prep';
 import gasp from './gasp';
+import GPOS from './GPOS';
+import kern from './kern';
 
 
 export default {
@@ -33,5 +35,7 @@ export default {
     fpgm,
     cvt,
     prep,
-    gasp
+    gasp,
+    GPOS,
+    kern
 };

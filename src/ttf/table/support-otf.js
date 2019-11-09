@@ -12,6 +12,8 @@ import hmtx from './hmtx';
 import post from './post';
 import OS2 from './OS2';
 import CFF from './CFF';
+import GPOS from './GPOS';
+import kern from './kern';
 
 export default {
     head,
@@ -22,5 +24,7 @@ export default {
     hmtx,
     post,
     'OS/2': OS2,
-    CFF
+    CFF,
+    GPOS,
+    kern
 };
