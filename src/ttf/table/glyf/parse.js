@@ -206,7 +206,15 @@ function parseCompoundGlyf(reader, glyf) {
             };
         }
         else {
-            error.raise(10202);
+            g.points = [arg1, arg2];
+            g.transform = {
+                a: Math.round(10000 * scaleX / 16384) / 10000,
+                b: Math.round(10000 * scale01 / 16384) / 10000,
+                c: Math.round(10000 * scale10 / 16384) / 10000,
+                d: Math.round(10000 * scaleY / 16384) / 10000,
+                e: 0,
+                f: 0
+            };
         }
 
         glyf.glyfs.push(g);
