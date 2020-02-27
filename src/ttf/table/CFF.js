@@ -12,6 +12,7 @@
 import table from './table';
 import string from '../util/string';
 import encoding from './cff/encoding';
+import cffStandardStrings from './cff/cffStandardStrings';
 import parseCFFDict from './cff/parseCFFDict';
 import parseCFFGlyph from './cff/parseCFFGlyph';
 import parseCFFCharset from './cff/parseCFFCharset';
@@ -115,6 +116,7 @@ export default table.create(
     [],
     {
         read(reader, font) {
+
             let offset = this.offset;
             reader.seek(offset);
 
@@ -178,7 +180,19 @@ export default table.create(
             // 解析glyf数据和名字
             let charStringsIndex = parseCFFIndex(reader, offset + topDict.charStrings);
             let nGlyphs = charStringsIndex.objects.length;
-            cff.charset = parseCFFCharset(reader, offset + topDict.charset, nGlyphs, stringIndex.objects);
+
+            if (topDict.charset < 3) {
+              /*@author: fr33z00
+              See end of chapter 13 (p22) of #5176.CFF.pdf :
+              Still more optimization is possible by
+              observing that many fonts adopt one of 3 common charsets. In
+              these cases the operand to the charset operator in the Top DICT
+              specifies a predefined charset id, in place of an offset, as shown in table 22*/
+              cff.charset = cffStandardStrings;
+            }
+            else {
+              cff.charset = parseCFFCharset(reader, offset + topDict.charset, nGlyphs, stringIndex.objects);
+            }
 
             // Standard encoding
             if (topDict.encoding === 0) {
