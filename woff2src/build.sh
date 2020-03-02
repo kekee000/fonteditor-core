@@ -1,4 +1,6 @@
  #!/bin/bash
+cd $(dirname $0);
+
 # woff2 build options
 
 OUTPUT="$(emcc --bind  "woff2.cpp" \
@@ -42,3 +44,5 @@ OUTPUT="$(emcc --bind  "woff2.cpp" \
   -s MODULARIZE=1  -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 \
   -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap","stringToUTF8"]' -s ERROR_ON_UNDEFINED_SYMBOLS=0)"
 echo "${OUTPUT}"
+
+node build.js

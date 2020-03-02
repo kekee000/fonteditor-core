@@ -20,6 +20,16 @@ woff2.init().then(function (woff2) {
 
 install emsdk from https://emscripten.org/docs/getting_started/downloads.html
 
+install specific tag: 1.38.48
+
+```
+./emsdk install 1.38.48
+./emsdk activate latest
+source ./emsdk_env.sh
+```
+
+build woff2.wasm
+
 ```
 git clone --recurse-submodules https://github.com/google/woff2.git
 sh build.sh
