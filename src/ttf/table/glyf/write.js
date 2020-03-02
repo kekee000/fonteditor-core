@@ -37,16 +37,17 @@ export default function write(writer, ttf) {
         if (glyf.compound) {
 
             for (i = 0, l = glyf.glyfs.length; i < l; i++) {
+                let g = glyf.glyfs[i];
 
-                flags = componentFlag.ARGS_ARE_XY_VALUES
-                    + componentFlag.ROUND_XY_TO_GRID; // xy values
+                flags = g.points ? 0 : 
+                    (componentFlag.ARGS_ARE_XY_VALUES
+                    + componentFlag.ROUND_XY_TO_GRID); // xy values
 
                 // more components
                 if (i < l - 1) {
                     flags += componentFlag.MORE_COMPONENTS;
                 }
 
-                let g = glyf.glyfs[i];
 
                 // use my metrics
                 flags += g.useMyMetrics ? componentFlag.USE_MY_METRICS : 0;
@@ -58,8 +59,8 @@ export default function write(writer, ttf) {
                 let b = transform.b;
                 let c = transform.c;
                 let d = transform.d;
-                let e = transform.e;
-                let f = transform.f;
+                let e = g.points ? g.points[0] : transform.e;
+                let f = g.points ? g.points[1] : transform.f;
 
                 // xy values or points
                 // int 8 放不下，则用int16放

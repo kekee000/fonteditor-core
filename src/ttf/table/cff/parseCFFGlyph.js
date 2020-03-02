@@ -252,22 +252,20 @@ export default function parseCFFCharstring(code, font, index) {
                         haveWidth = true;
                     }
                     else if (stack.length === 4) {
-                        glyfs[0] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()])};
-                        glyfs[1] = {
-                            glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]),
-                            transform: {a: 1, b: 0, c: 0, d: 1, f: stack.pop(), e: stack.pop()}
-                        };
+                        glyfs[1] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]), transform: {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}};
+                        glyfs[0] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]), transform: {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}};
+                        glyfs[1].transform.f = stack.pop();
+                        glyfs[1].transform.e = stack.pop();
                     }
                     else if (stack.length === 5) {
                         if (!haveWidth) {
                             width = stack.shift() + font.nominalWidthX;
                         }
                         haveWidth = true;
-                        glyfs[0] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()])};
-                        glyfs[1] = {
-                            glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]),
-                            transform: {a: 1, b: 0, c: 0, d: 1, f: stack.pop(), e: stack.pop()}
-                        };
+                        glyfs[1] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]), transform: {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}};
+                        glyfs[0] = {glyphIndex: font.charset.indexOf(font.encoding[stack.pop()]), transform: {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}};
+                        glyfs[1].transform.f = stack.pop();
+                        glyfs[1].transform.e = stack.pop();
                     }
 
                     if (open) {
@@ -472,6 +470,7 @@ export default function parseCFFCharstring(code, font, index) {
         advanceWidth: width
     };
     if (glyfs.length) {
+        glyf.compound = true;
         glyf.glyfs = glyfs;
     }
     return glyf;
