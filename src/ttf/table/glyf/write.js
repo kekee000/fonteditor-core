@@ -17,13 +17,8 @@ export default function write(writer, ttf) {
     let hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
     ttf.glyf.forEach(function (glyf, index) {
 
-        // 非复合图元没有轮廓则不写
-        if (!glyf.compound && (!glyf.contours || 0 === glyf.contours.length)) {
-            return;
-        }
-
         // header
-        writer.writeInt16(glyf.compound ? -1 : glyf.contours.length);
+        writer.writeInt16(glyf.compound ? -1 : (glyf.contours || []).length);
         writer.writeInt16(glyf.xMin);
         writer.writeInt16(glyf.yMin);
         writer.writeInt16(glyf.xMax);
@@ -112,7 +107,7 @@ export default function write(writer, ttf) {
         else {
 
             let endPtsOfContours = -1;
-            glyf.contours.forEach(function (contour) {
+            (glyf.contours || []).forEach(function (contour) {
                 endPtsOfContours += contour.length;
                 writer.writeUint16(endPtsOfContours);
             });
@@ -131,12 +126,12 @@ export default function write(writer, ttf) {
 
 
             // 获取暂存中的flags
-            flags = ttf.support.glyf[index].flags;
+            flags = ttf.support.glyf[index].flags || [];
             for (i = 0, l = flags.length; i < l; i++) {
                 writer.writeUint8(flags[i]);
             }
 
-            let xCoord = ttf.support.glyf[index].xCoord;
+            let xCoord = ttf.support.glyf[index].xCoord || [];
             for (i = 0, l = xCoord.length; i < l; i++) {
                 if (0 <= xCoord[i] && xCoord[i] <= 0xFF) {
                     writer.writeUint8(xCoord[i]);
@@ -146,7 +141,7 @@ export default function write(writer, ttf) {
                 }
             }
 
-            let yCoord = ttf.support.glyf[index].yCoord;
+            let yCoord = ttf.support.glyf[index].yCoord || [];
             for (i = 0, l = yCoord.length; i < l; i++) {
                 if (0 <= yCoord[i] && yCoord[i] <= 0xFF) {
                     writer.writeUint8(yCoord[i]);

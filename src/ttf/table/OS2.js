@@ -198,33 +198,30 @@ export default table.create(
                 }
 
                 // 统计边界信息
-                if (glyf.compound || glyf.contours && glyf.contours.length) {
-
-                    if (glyf.xMin < xMin) {
-                        xMin = glyf.xMin;
-                    }
-
-                    if (glyf.yMin < yMin) {
-                        yMin = glyf.yMin;
-                    }
-
-                    if (glyf.xMax > xMax) {
-                        xMax = glyf.xMax;
-                    }
-
-                    if (glyf.yMax > yMax) {
-                        yMax = glyf.yMax;
-                    }
-
-                    advanceWidthMax = Math.max(advanceWidthMax, glyf.advanceWidth);
-                    minLeftSideBearing = Math.min(minLeftSideBearing, glyf.leftSideBearing);
-                    minRightSideBearing = Math.min(minRightSideBearing, glyf.advanceWidth - glyf.xMax);
-                    xMaxExtent = Math.max(xMaxExtent, glyf.xMax);
-
-                    xAvgCharWidth += glyf.advanceWidth;
-
-                    glyfNotEmpty++;
+                if (glyf.xMin < xMin) {
+                    xMin = glyf.xMin;
                 }
+
+                if (glyf.yMin < yMin) {
+                    yMin = glyf.yMin;
+                }
+
+                if (glyf.xMax > xMax) {
+                    xMax = glyf.xMax;
+                }
+
+                if (glyf.yMax > yMax) {
+                    yMax = glyf.yMax;
+                }
+
+                advanceWidthMax = Math.max(advanceWidthMax, glyf.advanceWidth);
+                minLeftSideBearing = Math.min(minLeftSideBearing, glyf.leftSideBearing);
+                minRightSideBearing = Math.min(minRightSideBearing, glyf.advanceWidth - glyf.xMax);
+                xMaxExtent = Math.max(xMaxExtent, glyf.xMax);
+
+                xAvgCharWidth += glyf.advanceWidth;
+
+                glyfNotEmpty++;
 
                 let unicodes = glyf.unicode;
 
