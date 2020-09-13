@@ -192,7 +192,7 @@ export default class TTF {
      * @return {?number} 返回glyf索引号
      */
     getGlyfIndexByCode(c) {
-        let charCode = typeof c === 'number' ? c : c.charCodeAt(0);
+        let charCode = typeof c === 'number' ? c : c.codePointAt(0);
         let glyfIndex = this.ttf.cmap[charCode] || -1;
         return glyfIndex;
     }

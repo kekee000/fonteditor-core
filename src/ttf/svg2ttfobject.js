@@ -272,10 +272,6 @@ function parseGlyf(xmlDoc, ttf) {
 
     if (glyfNodes.length) {
 
-        // map unicode
-        let unicodeMap = function (u) {
-            return u.charCodeAt(0);
-        };
 
         for (let i = 0, l = glyfNodes.length; i < l; i++) {
 
@@ -289,7 +285,14 @@ function parseGlyf(xmlDoc, ttf) {
             }
 
             if ((unicode = node.getAttribute('unicode'))) {
-                glyf.unicode = unicode.split('').map(unicodeMap);
+                glyf.unicode = []
+                let nextIndex =0;
+                for(let ui=0; ui < unicode.length; ui++) {
+                    let ucp = unicode.codePointAt(ui)
+                    glyf.unicode.push(ucp)
+                    ui = ucp > 0xffff ? ui +1 : ui
+                }
+
             }
 
             if ((d = node.getAttribute('d'))) {
