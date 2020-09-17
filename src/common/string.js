@@ -21,7 +21,7 @@ export default {
 
         // 处理转义的中文和实体字符
         return str.replace(/&#([\d]+);/g, function ($0, $1) {
-            return String.fromCharCode(parseInt($1, 10));
+            return String.fromCodePoint(parseInt($1, 10));
         });
     },
 

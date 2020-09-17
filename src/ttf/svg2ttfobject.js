@@ -272,10 +272,6 @@ function parseGlyf(xmlDoc, ttf) {
 
     if (glyfNodes.length) {
 
-        // map unicode
-        let unicodeMap = function (u) {
-            return u.charCodeAt(0);
-        };
 
         for (let i = 0, l = glyfNodes.length; i < l; i++) {
 
@@ -289,13 +285,27 @@ function parseGlyf(xmlDoc, ttf) {
             }
 
             if ((unicode = node.getAttribute('unicode'))) {
-                glyf.unicode = unicode.split('').map(unicodeMap);
+                let nextUnicode = []
+                let nextIndex =0;
+                let totalCodePoints = 0;
+                let dupe = false
+                for(let ui=0; ui < unicode.length; ui++) {
+                    let ucp = unicode.codePointAt(ui)
+                    nextUnicode.push(ucp)
+                    ui = ucp > 0xffff ? ui +1 : ui
+                    totalCodePoints = totalCodePoints + 1;
+                }
+                if(totalCodePoints == 1) { //TTF can't handle ligatures
+                  glyf.unicode = nextUnicode
+
+                  if ((d = node.getAttribute('d'))) {
+                    glyf.contours = path2contours(d);
+                  }
+                  ttf.glyf.push(glyf);
+
+                }
             }
 
-            if ((d = node.getAttribute('d'))) {
-                glyf.contours = path2contours(d);
-            }
-            ttf.glyf.push(glyf);
         }
     }
 

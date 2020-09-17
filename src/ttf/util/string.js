@@ -94,7 +94,11 @@ export default {
                 byteArray.push(str.charCodeAt(i));
             }
             else {
-                let h = encodeURIComponent(str.charAt(i)).slice(1).split('%');
+                let codePoint = str.codePointAt(i)
+                if(codePoint > 0xffff) {
+                  i = i + 1;
+                }
+                let h = encodeURIComponent(String.fromCodePoint(codePoint)).slice(1).split('%');
                 for (let j = 0; j < h.length; j++) {
                     byteArray.push(parseInt(h[j], 16));
                 }
