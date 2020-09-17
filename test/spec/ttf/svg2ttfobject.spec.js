@@ -34,6 +34,14 @@ describe('svg转ttf对象', function () {
         assert.equal(fontObject.glyf[2].unicode[0], 57345);
     });
 
+    let hucpTtf = svg2ttfobject(readData('high-unicode-codepoints.svg'));
+
+    it('test svg high unicode codepoint and ligature conversion', function () {
+        assert.equal(hucpTtf.glyf.length, 3); // original file has missing + 3 glyfs, one of which is a ligature, so total after conversion should be 4 - 1 = 3
+        assert.equal(hucpTtf.glyf[1].unicode[0], 0x0ffffa);
+        assert.equal(hucpTtf.glyf[2].unicode[0], 0x0ffffb);
+    });
+
 });
 
 describe('读错误svg数据', function () {
