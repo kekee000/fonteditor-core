@@ -66,9 +66,9 @@ function metadata2xml(metadata) {
 
     if (metadata.credit) {
         xml += '<credits>';
-        let credits = metadata.credit instanceof Array ? metadata.credit : [metadata.credit];
+        const credits = metadata.credit instanceof Array ? metadata.credit : [metadata.credit];
 
-        credits.forEach(function (credit) {
+        credits.forEach((credit) => {
             xml += '<credit name="' + string.encodeHTML(credit.name) + '"'
                 +     ' url="' + string.encodeHTML(credit.url) + '"'
                 +     ' role="' + string.encodeHTML(credit.role || 'Contributor') + '" />';
@@ -125,7 +125,7 @@ function metadata2xml(metadata) {
 export default function ttf2woff(ttfBuffer, options = {}) {
 
     // woff 头部结构
-    let woffHeader = {
+    const woffHeader = {
         signature: 0x774F4646, // for woff
         flavor: 0x10000, // for ttf
         length: 0,
@@ -141,9 +141,9 @@ export default function ttf2woff(ttfBuffer, options = {}) {
         privLength: 0
     };
 
-    let ttfReader = new Reader(ttfBuffer);
+    const ttfReader = new Reader(ttfBuffer);
     let tableEntries = [];
-    let numTables = ttfReader.readUint16(4); // 读取ttf表个数
+    const numTables = ttfReader.readUint16(4); // 读取ttf表个数
     let tableEntry;
     let deflatedData;
     let i;
@@ -165,7 +165,7 @@ export default function ttf2woff(ttfBuffer, options = {}) {
             length: ttfReader.readUint32()
         };
 
-        let entryOffset = ttfReader.offset;
+        const entryOffset = ttfReader.offset;
 
         if (tableEntry.tag === 'head') {
             // 读取font revision
@@ -174,7 +174,7 @@ export default function ttf2woff(ttfBuffer, options = {}) {
         }
 
         // ttf 表数据
-        let sfntData = ttfReader.readBytes(tableEntry.offset, tableEntry.length);
+        const sfntData = ttfReader.readBytes(tableEntry.offset, tableEntry.length);
 
         // 对数据进行压缩
         if (options.deflate) {
@@ -203,9 +203,7 @@ export default function ttf2woff(ttfBuffer, options = {}) {
     }
 
     // 对table进行排序
-    tableEntries = tableEntries.sort(function (a, b) {
-        return a.tag === b.tag ? 0 : a.tag < b.tag ? -1 : 1;
-    });
+    tableEntries = tableEntries.sort((a, b) => a.tag === b.tag ? 0 : a.tag < b.tag ? -1 : 1);
 
     // 计算offset和 woff size
     let woffSize = 44 + 20 * numTables; // header size + table entries
@@ -214,7 +212,7 @@ export default function ttf2woff(ttfBuffer, options = {}) {
     for (i = 0, l = tableEntries.length; i < l; ++i) {
         tableEntry = tableEntries[i];
         tableEntry.offset = woffSize;
-            // 4字节对齐
+        // 4字节对齐
         woffSize += tableEntry.compLength + (tableEntry.compLength % 4 ? 4 - tableEntry.compLength % 4 : 0);
         ttfSize += tableEntry.length + (tableEntry.length % 4 ? 4 - tableEntry.length % 4 : 0);
     }
@@ -222,7 +220,7 @@ export default function ttf2woff(ttfBuffer, options = {}) {
     // 计算metaData
     let metadata = null;
     if (options.metadata) {
-        let xml = utilString.toUTF8Bytes(metadata2xml(options.metadata));
+        const xml = utilString.toUTF8Bytes(metadata2xml(options.metadata));
 
         if (options.deflate) {
             deflatedData = options.deflate(xml);
@@ -249,7 +247,7 @@ export default function ttf2woff(ttfBuffer, options = {}) {
     woffHeader.totalSfntSize = ttfSize;
 
     // 写woff数据
-    let woffWriter = new Writer(new ArrayBuffer(woffSize));
+    const woffWriter = new Writer(new ArrayBuffer(woffSize));
 
     // 写woff头部
     woffWriter.writeUint32(woffHeader.signature);

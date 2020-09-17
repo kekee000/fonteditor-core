@@ -15,8 +15,8 @@ export default table.create(
     'cmap',
     [],
     {
+        write,
         read: parse,
-        write: write,
         size: sizeof
     }
 );

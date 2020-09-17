@@ -25,10 +25,10 @@ export default function parseTransform(str) {
     }
 
     TRANSFORM_REGEX.lastIndex = 0;
-    let transforms = [];
+    const transforms = [];
     let match;
 
-    while (match = TRANSFORM_REGEX.exec(str)) {
+    while ((match = TRANSFORM_REGEX.exec(str))) {
         transforms.push({
             name: match[1],
             params: parseParams(match[2])

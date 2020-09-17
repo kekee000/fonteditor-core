@@ -13,11 +13,12 @@ import woff2 from '../../woff2/index';
  *
  * @return {ArrayBuffer} woff格式byte流
  */
+// eslint-disable-next-line no-unused-vars
 export default function woff2tottf(woff2Buffer, options = {}) {
     if (!woff2.isInited()) {
         throw new Error('use woff2.init() to init woff2 module!');
     }
-    let result = woff2.decode(woff2Buffer);
+    const result = woff2.decode(woff2Buffer);
     return result.buffer;
 }
 
@@ -30,8 +31,8 @@ export default function woff2tottf(woff2Buffer, options = {}) {
  * @return {Promise.<ArrayBuffer>} woff格式byte流
  */
 export function woff2tottfasync(woff2Buffer, options = {}) {
-    return woff2.init(options.wasmUrl).then(function () {
-        let result = woff2.decode(woff2Buffer);
+    return woff2.init(options.wasmUrl).then(() => {
+        const result = woff2.decode(woff2Buffer);
         return result.buffer;
     });
 }

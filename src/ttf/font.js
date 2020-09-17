@@ -265,7 +265,7 @@ export default class Font {
      * @return {Font}
      */
     optimize(out) {
-        let result = optimizettf(this.data);
+        const result = optimizettf(this.data);
         if (out) {
             out.result = result;
         }
@@ -278,7 +278,7 @@ export default class Font {
      * @return {this}
      */
     compound2simple() {
-        let ttf = new TTF(this.data);
+        const ttf = new TTF(this.data);
         ttf.compound2simple();
         this.data = ttf.get();
         return this;
@@ -290,7 +290,7 @@ export default class Font {
      * @return {this}
      */
     sort() {
-        let ttf = new TTF(this.data);
+        const ttf = new TTF(this.data);
         ttf.sortGlyf();
         this.data = ttf.get();
         return this;
@@ -310,8 +310,8 @@ export default class Font {
      * @return {Array}  glyf字形列表
      */
     find(condition) {
-        let ttf = new TTF(this.data);
-        let indexList = ttf.findGlyf(condition);
+        const ttf = new TTF(this.data);
+        const indexList = ttf.findGlyf(condition);
         return indexList.length ? ttf.getGlyf(indexList) : indexList;
     }
 
@@ -327,7 +327,7 @@ export default class Font {
      * @return {Font}
      */
     merge(font, options) {
-        let ttf = new TTF(this.data);
+        const ttf = new TTF(this.data);
         ttf.mergeGlyf(font.get(), options);
         this.data = ttf.get();
         return this;

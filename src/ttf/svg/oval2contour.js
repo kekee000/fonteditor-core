@@ -23,12 +23,12 @@ export default function oval2contour(cx, cy, rx, ry) {
         ry = rx;
     }
 
-    let bound = computePath(circlePath);
-    let scaleX = (+rx) * 2 / bound.width;
-    let scaleY = (+ry) * 2 / bound.height;
-    let centerX = bound.width * scaleX / 2;
-    let centerY = bound.height * scaleY / 2;
-    let contour = clone(circlePath);
+    const bound = computePath(circlePath);
+    const scaleX = (+rx) * 2 / bound.width;
+    const scaleY = (+ry) * 2 / bound.height;
+    const centerX = bound.width * scaleX / 2;
+    const centerY = bound.height * scaleY / 2;
+    const contour = clone(circlePath);
     pathAdjust(contour, scaleX, scaleY);
     pathAdjust(contour, 1, 1, +cx - centerX, +cy - centerY);
 

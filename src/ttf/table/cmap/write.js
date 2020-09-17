@@ -49,9 +49,9 @@ function writeSubTable4(writer, segments) {
     writer.writeUint16(24 + segments.length * 8); // length
     writer.writeUint16(0); // language
 
-    let segCount = segments.length + 1;
-    let maxExponent = Math.floor(Math.log(segCount) / Math.LN2);
-    let searchRange = 2 * Math.pow(2, maxExponent);
+    const segCount = segments.length + 1;
+    const maxExponent = Math.floor(Math.log(segCount) / Math.LN2);
+    const searchRange = 2 * Math.pow(2, maxExponent);
 
     writer.writeUint16(segCount * 2); // segCountX2
     writer.writeUint16(searchRange); // searchRange
@@ -59,7 +59,7 @@ function writeSubTable4(writer, segments) {
     writer.writeUint16(2 * segCount - searchRange); // rangeShift
 
     // end list
-    segments.forEach(function (segment) {
+    segments.forEach((segment) => {
         writer.writeUint16(segment.end);
     });
     writer.writeUint16(0xFFFF); // end code
@@ -67,13 +67,13 @@ function writeSubTable4(writer, segments) {
 
 
     // start list
-    segments.forEach(function (segment) {
+    segments.forEach((segment) => {
         writer.writeUint16(segment.start);
     });
     writer.writeUint16(0xFFFF); // start code
 
     // id delta
-    segments.forEach(function (segment) {
+    segments.forEach((segment) => {
         writer.writeUint16(segment.delta);
     });
     writer.writeUint16(1);
@@ -102,7 +102,7 @@ function writeSubTable12(writer, segments) {
     writer.writeUint32(0); // language
     writer.writeUint32(segments.length); // nGroups
 
-    segments.forEach(function (segment) {
+    segments.forEach((segment) => {
         writer.writeUint32(segment.start);
         writer.writeUint32(segment.end);
         writer.writeUint32(segment.startId);
@@ -136,16 +136,16 @@ function writeSubTableHeader(writer, platform, encoding, offset) {
  * @return {Object}        写入器
  */
 export default function write(writer, ttf) {
-    let hasGLyphsOver2Bytes = ttf.support.cmap.hasGLyphsOver2Bytes;
+    const hasGLyphsOver2Bytes = ttf.support.cmap.hasGLyphsOver2Bytes;
 
     // write table header.
     writer.writeUint16(0); // version
     writer.writeUint16(hasGLyphsOver2Bytes ? 4 : 3); // count
 
     // header size
-    let subTableOffset = 4 + (hasGLyphsOver2Bytes ? 32 : 24);
-    let format4Size = ttf.support.cmap.format4Size;
-    let format0Size = ttf.support.cmap.format0Size;
+    const subTableOffset = 4 + (hasGLyphsOver2Bytes ? 32 : 24);
+    const format4Size = ttf.support.cmap.format4Size;
+    const format0Size = ttf.support.cmap.format0Size;
 
     // subtable 4, unicode
     writeSubTableHeader(writer, 0, 3, subTableOffset);

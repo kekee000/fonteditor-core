@@ -34,11 +34,11 @@ export default function compound2simpleglyf(glyf, ttf, recrusive) {
         return glyf;
     }
 
-    let contoursList = {};
+    const contoursList = {};
     transformGlyfContours(glyf, ttf, contoursList, glyfIndex);
 
     if (recrusive) {
-        Object.keys(contoursList).forEach(function (index) {
+        Object.keys(contoursList).forEach((index) => {
             compound2simple(ttf.glyf[index], contoursList[index]);
         });
     }

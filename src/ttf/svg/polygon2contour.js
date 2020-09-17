@@ -17,8 +17,8 @@ export default function polygon2contour(points) {
         return null;
     }
 
-    let contours = [];
-    let segments = parseParams(points);
+    const contours = [];
+    const segments = parseParams(points);
     for (let i = 0, l = segments.length; i < l; i += 2) {
         contours.push({
             x: segments[i],

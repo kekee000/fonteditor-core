@@ -34,13 +34,13 @@ export default {
 
         let message = i18n.lang[number];
         if (fargs.length > 0) {
-            let args = typeof fargs[0] === 'object'
+            const args = typeof fargs[0] === 'object'
                 ? fargs[0]
                 : fargs;
             message = string.format(message, args);
         }
 
-        let event = new Error(message);
+        const event = new Error(message);
         event.number = number;
         if (data) {
             event.data = data;

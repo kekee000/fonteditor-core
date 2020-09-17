@@ -18,10 +18,10 @@ function cubic2Points(cubicList, contour) {
 
     let i;
     let l;
-    let q2List = [];
+    const q2List = [];
 
-    cubicList.forEach(function (c) {
-        let list = bezierCubic2Q2(c[0], c[1], c[2], c[3]);
+    cubicList.forEach(c => {
+        const list = bezierCubic2Q2(c[0], c[1], c[2], c[3]);
         for (i = 0, l = list.length; i < l; i++) {
             q2List.push(list[i]);
         }
@@ -82,7 +82,7 @@ function cubic2Points(cubicList, contour) {
 function segments2Contours(segments) {
 
     // 解析segments
-    let contours = [];
+    const contours = [];
     let contour = [];
     let prevX = 0;
     let prevY = 0;
@@ -431,7 +431,7 @@ function segments2Contours(segments) {
                     ey = prevY + ey;
                 }
 
-                let path = getArc(
+                const path = getArc(
                     args[q], args[q + 1],
                     args[q + 2], args[q + 3], args[q + 4],
                     {x: prevX, y: prevY},
@@ -475,49 +475,50 @@ export default function path2contours(path) {
     path = path.replace(/(\d+)\s*(m|$)/gi, '$1z$2');
 
     // 获取segments
-    let segments = [];
+    const segments = [];
     let cmd;
     let relative = false;
     let lastIndex;
     let args;
 
     for (let i = 0, l = path.length; i < l; i++) {
-        let c = path[i].toUpperCase();
-        let r = c !== path[i];
+        const c = path[i].toUpperCase();
+        const r = c !== path[i];
 
         switch (c) {
-            case 'M':
-                /* jshint -W086 */
-                if (i === 0) {
-                    cmd = c;
-                    lastIndex = 1;
-                    break;
-                }
-            case 'Q':
-            case 'T':
-            case 'C':
-            case 'S':
-            case 'H':
-            case 'V':
-            case 'L':
-            case 'A':
-            case 'Z':
-                if (cmd === 'Z') {
-                    segments.push({cmd: 'Z'});
-                }
-                else {
-                    args = path.slice(lastIndex, i);
-                    segments.push({
-                        cmd: cmd,
-                        relative: relative,
-                        args: parseParams(args)
-                    });
-                }
-
+        case 'M':
+            /* jshint -W086 */
+            if (i === 0) {
                 cmd = c;
-                relative = r;
-                lastIndex = i + 1;
+                lastIndex = 1;
                 break;
+            }
+        // eslint-disable-next-line no-fallthrough
+        case 'Q':
+        case 'T':
+        case 'C':
+        case 'S':
+        case 'H':
+        case 'V':
+        case 'L':
+        case 'A':
+        case 'Z':
+            if (cmd === 'Z') {
+                segments.push({cmd: 'Z'});
+            }
+            else {
+                args = path.slice(lastIndex, i);
+                segments.push({
+                    cmd,
+                    relative,
+                    args: parseParams(args)
+                });
+            }
+
+            cmd = c;
+            relative = r;
+            lastIndex = i + 1;
+            break;
 
         }
     }

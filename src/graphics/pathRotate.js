@@ -15,10 +15,10 @@
  */
 export default function pathRotate(contour, angle, centerX, centerY) {
     angle = angle === undefined ? 0 : angle;
-    let x = centerX || 0;
-    let y = centerY || 0;
-    let cos = Math.cos(angle);
-    let sin = Math.sin(angle);
+    const x = centerX || 0;
+    const y = centerY || 0;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
     let px;
     let py;
     let p;

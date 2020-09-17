@@ -13,16 +13,16 @@ export default table.create(
 
         read(reader, ttf) {
             let offset = this.offset;
-            let indexToLocFormat = ttf.head.indexToLocFormat;
+            const indexToLocFormat = ttf.head.indexToLocFormat;
             // indexToLocFormat有2字节和4字节的区别
-            let type = struct.names[(indexToLocFormat === 0) ? struct.Uint16 : struct.Uint32];
-            let size = (indexToLocFormat === 0) ? 2 : 4; // 字节大小
-            let sizeRatio = (indexToLocFormat === 0) ? 2 : 1; // 真实地址偏移
-            let wordOffset = [];
+            const type = struct.names[(indexToLocFormat === 0) ? struct.Uint16 : struct.Uint32];
+            const size = (indexToLocFormat === 0) ? 2 : 4; // 字节大小
+            const sizeRatio = (indexToLocFormat === 0) ? 2 : 1; // 真实地址偏移
+            const wordOffset = [];
 
             reader.seek(offset);
 
-            let numGlyphs = ttf.maxp.numGlyphs;
+            const numGlyphs = ttf.maxp.numGlyphs;
             for (let i = 0; i < numGlyphs; ++i) {
                 wordOffset.push(reader.read(type, offset, false) * sizeRatio);
                 offset += size;
@@ -32,11 +32,11 @@ export default table.create(
         },
 
         write(writer, ttf) {
-            let glyfSupport = ttf.support.glyf;
+            const glyfSupport = ttf.support.glyf;
             let offset = ttf.support.glyf.offset || 0;
-            let indexToLocFormat = ttf.head.indexToLocFormat;
-            let sizeRatio = (indexToLocFormat === 0) ? 0.5 : 1;
-            let numGlyphs = ttf.glyf.length;
+            const indexToLocFormat = ttf.head.indexToLocFormat;
+            const sizeRatio = (indexToLocFormat === 0) ? 0.5 : 1;
+            const numGlyphs = ttf.glyf.length;
 
             for (let i = 0; i < numGlyphs; ++i) {
                 if (indexToLocFormat) {
@@ -60,7 +60,7 @@ export default table.create(
         },
 
         size(ttf) {
-            let locaCount = ttf.glyf.length + 1;
+            const locaCount = ttf.glyf.length + 1;
             return ttf.head.indexToLocFormat ? locaCount * 4 : locaCount * 2;
         }
     }

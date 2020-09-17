@@ -15,52 +15,52 @@ import error from './error';
  *
  * @return {ArrayBuffer} ttf格式byte流
  */
+// eslint-disable-next-line no-unused-vars
 export default function eot2ttf(eotBuffer, options = {}) {
-
     // 这里用小尾方式读取
-    let eotReader = new Reader(eotBuffer, 0, eotBuffer.byteLength, true);
+    const eotReader = new Reader(eotBuffer, 0, eotBuffer.byteLength, true);
 
     // check magic number
-    let magicNumber = eotReader.readUint16(34);
+    const magicNumber = eotReader.readUint16(34);
     if (magicNumber !== 0x504C) {
         error.raise(10110);
     }
 
     // check version
-    let version = eotReader.readUint32(8);
+    const version = eotReader.readUint32(8);
     if (version !== 0x20001 && version !== 0x10000 && version !== 0x20002) {
         error.raise(10110);
     }
 
-    let eotSize = eotBuffer.byteLength || eotBuffer.length;
-    let fontSize = eotReader.readUint32(4);
+    const eotSize = eotBuffer.byteLength || eotBuffer.length;
+    const fontSize = eotReader.readUint32(4);
 
     let fontOffset = 82;
-    let familyNameSize = eotReader.readUint16(fontOffset);
+    const familyNameSize = eotReader.readUint16(fontOffset);
     fontOffset += 4 + familyNameSize;
 
-    let styleNameSize = eotReader.readUint16(fontOffset);
+    const styleNameSize = eotReader.readUint16(fontOffset);
     fontOffset += 4 + styleNameSize;
 
-    let versionNameSize = eotReader.readUint16(fontOffset);
+    const versionNameSize = eotReader.readUint16(fontOffset);
     fontOffset += 4 + versionNameSize;
 
-    let fullNameSize = eotReader.readUint16(fontOffset);
+    const fullNameSize = eotReader.readUint16(fontOffset);
     fontOffset += 2 + fullNameSize;
 
     // version 0x20001
     if (version === 0x20001 || version === 0x20002) {
-        let rootStringSize = eotReader.readUint16(fontOffset + 2);
+        const rootStringSize = eotReader.readUint16(fontOffset + 2);
         fontOffset += 4 + rootStringSize;
     }
 
     // version 0x20002
     if (version === 0x20002) {
         fontOffset += 10;
-        let signatureSize = eotReader.readUint16(fontOffset);
+        const signatureSize = eotReader.readUint16(fontOffset);
         fontOffset += 2 + signatureSize;
         fontOffset += 4;
-        let eudcFontSize = eotReader.readUint32(fontOffset);
+        const eudcFontSize = eotReader.readUint32(fontOffset);
         fontOffset += 4 + eudcFontSize;
     }
 
@@ -74,6 +74,6 @@ export default function eot2ttf(eotBuffer, options = {}) {
     }
 
     // not support ArrayBuffer.slice eg. IE10
-    let bytes = eotReader.readBytes(fontOffset, fontSize);
+    const bytes = eotReader.readBytes(fontOffset, fontSize);
     return new Writer(new ArrayBuffer(fontSize)).writeBytes(bytes).getBuffer();
 }

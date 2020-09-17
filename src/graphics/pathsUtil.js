@@ -16,10 +16,10 @@ import pathRotate from './pathRotate';
  * @return {Array} 变换后的路径
  */
 function mirrorPaths(paths, xScale, yScale) {
-    let {x, y, width, height} = computePath.apply(null, paths);
+    const {x, y, width, height} = computePath(...paths);
 
     if (xScale === -1) {
-        paths.forEach(function (p) {
+        paths.forEach(p => {
             pathAdjust(p, -1, 1, -x, 0);
             pathAdjust(p, 1, 1, x + width, 0);
             p.reverse();
@@ -28,7 +28,7 @@ function mirrorPaths(paths, xScale, yScale) {
     }
 
     if (yScale === -1) {
-        paths.forEach(function (p) {
+        paths.forEach(p => {
             pathAdjust(p, 1, -1, 0, -y);
             pathAdjust(p, 1, 1, 0, y + height);
             p.reverse();
@@ -54,12 +54,12 @@ export default {
             return paths;
         }
 
-        let bound = computePath.apply(null, paths);
+        const bound = computePath(...paths);
 
-        let cx = bound.x + (bound.width) / 2;
-        let cy = bound.y + (bound.height) / 2;
+        const cx = bound.x + (bound.width) / 2;
+        const cy = bound.y + (bound.height) / 2;
 
-        paths.forEach(function (p) {
+        paths.forEach(p => {
             pathRotate(p, angle, cx, cy);
         });
 
@@ -75,8 +75,8 @@ export default {
      * @return {Array} 变换后的路径
      */
     move(paths, x, y) {
-        let bound = computePath.apply(null, paths);
-        paths.forEach(function (path) {
+        const bound = computePath(...paths);
+        paths.forEach(path => {
             pathAdjust(path, 1, 1, x - bound.x, y - bound.y);
         });
 

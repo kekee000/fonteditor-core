@@ -9,7 +9,7 @@ import config from './data/default';
 
 
 export default function getEmpty() {
-    let ttf = clone(emptyttf);
+    const ttf = clone(emptyttf);
     Object.assign(ttf.name, config.name);
     ttf.head.created = ttf.head.modified = Date.now();
     return ttf;

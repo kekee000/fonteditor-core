@@ -14,8 +14,8 @@ import componentFlag from '../../enum/componentFlag';
  */
 export default function write(writer, ttf) {
 
-    let hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
-    ttf.glyf.forEach(function (glyf, index) {
+    const hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
+    ttf.glyf.forEach((glyf, index) => {
 
         // header
         writer.writeInt16(glyf.compound ? -1 : (glyf.contours || []).length);
@@ -32,11 +32,10 @@ export default function write(writer, ttf) {
         if (glyf.compound) {
 
             for (i = 0, l = glyf.glyfs.length; i < l; i++) {
-                let g = glyf.glyfs[i];
+                const g = glyf.glyfs[i];
 
-                flags = g.points ? 0 : 
-                    (componentFlag.ARGS_ARE_XY_VALUES
-                    + componentFlag.ROUND_XY_TO_GRID); // xy values
+                flags = g.points
+                    ? 0 : (componentFlag.ARGS_ARE_XY_VALUES + componentFlag.ROUND_XY_TO_GRID); // xy values
 
                 // more components
                 if (i < l - 1) {
@@ -49,13 +48,13 @@ export default function write(writer, ttf) {
                 // overlap compound
                 flags += g.overlapCompound ? componentFlag.OVERLAP_COMPOUND : 0;
 
-                let transform = g.transform;
-                let a = transform.a;
-                let b = transform.b;
-                let c = transform.c;
-                let d = transform.d;
-                let e = g.points ? g.points[0] : transform.e;
-                let f = g.points ? g.points[1] : transform.f;
+                const transform = g.transform;
+                const a = transform.a;
+                const b = transform.b;
+                const c = transform.c;
+                const d = transform.d;
+                const e = g.points ? g.points[0] : transform.e;
+                const f = g.points ? g.points[1] : transform.f;
 
                 // xy values or points
                 // int 8 放不下，则用int16放
@@ -66,13 +65,11 @@ export default function write(writer, ttf) {
                 if (b || c) {
                     flags += componentFlag.WE_HAVE_A_TWO_BY_TWO;
                 }
-                else {
-                    if ((a !== 1 || d !== 1) && a === d) {
-                        flags += componentFlag.WE_HAVE_A_SCALE;
-                    }
-                    else if (a !== 1 || d !== 1) {
-                        flags += componentFlag.WE_HAVE_AN_X_AND_Y_SCALE;
-                    }
+                else if ((a !== 1 || d !== 1) && a === d) {
+                    flags += componentFlag.WE_HAVE_A_SCALE;
+                }
+                else if (a !== 1 || d !== 1) {
+                    flags += componentFlag.WE_HAVE_AN_X_AND_Y_SCALE;
                 }
 
                 writer.writeUint16(flags);
@@ -107,14 +104,14 @@ export default function write(writer, ttf) {
         else {
 
             let endPtsOfContours = -1;
-            (glyf.contours || []).forEach(function (contour) {
+            (glyf.contours || []).forEach((contour) => {
                 endPtsOfContours += contour.length;
                 writer.writeUint16(endPtsOfContours);
             });
 
             // instruction
             if (hinting && glyf.instructions) {
-                let instructions = glyf.instructions;
+                const instructions = glyf.instructions;
                 writer.writeUint16(instructions.length);
                 for (i = 0, l = instructions.length; i < l; i++) {
                     writer.writeUint8(instructions[i]);
@@ -131,7 +128,7 @@ export default function write(writer, ttf) {
                 writer.writeUint8(flags[i]);
             }
 
-            let xCoord = ttf.support.glyf[index].xCoord || [];
+            const xCoord = ttf.support.glyf[index].xCoord || [];
             for (i = 0, l = xCoord.length; i < l; i++) {
                 if (0 <= xCoord[i] && xCoord[i] <= 0xFF) {
                     writer.writeUint8(xCoord[i]);
@@ -141,7 +138,7 @@ export default function write(writer, ttf) {
                 }
             }
 
-            let yCoord = ttf.support.glyf[index].yCoord || [];
+            const yCoord = ttf.support.glyf[index].yCoord || [];
             for (i = 0, l = yCoord.length; i < l; i++) {
                 if (0 <= yCoord[i] && yCoord[i] <= 0xFF) {
                     writer.writeUint8(yCoord[i]);
@@ -153,7 +150,7 @@ export default function write(writer, ttf) {
         }
 
         // 4字节对齐
-        let glyfSize = ttf.support.glyf[index].glyfSize;
+        const glyfSize = ttf.support.glyf[index].glyfSize;
 
         if (glyfSize % 4) {
             writer.writeEmpty(4 - glyfSize % 4);

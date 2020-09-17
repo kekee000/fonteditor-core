@@ -14,7 +14,7 @@ export default function unicode2xml(unicodeList) {
     if (typeof unicodeList === 'number') {
         unicodeList = [unicodeList];
     }
-    return unicodeList.map(function (u) {
+    return unicodeList.map(u => {
         if (u < 0x20) {
             return '';
         }

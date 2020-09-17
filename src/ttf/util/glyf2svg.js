@@ -23,7 +23,7 @@ export default function glyf2svg(glyf, ttf) {
         return '';
     }
 
-    let pathArray = [];
+    const pathArray = [];
 
     if (!glyf.compound) {
         if (glyf.contours && glyf.contours.length) {
@@ -32,7 +32,7 @@ export default function glyf2svg(glyf, ttf) {
 
     }
     else {
-        let contours = transformGlyfContours(glyf, ttf);
+        const contours = transformGlyfContours(glyf, ttf);
         if (contours && contours.length) {
             pathArray.push(contours2svg(contours));
         }

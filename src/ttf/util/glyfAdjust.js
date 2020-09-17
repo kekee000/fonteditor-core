@@ -24,26 +24,26 @@ export default function glyfAdjust(g, scaleX = 1, scaleY = 1, offsetX = 0, offse
 
     if (g.contours && g.contours.length) {
         if (scaleX !== 1 || scaleY !== 1) {
-            g.contours.forEach(function (contour) {
+            g.contours.forEach((contour) => {
                 pathAdjust(contour, scaleX, scaleY);
             });
         }
 
         if (offsetX !== 0 || offsetY !== 0) {
-            g.contours.forEach(function (contour) {
+            g.contours.forEach((contour) => {
                 pathAdjust(contour, 1, 1, offsetX, offsetY);
             });
         }
 
         if (false !== useCeil) {
-            g.contours.forEach(function (contour) {
+            g.contours.forEach((contour) => {
                 pathCeil(contour);
             });
         }
     }
 
     // 重新计算xmin，xmax，ymin，ymax
-    let advanceWidth = g.advanceWidth;
+    const advanceWidth = g.advanceWidth;
     if (
         undefined === g.xMin
         || undefined === g.yMax
@@ -53,6 +53,7 @@ export default function glyfAdjust(g, scaleX = 1, scaleY = 1, offsetX = 0, offse
         // 有的字形没有形状，需要特殊处理一下
         let bound;
         if (g.contours && g.contours.length) {
+            // eslint-disable-next-line no-invalid-this
             bound = computePathBox.apply(this, g.contours);
         }
         else {

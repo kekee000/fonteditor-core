@@ -10,8 +10,8 @@ function checkSumArrayBuffer(buffer, offset = 0, length) {
         throw new Error('check sum out of bound');
     }
 
-    let nLongs = Math.floor(length / 4);
-    let view = new DataView(buffer, offset, length);
+    const nLongs = Math.floor(length / 4);
+    const view = new DataView(buffer, offset, length);
     let sum = 0;
     let i = 0;
 
@@ -38,7 +38,7 @@ function checkSumArray(buffer, offset = 0, length) {
         throw new Error('check sum out of bound');
     }
 
-    let nLongs = Math.floor(length / 4);
+    const nLongs = Math.floor(length / 4);
     let sum = 0;
     let i = 0;
 

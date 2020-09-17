@@ -15,8 +15,8 @@
  */
 export default function pathSkew(contour, angle, offsetX, offsetY) {
     angle = angle === undefined ? 0 : angle;
-    let x = offsetX || 0;
-    let tan = Math.tan(angle);
+    const x = offsetX || 0;
+    const tan = Math.tan(angle);
     let p;
     let i;
     let l;

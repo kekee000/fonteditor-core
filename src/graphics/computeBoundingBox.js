@@ -26,7 +26,7 @@ function computeBoundingBox(points) {
     let bottom = points[0].y;
 
     for (let i = 1; i < points.length; i++) {
-        let p = points[i];
+        const p = points[i];
 
         if (p.x < left) {
             left = p.x;
@@ -87,14 +87,14 @@ function computeQuadraticBezierBoundingBox(p0, p1, p2) {
     t1 = Math.max(Math.min(t1, 1), 0);
     t2 = Math.max(Math.min(t2, 1), 0);
 
-    let ct1 = 1 - t1;
-    let ct2 = 1 - t2;
+    const ct1 = 1 - t1;
+    const ct2 = 1 - t2;
 
-    let x1 = ct1 * ct1 * p0.x + 2 * ct1 * t1 * p1.x + t1 * t1 * p2.x;
-    let y1 = ct1 * ct1 * p0.y + 2 * ct1 * t1 * p1.y + t1 * t1 * p2.y;
+    const x1 = ct1 * ct1 * p0.x + 2 * ct1 * t1 * p1.x + t1 * t1 * p2.x;
+    const y1 = ct1 * ct1 * p0.y + 2 * ct1 * t1 * p1.y + t1 * t1 * p2.y;
 
-    let x2 = ct2 * ct2 * p0.x + 2 * ct2 * t2 * p1.x + t2 * t2 * p2.x;
-    let y2 = ct2 * ct2 * p0.y + 2 * ct2 * t2 * p1.y + t2 * t2 * p2.y;
+    const x2 = ct2 * ct2 * p0.x + 2 * ct2 * t2 * p1.x + t2 * t2 * p2.x;
+    const y2 = ct2 * ct2 * p0.y + 2 * ct2 * t2 * p1.y + t2 * t2 * p2.y;
 
     return computeBoundingBox(
         [
@@ -121,14 +121,14 @@ function computeQuadraticBezierBoundingBox(p0, p1, p2) {
  */
 function computePathBoundingBox(...args) {
 
-    let points = [];
-    let iterator = function (c, p0, p1, p2) {
+    const points = [];
+    const iterator = function (c, p0, p1, p2) {
         if (c === 'L') {
             points.push(p0);
             points.push(p1);
         }
         else if (c === 'Q') {
-            let bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
+            const bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
 
             points.push(bound);
             points.push({
@@ -139,13 +139,13 @@ function computePathBoundingBox(...args) {
     };
 
     if (args.length === 1) {
-        pathIterator(args[0], function (c, p0, p1, p2) {
+        pathIterator(args[0], (c, p0, p1, p2) => {
             if (c === 'L') {
                 points.push(p0);
                 points.push(p1);
             }
             else if (c === 'Q') {
-                let bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
+                const bound = computeQuadraticBezierBoundingBox(p0, p1, p2);
 
                 points.push(bound);
                 points.push({

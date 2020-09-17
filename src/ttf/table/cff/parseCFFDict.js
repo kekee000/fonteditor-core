@@ -149,16 +149,16 @@ const PRIVATE_DICT_META = [
 ];
 
 function entriesToObject(entries) {
-    let hash = {};
+    const hash = {};
 
     for (let i = 0, l = entries.length; i < l; i++) {
-        let key = entries[i][0];
+        const key = entries[i][0];
         if (undefined !== hash[key]) {
             console.warn('dict already has key:' + key);
             continue;
         }
 
-        let values = entries[i][1];
+        const values = entries[i][1];
         hash[key] = values.length === 1 ? values[0] : values;
     }
 
@@ -169,13 +169,13 @@ function entriesToObject(entries) {
 /* eslint-disable no-constant-condition */
 function parseFloatOperand(reader) {
     let s = '';
-    let eof = 15;
-    let lookup = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'E', 'E-', null, '-'];
+    const eof = 15;
+    const lookup = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'E', 'E-', null, '-'];
 
     while (true) {
-        let b = reader.readUint8();
-        let n1 = b >> 4;
-        let n2 = b & 15;
+        const b = reader.readUint8();
+        const n1 = b >> 4;
+        const n2 = b & 15;
 
         if (n1 === eof) {
             break;
@@ -252,12 +252,12 @@ function parseOperand(reader, b0) {
  * @return {Object}         解析后数据
  */
 function interpretDict(dict, meta, strings) {
-    let newDict = {};
+    const newDict = {};
 
     // Because we also want to include missing values, we start out from the meta list
     // and lookup values in the dict.
     for (let i = 0, l = meta.length; i < l; i++) {
-        let m = meta[i];
+        const m = meta[i];
         let value = dict[m.op];
         if (value === undefined) {
             value = m.value !== undefined ? m.value : null;
@@ -287,9 +287,9 @@ function parseCFFDict(reader, offset, length) {
         reader.seek(offset);
     }
 
-    let entries = [];
+    const entries = [];
     let operands = [];
-    let lastOffset = reader.offset + (null != length ? length : reader.length);
+    const lastOffset = reader.offset + (null != length ? length : reader.length);
 
     while (reader.offset < lastOffset) {
         let op = reader.readUint8();
@@ -325,7 +325,7 @@ function parseCFFDict(reader, offset, length) {
  * @return {Object}         字典数据
  */
 function parseTopDict(reader, start, length, strings) {
-    let dict = parseCFFDict(reader, start || 0, length || reader.length);
+    const dict = parseCFFDict(reader, start || 0, length || reader.length);
     return interpretDict(dict, TOP_DICT_META, strings);
 }
 
@@ -339,7 +339,7 @@ function parseTopDict(reader, start, length, strings) {
  * @return {Object}         字典数据
  */
 function parsePrivateDict(reader, start, length, strings) {
-    let dict = parseCFFDict(reader, start || 0, length || reader.length);
+    const dict = parseCFFDict(reader, start || 0, length || reader.length);
     return interpretDict(dict, PRIVATE_DICT_META, strings);
 }
 

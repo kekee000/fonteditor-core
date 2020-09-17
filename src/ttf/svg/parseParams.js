@@ -25,6 +25,6 @@ export default function (str) {
     if (!str) {
         return [];
     }
-    let matchs = str.match(SEGMENT_REGEX);
+    const matchs = str.match(SEGMENT_REGEX);
     return matchs ? matchs.map(getSegment) : [];
 }

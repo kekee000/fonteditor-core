@@ -52,21 +52,21 @@ export function getSymbolId(glyf, index) {
  * @param {Object} options.metadata 字体相关的信息
  * @return {string} svg字符串
  */
-function ttfobject2symbol(ttf, options) {
-
-    let xmlObject = {};
-    let unitsPerEm = ttf.head.unitsPerEm;
-    let descent = ttf.hhea.descent;
+// eslint-disable-next-line no-unused-vars
+function ttfobject2symbol(ttf, options = {}) {
+    const xmlObject = {};
+    const unitsPerEm = ttf.head.unitsPerEm;
+    const descent = ttf.hhea.descent;
     // glyf 信息
     let symbolList = '';
     for (let i = 1, l = ttf.glyf.length; i < l; i++) {
-        let glyf = ttf.glyf[i];
+        const glyf = ttf.glyf[i];
         // 筛选简单字形，并且有轮廓，有编码
         if (!glyf.compound && glyf.contours) {
-            let contours = pathsUtil.flip(glyf.contours);
-            let glyfObject = {
-                descent: descent,
-                unitsPerEm: unitsPerEm,
+            const contours = pathsUtil.flip(glyf.contours);
+            const glyfObject = {
+                descent,
+                unitsPerEm,
                 id: getSymbolId(glyf, i),
                 d: contours2svg(contours)
             };
@@ -91,8 +91,8 @@ export default function ttf2symbol(ttfBuffer, options = {}) {
 
     // 读取ttf二进制流
     if (ttfBuffer instanceof ArrayBuffer) {
-        let reader = new TTFReader();
-        let ttfObject = reader.read(ttfBuffer);
+        const reader = new TTFReader();
+        const ttfObject = reader.read(ttfBuffer);
         reader.dispose();
 
         return ttfobject2symbol(ttfObject, options);

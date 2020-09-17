@@ -41,8 +41,8 @@ export function mul(matrix1 = [1, 0, 0, 1], matrix2 = [1, 0, 0, 1]) {
  */
 export function multiply(...matrixs) {
     let result = matrixs[0];
-    for (let i = 1, matrix; matrix = matrixs[i]; i++) {
-        result = this.mul(result, matrix);
+    for (let i = 1, matrix; (matrix = matrixs[i]); i++) {
+        result = mul(result, matrix);
     }
 
     return result;

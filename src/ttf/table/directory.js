@@ -12,15 +12,15 @@ export default table.create(
     [],
     {
         read(reader, ttf) {
-            let tables = {};
-            let numTables = ttf.numTables;
-            let offset = this.offset;
+            const tables = {};
+            const numTables = ttf.numTables;
+            const offset = this.offset;
 
             for (let i = offset, l = numTables * 16; i < l; i += 16) {
-                let name = reader.readString(i, 4).trim();
+                const name = reader.readString(i, 4).trim();
 
                 tables[name] = {
-                    name: name,
+                    name,
                     checkSum: reader.readUint32(i + 4),
                     offset: reader.readUint32(i + 8),
                     length: reader.readUint32(i + 12)
@@ -32,7 +32,7 @@ export default table.create(
 
         write(writer, ttf) {
 
-            let tables = ttf.support.tables;
+            const tables = ttf.support.tables;
             for (let i = 0, l = tables.length; i < l; i++) {
                 writer.writeString((tables[i].name + '    ').slice(0, 4));
                 writer.writeUint32(tables[i].checkSum);

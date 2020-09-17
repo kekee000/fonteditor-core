@@ -15,9 +15,7 @@ import {getSymbolId} from './ttf2symbol';
  * @return {string}         unicode string
  */
 function listUnicode(unicode) {
-    return unicode.map(function (u) {
-        return '\\' + u.toString(16);
-    }).join(',');
+    return unicode.map((u) => '\\' + u.toString(16)).join(',');
 }
 
 /**
@@ -31,17 +29,15 @@ function listUnicode(unicode) {
  */
 function ttfobject2icon(ttf, options = {}) {
 
-    let glyfList = [];
+    const glyfList = [];
 
     // glyf 信息
-    let filtered = ttf.glyf.filter(function (g) {
-        return g.name !== '.notdef'
+    const filtered = ttf.glyf.filter((g) => g.name !== '.notdef'
             && g.name !== '.null'
             && g.name !== 'nonmarkingreturn'
-            && g.unicode && g.unicode.length;
-    });
+            && g.unicode && g.unicode.length);
 
-    filtered.forEach(function (g, i) {
+    filtered.forEach((g, i) => {
         glyfList.push({
             code: '&#x' + g.unicode[0].toString(16) + ';',
             codeName: listUnicode(g.unicode),
@@ -53,7 +49,7 @@ function ttfobject2icon(ttf, options = {}) {
     return {
         fontFamily: ttf.name.fontFamily || config.name.fontFamily,
         iconPrefix: options.iconPrefix || 'icon',
-        glyfList: glyfList
+        glyfList
     };
 
 }
@@ -71,8 +67,8 @@ function ttfobject2icon(ttf, options = {}) {
 export default function ttf2icon(ttfBuffer, options = {}) {
     // 读取ttf二进制流
     if (ttfBuffer instanceof ArrayBuffer) {
-        let reader = new TTFReader();
-        let ttfObject = reader.read(ttfBuffer);
+        const reader = new TTFReader();
+        const ttfObject = reader.read(ttfBuffer);
         reader.dispose();
 
         return ttfobject2icon(ttfObject, options);

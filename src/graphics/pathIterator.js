@@ -29,17 +29,16 @@ export default function pathIterator(contour, callBack) {
             if (curPoint.onCurve) {
                 cursorPoint = curPoint;
             }
-            else {
-                if (prevPoint.onCurve) {
-                    cursorPoint = prevPoint;
-                }
-                else {
-                    cursorPoint = {
-                        x: (prevPoint.x + curPoint.x) / 2,
-                        y: (prevPoint.y + curPoint.y) / 2
-                    };
-                }
+            else if (prevPoint.onCurve) {
+                cursorPoint = prevPoint;
             }
+            else {
+                cursorPoint = {
+                    x: (prevPoint.x + curPoint.x) / 2,
+                    y: (prevPoint.y + curPoint.y) / 2
+                };
+            }
+
         }
 
         // 直线
@@ -58,7 +57,7 @@ export default function pathIterator(contour, callBack) {
                 cursorPoint = nextPoint;
             }
             else {
-                let last = {
+                const last = {
                     x: (curPoint.x + nextPoint.x) / 2,
                     y: (curPoint.y + nextPoint.y) / 2
                 };

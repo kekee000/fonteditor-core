@@ -15,10 +15,10 @@ export default function contour2svg(contour, precision = 2) {
         return '';
     }
 
-    let ceil = function (number) {
+    const ceil = function (number) {
         return +(number).toFixed(precision);
     };
-    let pathArr = [];
+    const pathArr = [];
     let curPoint;
     let prevPoint;
     let nextPoint;
@@ -36,17 +36,15 @@ export default function contour2svg(contour, precision = 2) {
                 y = curPoint.y;
                 pathArr.push('M' + ceil(x) + ' ' + ceil(y));
             }
+            else if (prevPoint.onCurve) {
+                x = prevPoint.x;
+                y = prevPoint.y;
+                pathArr.push('M' + ceil(x) + ' ' + ceil(y));
+            }
             else {
-                if (prevPoint.onCurve) {
-                    x = prevPoint.x;
-                    y = prevPoint.y;
-                    pathArr.push('M' + ceil(x) + ' ' + ceil(y));
-                }
-                else {
-                    x = (prevPoint.x + curPoint.x) / 2;
-                    y = (prevPoint.y + curPoint.y) / 2;
-                    pathArr.push('M' + ceil(x)  + ' ' + ceil(y));
-                }
+                x = (prevPoint.x + curPoint.x) / 2;
+                y = (prevPoint.y + curPoint.y) / 2;
+                pathArr.push('M' + ceil(x)  + ' ' + ceil(y));
             }
         }
 
@@ -67,8 +65,8 @@ export default function contour2svg(contour, precision = 2) {
                 y = nextPoint.y;
             }
             else {
-                let x1 = (curPoint.x + nextPoint.x) / 2;
-                let y1 = (curPoint.y + nextPoint.y) / 2;
+                const x1 = (curPoint.x + nextPoint.x) / 2;
+                const y1 = (curPoint.y + nextPoint.y) / 2;
                 pathArr.push('q' + ceil(curPoint.x - x)
                         + ' ' + ceil(curPoint.y - y)
                         + ' ' + ceil(x1 - x)

@@ -18,7 +18,7 @@ import {computePathBox} from '../graphics/computeBoundingBox';
 export default function otf2ttfobject(otfBuffer, options) {
     let otfObject;
     if (otfBuffer instanceof ArrayBuffer) {
-        let otfReader = new OTFReader(options);
+        const otfReader = new OTFReader(options);
         otfObject = otfReader.read(otfBuffer);
         otfReader.dispose();
     }
@@ -30,9 +30,9 @@ export default function otf2ttfobject(otfBuffer, options) {
     }
 
     // 转换otf轮廓
-    otfObject.glyf.forEach(function (g) {
+    otfObject.glyf.forEach((g) => {
         g.contours = otfContours2ttfContours(g.contours);
-        let box = computePathBox.apply(null, g.contours);
+        const box = computePathBox(...g.contours);
         if (box) {
             g.xMin = box.x;
             g.xMax = box.x + box.width;

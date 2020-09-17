@@ -3,8 +3,6 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-/* eslint-disable fecs-use-computed-property */
-
 import Directory from './table/directory';
 import supportTables from './table/support-otf';
 import Reader from './reader';
@@ -23,7 +21,7 @@ export default class OTFReader {
         this.options = options;
     }
 
-   /**
+    /**
      * 初始化
      *
      * @param {ArrayBuffer} buffer buffer对象
@@ -31,8 +29,8 @@ export default class OTFReader {
      */
     readBuffer(buffer) {
 
-        let reader = new Reader(buffer, 0, buffer.byteLength, false);
-        let font = {};
+        const reader = new Reader(buffer, 0, buffer.byteLength, false);
+        const font = {};
 
         // version
         font.version = reader.readString(0, 4);
@@ -66,9 +64,9 @@ export default class OTFReader {
         font.readOptions = this.options;
 
         // 读取支持的表数据
-        Object.keys(supportTables).forEach(function (tableName) {
+        Object.keys(supportTables).forEach((tableName) => {
             if (font.tables[tableName]) {
-                let offset = font.tables[tableName].offset;
+                const offset = font.tables[tableName].offset;
                 font[tableName] = new supportTables[tableName](offset).read(reader, font);
             }
         });
@@ -89,12 +87,12 @@ export default class OTFReader {
      */
     resolveGlyf(font) {
 
-        let codes = font.cmap;
+        const codes = font.cmap;
         let glyf = font.CFF.glyf;
-        let subsetMap = font.readOptions.subset ? font.subsetMap : null; // 当前ttf的子集列表
+        const subsetMap = font.readOptions.subset ? font.subsetMap : null; // 当前ttf的子集列表
         // unicode
-        Object.keys(codes).forEach(function (c) {
-            let i = codes[c];
+        Object.keys(codes).forEach((c) => {
+            const i = codes[c];
             if (subsetMap && !subsetMap[i]) {
                 return;
             }
@@ -105,7 +103,7 @@ export default class OTFReader {
         });
 
         // leftSideBearing
-        font.hmtx.forEach(function (item, i) {
+        font.hmtx.forEach((item, i) => {
             if (subsetMap && !subsetMap[i]) {
                 return;
             }
@@ -115,8 +113,8 @@ export default class OTFReader {
 
         // 设置了subsetMap之后需要选取subset中的字形
         if (subsetMap) {
-            let subGlyf = [];
-            Object.keys(subsetMap).forEach(function (i) {
+            const subGlyf = [];
+            Object.keys(subsetMap).forEach((i) => {
                 subGlyf.push(glyf[+i]);
             });
             glyf = subGlyf;
@@ -139,7 +137,7 @@ export default class OTFReader {
         delete font.subsetMap;
 
         // 删除无用的表
-        let cff = font.CFF;
+        const cff = font.CFF;
         delete cff.glyf;
         delete cff.charset;
         delete cff.encoding;

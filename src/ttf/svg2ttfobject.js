@@ -23,8 +23,8 @@ import reduceGlyf from './util/reduceGlyf';
 function loadXML(xml) {
     if (DOMParser) {
         try {
-            let domParser = new DOMParser();
-            let xmlDoc = domParser.parseFromString(xml, 'text/xml');
+            const domParser = new DOMParser();
+            const xmlDoc = domParser.parseFromString(xml, 'text/xml');
             return xmlDoc;
         }
         catch (exp) {
@@ -42,8 +42,8 @@ function loadXML(xml) {
  */
 function resolveSVG(svg) {
     // 去除xmlns，防止xmlns导致svg解析错误
-    svg = svg.replace(/\s+xmlns(?:\:[\w-]+)?=("|')[^"']*\1/g, ' ')
-        .replace(/<defs[>\s][\s\S]+?\/defs>/g, function (text) {
+    svg = svg.replace(/\s+xmlns(?::[\w-]+)?=("|')[^"']*\1/g, ' ')
+        .replace(/<defs[>\s][\s\S]+?\/defs>/g, (text) => {
             if (text.indexOf('</font>') >= 0) {
                 return text;
             }
@@ -59,7 +59,7 @@ function resolveSVG(svg) {
  * @return {Object} ttfObject对象
  */
 function getEmptyTTF() {
-    let ttf = getEmptyttfObject();
+    const ttf = getEmptyttfObject();
     ttf.head.unitsPerEm = 0; // 去除unitsPerEm以便于重新计算
     ttf.from = 'svgfont';
     return ttf;
@@ -92,7 +92,7 @@ function getEmptyObject() {
  * @return {number}
  */
 function getUnitsPerEm(xMin, xMax, yMin, yMax) {
-    let seed = Math.ceil(Math.min(yMax - yMin, xMax - xMin));
+    const seed = Math.ceil(Math.min(yMax - yMin, xMax - xMin));
 
     if (!seed) {
         return 1024;
@@ -110,7 +110,7 @@ function getUnitsPerEm(xMin, xMax, yMin, yMax) {
             return unitsPerEm;
         }
 
-        unitsPerEm = unitsPerEm << 1;
+        unitsPerEm <<= 1;
     }
 
     return 1024;
@@ -128,7 +128,7 @@ function resolve(ttf) {
     // 如果是svg格式字体，则去小数
     // 由于svg格式导入时候会出现字形重复问题，这里进行优化
     if (ttf.from === 'svgfont' && ttf.head.unitsPerEm > 128) {
-        ttf.glyf.forEach(function (g) {
+        ttf.glyf.forEach((g) => {
             if (g.contours) {
                 glyfAdjust(g);
                 reduceGlyf(g);
@@ -142,9 +142,9 @@ function resolve(ttf) {
         let yMin = 16384;
         let yMax = -16384;
 
-        ttf.glyf.forEach(function (g) {
+        ttf.glyf.forEach((g) => {
             if (g.contours) {
-                let bound = computePathBox.apply(null, g.contours);
+                const bound = computePathBox(...g.contours);
                 if (bound) {
                     xMin = Math.min(xMin, bound.x);
                     xMax = Math.max(xMax, bound.x + bound.width);
@@ -154,10 +154,10 @@ function resolve(ttf) {
             }
         });
 
-        let unitsPerEm = getUnitsPerEm(xMin, xMax, yMin, yMax);
-        let scale = 1024 / unitsPerEm;
+        const unitsPerEm = getUnitsPerEm(xMin, xMax, yMin, yMax);
+        const scale = 1024 / unitsPerEm;
 
-        ttf.glyf.forEach(function (g) {
+        ttf.glyf.forEach((g) => {
             glyfAdjust(g, scale, scale);
             reduceGlyf(g);
         });
@@ -176,9 +176,9 @@ function resolve(ttf) {
  */
 function parseFont(xmlDoc, ttf) {
 
-    let metaNode = xmlDoc.getElementsByTagName('metadata')[0];
-    let fontNode = xmlDoc.getElementsByTagName('font')[0];
-    let fontFaceNode = xmlDoc.getElementsByTagName('font-face')[0];
+    const metaNode = xmlDoc.getElementsByTagName('metadata')[0];
+    const fontNode = xmlDoc.getElementsByTagName('font')[0];
+    const fontFaceNode = xmlDoc.getElementsByTagName('font-face')[0];
 
     if (metaNode && metaNode.textContent) {
         ttf.metadata = string.decodeHTML(metaNode.textContent.trim());
@@ -192,17 +192,17 @@ function parseFont(xmlDoc, ttf) {
     }
 
     if (fontFaceNode) {
-        let OS2 = ttf['OS/2'];
+        const OS2 = ttf['OS/2'];
         ttf.name.fontFamily = fontFaceNode.getAttribute('font-family') || '';
         OS2.usWeightClass = +(fontFaceNode.getAttribute('font-weight') || 0);
         ttf.head.unitsPerEm = +(fontFaceNode.getAttribute('units-per-em') || 0);
 
         // 解析panose, eg: 2 0 6 3 0 0 0 0 0 0
-        let panose = (fontFaceNode.getAttribute('panose-1') || '').split(' ');
+        const panose = (fontFaceNode.getAttribute('panose-1') || '').split(' ');
         [
             'bFamilyType', 'bSerifStyle', 'bWeight', 'bProportion', 'bContrast',
             'bStrokeVariation', 'bArmStyle', 'bLetterform', 'bMidline', 'bXHeight'
-        ].forEach(function (name, i) {
+        ].forEach((name, i) => {
             OS2[name] = +(panose[i] || 0);
         });
 
@@ -211,8 +211,8 @@ function parseFont(xmlDoc, ttf) {
         OS2.bXHeight = +(fontFaceNode.getAttribute('x-height') || 0);
 
         // 解析bounding
-        let box = (fontFaceNode.getAttribute('bbox') || '').split(' ');
-        ['xMin', 'yMin', 'xMax', 'yMax'].forEach(function (name, i) {
+        const box = (fontFaceNode.getAttribute('bbox') || '').split(' ');
+        ['xMin', 'yMin', 'xMax', 'yMax'].forEach((name, i) => {
             ttf.head[name] = +(box[i] || '');
         });
 
@@ -220,9 +220,9 @@ function parseFont(xmlDoc, ttf) {
         ttf.post.underlinePosition = +(fontFaceNode.getAttribute('underline-position') || 0);
 
         // unicode range
-        let unicodeRange = fontFaceNode.getAttribute('unicode-range');
+        const unicodeRange = fontFaceNode.getAttribute('unicode-range');
         if (unicodeRange) {
-            unicodeRange.replace(/u\+([0-9A-Z]+)(\-[0-9A-Z]+)?/i, function ($0, a, b) {
+            unicodeRange.replace(/u\+([0-9A-Z]+)(-[0-9A-Z]+)?/i, ($0, a, b) => {
                 OS2.usFirstCharIndex = Number('0x' + a);
                 OS2.usLastCharIndex = b ? Number('0x' + b.slice(1)) : 0xFFFFFFFF;
             });
@@ -241,14 +241,14 @@ function parseFont(xmlDoc, ttf) {
  */
 function parseGlyf(xmlDoc, ttf) {
 
-    let missingNode = xmlDoc.getElementsByTagName('missing-glyph')[0];
+    const missingNode = xmlDoc.getElementsByTagName('missing-glyph')[0];
 
     // 解析glyf
     let d;
     let unicode;
     if (missingNode) {
 
-        let missing = {
+        const missing = {
             name: '.notdef'
         };
 
@@ -268,15 +268,15 @@ function parseGlyf(xmlDoc, ttf) {
         ttf.glyf.unshift(missing);
     }
 
-    let glyfNodes = xmlDoc.getElementsByTagName('glyph');
+    const glyfNodes = xmlDoc.getElementsByTagName('glyph');
 
     if (glyfNodes.length) {
 
 
         for (let i = 0, l = glyfNodes.length; i < l; i++) {
 
-            let node = glyfNodes[i];
-            let glyf = {
+            const node = glyfNodes[i];
+            const glyf = {
                 name: node.getAttribute('glyph-name') || node.getAttribute('name') || ''
             };
 
@@ -285,23 +285,22 @@ function parseGlyf(xmlDoc, ttf) {
             }
 
             if ((unicode = node.getAttribute('unicode'))) {
-                let nextUnicode = []
-                let nextIndex =0;
+                const nextUnicode = [];
                 let totalCodePoints = 0;
-                let dupe = false
-                for(let ui=0; ui < unicode.length; ui++) {
-                    let ucp = unicode.codePointAt(ui)
-                    nextUnicode.push(ucp)
-                    ui = ucp > 0xffff ? ui +1 : ui
-                    totalCodePoints = totalCodePoints + 1;
+                for (let ui = 0; ui < unicode.length; ui++) {
+                    const ucp = unicode.codePointAt(ui);
+                    nextUnicode.push(ucp);
+                    ui = ucp > 0xffff ? ui + 1 : ui;
+                    totalCodePoints += 1;
                 }
-                if(totalCodePoints == 1) { //TTF can't handle ligatures
-                  glyf.unicode = nextUnicode
+                if (totalCodePoints === 1) {
+                    // TTF can't handle ligatures
+                    glyf.unicode = nextUnicode;
 
-                  if ((d = node.getAttribute('d'))) {
-                    glyf.contours = path2contours(d);
-                  }
-                  ttf.glyf.push(glyf);
+                    if ((d = node.getAttribute('d'))) {
+                        glyf.contours = path2contours(d);
+                    }
+                    ttf.glyf.push(glyf);
 
                 }
             }
@@ -325,7 +324,7 @@ function parsePath(xmlDoc, ttf) {
     let contours;
     let glyf;
     let node;
-    let pathNodes = xmlDoc.getElementsByTagName('path');
+    const pathNodes = xmlDoc.getElementsByTagName('path');
 
     if (pathNodes.length) {
         for (let i = 0, l = pathNodes.length; i < l; i++) {
@@ -341,9 +340,7 @@ function parsePath(xmlDoc, ttf) {
 
     // 其他svg指令组成一个glyf字形
     contours = svgnode2contours(
-        Array.prototype.slice.call(xmlDoc.getElementsByTagName('*')).filter(function (node) {
-            return node.tagName !== 'path';
-        })
+        Array.prototype.slice.call(xmlDoc.getElementsByTagName('*')).filter((node) => node.tagName !== 'path')
     );
     if (contours) {
         glyf = {
@@ -387,14 +384,14 @@ function parseXML(xmlDoc, options) {
     }
 
     if (ttf.from === 'svg') {
-        let glyf = ttf.glyf;
+        const glyf = ttf.glyf;
         let i;
         let l;
         // 合并导入的字形为单个字形
         if (options.combinePath) {
-            let combined = [];
+            const combined = [];
             for (i = 0, l = glyf.length; i < l; i++) {
-                let contours = glyf[i].contours;
+                const contours = glyf[i].contours;
                 for (let index = 0, length = contours.length; index < length; index++) {
                     combined.push(contours[index]);
                 }
@@ -429,6 +426,6 @@ export default function svg2ttfObject(svg, options = {combinePath: false}) {
         xmlDoc = loadXML(svg);
     }
 
-    let ttf = parseXML(xmlDoc, options);
+    const ttf = parseXML(xmlDoc, options);
     return resolve(ttf);
 }

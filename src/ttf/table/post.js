@@ -31,22 +31,22 @@ export default table.create(
     {
 
         read(reader, ttf) {
-            let format = reader.readFixed(this.offset);
+            const format = reader.readFixed(this.offset);
             // 读取表头
-            let tbl = new Posthead(this.offset).read(reader, ttf);
+            const tbl = new Posthead(this.offset).read(reader, ttf);
 
             // format2
             if (format === 2) {
-                let numberOfGlyphs = reader.readUint16();
-                let glyphNameIndex = [];
+                const numberOfGlyphs = reader.readUint16();
+                const glyphNameIndex = [];
 
                 for (let i = 0; i < numberOfGlyphs; ++i) {
                     glyphNameIndex.push(reader.readUint16());
                 }
 
-                let pascalStringOffset = reader.offset;
-                let pascalStringLength = ttf.tables.post.length - (pascalStringOffset - this.offset);
-                let pascalStringBytes = reader.readBytes(reader.offset, pascalStringLength);
+                const pascalStringOffset = reader.offset;
+                const pascalStringLength = ttf.tables.post.length - (pascalStringOffset - this.offset);
+                const pascalStringBytes = reader.readBytes(reader.offset, pascalStringLength);
 
                 tbl.nameIndex = glyphNameIndex; // 设置glyf名字索引
                 tbl.names = string.getPascalString(pascalStringBytes); // glyf名字数组
@@ -62,7 +62,7 @@ export default table.create(
         write(writer, ttf) {
 
 
-            let post = ttf.post || {
+            const post = ttf.post || {
                 format: 3
             };
 
@@ -79,16 +79,16 @@ export default table.create(
 
             // version 3 不设置post信息
             if (post.format === 2) {
-                let numberOfGlyphs = ttf.glyf.length;
+                const numberOfGlyphs = ttf.glyf.length;
                 writer.writeUint16(numberOfGlyphs); // numberOfGlyphs
                 // write glyphNameIndex
-                let nameIndex = ttf.support.post.nameIndex;
+                const nameIndex = ttf.support.post.nameIndex;
                 for (let i = 0, l = nameIndex.length; i < l; i++) {
                     writer.writeUint16(nameIndex[i]);
                 }
 
                 // write names
-                ttf.support.post.names.forEach(function (name) {
+                ttf.support.post.names.forEach((name) => {
                     writer.writeBytes(name);
                 });
             }
@@ -96,7 +96,7 @@ export default table.create(
 
         size(ttf) {
 
-            let numberOfGlyphs = ttf.glyf.length;
+            const numberOfGlyphs = ttf.glyf.length;
             ttf.post = ttf.post || {};
             ttf.post.format = ttf.post.format || 3;
             ttf.post.maxMemType1 = numberOfGlyphs;
@@ -108,8 +108,8 @@ export default table.create(
 
             // version 2
             let size = 34 + numberOfGlyphs * 2; // header + numberOfGlyphs + numberOfGlyphs * 2
-            let glyphNames = [];
-            let nameIndexArr = [];
+            const glyphNames = [];
+            const nameIndexArr = [];
             let nameIndex = 0;
 
             // 获取 name的大小
@@ -119,15 +119,15 @@ export default table.create(
                     nameIndexArr.push(0);
                 }
                 else {
-                    let glyf = ttf.glyf[i];
-                    let unicode = glyf.unicode ? glyf.unicode[0] : 0;
-                    let unicodeNameIndex = unicodeName[unicode];
+                    const glyf = ttf.glyf[i];
+                    const unicode = glyf.unicode ? glyf.unicode[0] : 0;
+                    const unicodeNameIndex = unicodeName[unicode];
                     if (undefined !== unicodeNameIndex) {
                         nameIndexArr.push(unicodeNameIndex);
                     }
                     else {
                         // 这里需要注意，"" 有可能是"\3" length不为0，但是是空字符串
-                        let name = glyf.name;
+                        const name = glyf.name;
                         if (!name || name.charCodeAt(0) < 32) {
                             nameIndexArr.push(258 + nameIndex++);
                             glyphNames.push([0]);
@@ -135,7 +135,7 @@ export default table.create(
                         }
                         else {
                             nameIndexArr.push(258 + nameIndex++);
-                            let bytes = string.toPascalStringBytes(name); // pascal string bytes
+                            const bytes = string.toPascalStringBytes(name); // pascal string bytes
                             glyphNames.push(bytes);
                             size += bytes.length;
                         }

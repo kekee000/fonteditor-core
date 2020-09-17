@@ -27,7 +27,7 @@ const nameId = {
 
 // 反转names
 const nameIdHash = {};
-Object.keys(nameId).forEach(function (id) {
+Object.keys(nameId).forEach(id => {
     nameIdHash[nameId[id]] = +id;
 });
 

@@ -13,7 +13,7 @@ import pathCeil from '../../graphics/pathCeil';
  * @return {Array}            ttf轮廓
  */
 function transformContour(otfContour) {
-    let contour = [];
+    const contour = [];
     let prevPoint;
     let curPoint;
     let nextPoint;
@@ -31,7 +31,7 @@ function transformContour(otfContour) {
         else {
             nextPoint = otfContour[i + 1];
             nextNextPoint = i === l - 2 ? otfContour[0] : otfContour[i + 2];
-            let bezierArray = bezierCubic2Q2(prevPoint, curPoint, nextPoint, nextNextPoint);
+            const bezierArray = bezierCubic2Q2(prevPoint, curPoint, nextPoint, nextNextPoint);
             bezierArray[0][2].onCurve = true;
             contour.push(bezierArray[0][1]);
             contour.push(bezierArray[0][2]);
@@ -62,7 +62,7 @@ export default function otfContours2ttfContours(otfContours) {
     if (!otfContours || !otfContours.length) {
         return otfContours;
     }
-    let contours = [];
+    const contours = [];
     for (let i = 0, l = otfContours.length; i < l; i++) {
 
         // 这里可能由于转换错误导致空轮廓，需要去除

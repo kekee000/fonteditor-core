@@ -28,10 +28,10 @@ function encodeDelta(delta) {
 function getSegments(glyfUnicodes, bound) {
 
     let prevGlyph = null;
-    let result = [];
+    const result = [];
     let segment = {};
 
-    glyfUnicodes.forEach(function (glyph) {
+    glyfUnicodes.forEach((glyph) => {
 
         if (bound === undefined || glyph.unicode <= bound) {
             // 初始化编码头部，这里unicode和graph id 都必须连续
@@ -76,17 +76,15 @@ function getSegments(glyfUnicodes, bound) {
  * @return {Array} 码表
  */
 function getFormat0Segment(glyfUnicodes) {
-    let unicodes = [];
-    glyfUnicodes.forEach(function (u) {
+    const unicodes = [];
+    glyfUnicodes.forEach((u) => {
         if (u.unicode !== undefined && u.unicode < 256) {
             unicodes.push([u.unicode, u.id]);
         }
     });
 
     // 按编码排序
-    unicodes.sort(function (a, b) {
-        return a[0] - b[0];
-    });
+    unicodes.sort((a, b) => a[0] - b[0]);
 
     return unicodes;
 }
@@ -100,7 +98,7 @@ function getFormat0Segment(glyfUnicodes) {
 export default function sizeof(ttf) {
     ttf.support.cmap = {};
     let glyfUnicodes = [];
-    ttf.glyf.forEach(function (glyph, index) {
+    ttf.glyf.forEach((glyph, index) => {
 
         let unicodes = glyph.unicode;
 
@@ -109,9 +107,9 @@ export default function sizeof(ttf) {
         }
 
         if (unicodes && unicodes.length) {
-            unicodes.forEach(function (unicode) {
+            unicodes.forEach((unicode) => {
                 glyfUnicodes.push({
-                    unicode: unicode,
+                    unicode,
                     id: unicode !== 0xFFFF ? index : 0
                 });
             });
@@ -119,13 +117,11 @@ export default function sizeof(ttf) {
 
     });
 
-    glyfUnicodes = glyfUnicodes.sort(function (a, b) {
-        return a.unicode - b.unicode;
-    });
+    glyfUnicodes = glyfUnicodes.sort((a, b) => a.unicode - b.unicode);
 
     ttf.support.cmap.unicodes = glyfUnicodes;
 
-    let unicodes2Bytes = glyfUnicodes;
+    const unicodes2Bytes = glyfUnicodes;
 
     ttf.support.cmap.format4Segments = getSegments(unicodes2Bytes, 0xFFFF);
     ttf.support.cmap.format4Size = 24
@@ -135,21 +131,19 @@ export default function sizeof(ttf) {
     ttf.support.cmap.format0Size = 262;
 
     // we need subtable 12 only if found unicodes with > 2 bytes.
-    let hasGLyphsOver2Bytes = unicodes2Bytes.some(function (glyph) {
-        return glyph.unicode > 0xFFFF;
-    });
+    const hasGLyphsOver2Bytes = unicodes2Bytes.some((glyph) => glyph.unicode > 0xFFFF);
 
     if (hasGLyphsOver2Bytes) {
         ttf.support.cmap.hasGLyphsOver2Bytes = hasGLyphsOver2Bytes;
 
-        let unicodes4Bytes = glyfUnicodes;
+        const unicodes4Bytes = glyfUnicodes;
 
         ttf.support.cmap.format12Segments = getSegments(unicodes4Bytes);
         ttf.support.cmap.format12Size = 16
             + ttf.support.cmap.format12Segments.length * 12;
     }
 
-    let size = 4 + (hasGLyphsOver2Bytes ? 32 : 24) // cmap header
+    const size = 4 + (hasGLyphsOver2Bytes ? 32 : 24) // cmap header
         + ttf.support.cmap.format0Size // format 0
         + ttf.support.cmap.format4Size // format 4
         + (hasGLyphsOver2Bytes ? ttf.support.cmap.format12Size : 0); // format 12

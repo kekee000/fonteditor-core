@@ -40,7 +40,7 @@ export default class Reader {
      */
     constructor(buffer, offset, length, littleEndian) {
 
-        let bufferLength = buffer.byteLength || buffer.length;
+        const bufferLength = buffer.byteLength || buffer.length;
 
         this.offset = offset || 0;
         this.length = length || (bufferLength - this.offset);
@@ -74,7 +74,7 @@ export default class Reader {
             return this['read' + type](offset, littleEndian);
         }
 
-        let size = dataType[type];
+        const size = dataType[type];
         this.offset = offset + size;
         return this.view['get' + type](offset, littleEndian);
     }
@@ -97,7 +97,7 @@ export default class Reader {
             error.raise(10001, this.length, offset + length);
         }
 
-        let buffer = [];
+        const buffer = [];
         for (let i = 0; i < length; ++i) {
             buffer.push(this.view.getUint8(offset + i));
         }
@@ -126,7 +126,7 @@ export default class Reader {
 
         let value = '';
         for (let i = 0; i < length; ++i) {
-            let c = this.readUint8(offset + i);
+            const c = this.readUint8(offset + i);
             value += String.fromCharCode(c);
         }
 
@@ -152,7 +152,7 @@ export default class Reader {
      * @return {number}
      */
     readUint24(offset) {
-        let [i, j, k] = this.readBytes(offset || this.offset, 3);
+        const [i, j, k] = this.readBytes(offset || this.offset, 3);
         return (i << 16) + (j << 8) + k;
     }
 
@@ -166,7 +166,7 @@ export default class Reader {
         if (undefined === offset) {
             offset = this.offset;
         }
-        let val = this.readInt32(offset, false) / 65536.0;
+        const val = this.readInt32(offset, false) / 65536.0;
         return Math.ceil(val * 100000) / 100000;
     }
 
@@ -182,9 +182,9 @@ export default class Reader {
         }
 
         // new Date(1970, 1, 1).getTime() - new Date(1904, 1, 1).getTime();
-        let delta = -2077545600000;
-        let time = this.readUint32(offset + 4, false);
-        let date = new Date();
+        const delta = -2077545600000;
+        const time = this.readUint32(offset + 4, false);
+        const date = new Date();
         date.setTime(time * 1000 + delta);
         return date;
     }
@@ -218,6 +218,6 @@ export default class Reader {
 }
 
 // 直接支持的数据类型
-Object.keys(dataType).forEach(function (type) {
+Object.keys(dataType).forEach((type) => {
     Reader.prototype['read' + type] = curry(Reader.prototype.read, type);
 });

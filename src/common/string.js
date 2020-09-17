@@ -13,16 +13,14 @@ export default {
      */
     decodeHTML(source) {
 
-        let str = String(source)
+        const str = String(source)
             .replace(/&quot;/g, '"')
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
             .replace(/&amp;/g, '&');
 
         // 处理转义的中文和实体字符
-        return str.replace(/&#([\d]+);/g, function ($0, $1) {
-            return String.fromCodePoint(parseInt($1, 10));
-        });
+        return str.replace(/&#([\d]+);/g, ($0, $1) => String.fromCodePoint(parseInt($1, 10)));
     },
 
     /**
@@ -47,6 +45,7 @@ export default {
      * @return {number} 长度
      */
     getLength(source) {
+        // eslint-disable-next-line no-control-regex
         return String(source).replace(/[^\x00-\xff]/g, '11').length;
     },
 
@@ -58,8 +57,8 @@ export default {
      * @return {string} 格式化后字符串
      */
     format(source, data) {
-        return source.replace(/\$\{([\w.]+)\}/g, function ($0, $1) {
-            let ref = $1.split('.');
+        return source.replace(/\$\{([\w.]+)\}/g, ($0, $1) => {
+            const ref = $1.split('.');
             let refObject = data;
             let level;
 

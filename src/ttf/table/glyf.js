@@ -17,38 +17,38 @@ export default table.create(
     {
 
         read(reader, ttf) {
-            let startOffset = this.offset;
-            let loca = ttf.loca;
-            let numGlyphs = ttf.maxp.numGlyphs;
-            let glyphs = [];
+            const startOffset = this.offset;
+            const loca = ttf.loca;
+            const numGlyphs = ttf.maxp.numGlyphs;
+            const glyphs = [];
 
             reader.seek(startOffset);
 
             // subset
-            let subset = ttf.readOptions.subset;
+            const subset = ttf.readOptions.subset;
 
             if (subset && subset.length > 0) {
-                let subsetMap = {
+                const subsetMap = {
                     0: true // 设置.notdef
                 };
                 subsetMap[0] = true;
                 // subset map
-                let cmap = ttf.cmap;
+                const cmap = ttf.cmap;
 
                 // unicode to index
-                Object.keys(cmap).forEach(function (c) {
+                Object.keys(cmap).forEach((c) => {
                     if (subset.indexOf(+c) > -1) {
-                        let i = cmap[c];
+                        const i = cmap[c];
                         subsetMap[i] = true;
                     }
                 });
                 ttf.subsetMap = subsetMap;
-                let parsedGlyfMap = {};
+                const parsedGlyfMap = {};
                 // 循环解析subset相关的glyf，包括复合字形相关的字形
-                let travelsParse = function travels(subsetMap) {
-                    let newSubsetMap = {};
-                    Object.keys(subsetMap).forEach(function (i) {
-                        let index = +i;
+                const travelsParse = function travels(subsetMap) {
+                    const newSubsetMap = {};
+                    Object.keys(subsetMap).forEach((i) => {
+                        const index = +i;
                         parsedGlyfMap[index] = true;
                         // 当前的和下一个一样，或者最后一个无轮廓
                         if (loca[index] === loca[index + 1]) {
@@ -61,7 +61,7 @@ export default table.create(
                         }
 
                         if (glyphs[index].compound) {
-                            glyphs[index].glyfs.forEach(function (g) {
+                            glyphs[index].glyfs.forEach((g) => {
                                 if (!parsedGlyfMap[g.glyphIndex]) {
                                     newSubsetMap[g.glyphIndex] = true;
                                 }
@@ -106,7 +106,7 @@ export default table.create(
             return glyphs;
         },
 
-        write: write,
+        write,
         size: sizeof
     }
 );

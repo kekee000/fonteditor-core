@@ -18,22 +18,22 @@ export default function parseCFFEncoding(reader, start) {
 
     let i;
     let code;
-    let encoding = {};
-    let format = reader.readUint8();
+    const encoding = {};
+    const format = reader.readUint8();
 
     if (format === 0) {
-        let nCodes = reader.readUint8();
+        const nCodes = reader.readUint8();
         for (i = 0; i < nCodes; i += 1) {
             code = reader.readUint8();
             encoding[code] = i;
         }
     }
     else if (format === 1) {
-        let nRanges = reader.readUint8();
+        const nRanges = reader.readUint8();
         code = 1;
         for (i = 0; i < nRanges; i += 1) {
-            let first = reader.readUint8();
-            let nLeft = reader.readUint8();
+            const first = reader.readUint8();
+            const nLeft = reader.readUint8();
             for (let j = first; j <= first + nLeft; j += 1) {
                 encoding[j] = code;
                 code += 1;

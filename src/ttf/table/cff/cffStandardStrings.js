@@ -1,3 +1,7 @@
+/**
+ * @file cffStandardStrings.js
+ * @author mengke01(kekee000@gmail.com)
+ */
 const cffStandardStrings = [
     '.notdef', 'space', 'exclam', 'quotedbl', 'numbersign', 'dollar', 'percent', 'ampersand', 'quoteright',
     'parenleft', 'parenright', 'asterisk', 'plus', 'comma', 'hyphen', 'period', 'slash', 'zero', 'one', 'two',

@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform, glyph adjust.",
   "keywords": [
     "sfnt",
@@ -34,12 +34,21 @@
     }
   ],
   "scripts": {
+    "precommit": "npm run lint",
     "publish:npm": "npm run build && npm publish --registry=https://registry.npmjs.org/",
     "test": "./node_modules/.bin/mocha --require @babel/register  test/spec/*.spec.js test/spec/**/*.spec.js",
     "test:node": "npm run build && ./node_modules/mocha/bin/mocha test/node-spec/**/*.spec.js ",
     "dev": "webpack-dev-server --open --config ./config/webpack.dev.js",
     "build": "babel src --out-dir lib",
-    "lint": "fecs ./src --reporter=baidu --rule"
+    "lint": "eslint ./src"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{jsx,txs,ts,js,vue}": ["eslint"]
   },
   "dependencies": {
     "xmldom": "~0.1.19"
@@ -63,7 +72,11 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "commander": "^3.0.2",
     "css-loader": "^3.2.0",
+    "eslint": "^7.9.0",
+    "eslint-config-esnext": "^4.1.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
     "mocha": "^6.2.1",
     "pako": "^1.0.10",
     "style-loader": "^1.0.0",

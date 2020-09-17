@@ -28,8 +28,8 @@ const struct = {
 };
 
 // 反转名字查找
-let names = {};
-Object.keys(struct).forEach(function (key) {
+const names = {};
+Object.keys(struct).forEach((key) => {
     names[struct[key]] = key;
 });
 

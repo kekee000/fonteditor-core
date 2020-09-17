@@ -15,10 +15,10 @@ const TAU = Math.PI * 2;
 
 function vectorAngle(ux, uy, vx, vy) {
     // Calculate an angle between two vectors
-    let sign = (ux * vy - uy * vx < 0) ? -1 : 1;
-    let umag = Math.sqrt(ux * ux + uy * uy);
-    let vmag = Math.sqrt(ux * ux + uy * uy);
-    let dot = ux * vx + uy * vy;
+    const sign = (ux * vy - uy * vx < 0) ? -1 : 1;
+    const umag = Math.sqrt(ux * ux + uy * uy);
+    const vmag = Math.sqrt(ux * ux + uy * uy);
+    const dot = ux * vx + uy * vy;
     let div = dot / (umag * vmag);
 
     if (div > 1 || div < -1) {
@@ -35,7 +35,7 @@ function correctRadii(midx, midy, rx, ry) {
     rx = Math.abs(rx);
     ry = Math.abs(ry);
 
-    let Λ = (midx * midx) / (rx * rx) + (midy * midy) / (ry * ry);
+    const Λ = (midx * midx) / (rx * rx) + (midy * midy) / (ry * ry);
     if (Λ > 1) {
         rx *= Math.sqrt(Λ);
         ry *= Math.sqrt(Λ);
@@ -55,13 +55,13 @@ function getArcCenter(x1, y1, x2, y2, fa, fs, rx, ry, sin_φ, cos_φ) {
     // points. After that, rotate it to line up ellipse axes with coordinate
     // axes.
     //
-    let x1p = cos_φ * (x1 - x2) / 2 + sin_φ * (y1 - y2) / 2;
-    let y1p = -sin_φ * (x1 - x2) / 2 + cos_φ * (y1 - y2) / 2;
+    const x1p = cos_φ * (x1 - x2) / 2 + sin_φ * (y1 - y2) / 2;
+    const y1p = -sin_φ * (x1 - x2) / 2 + cos_φ * (y1 - y2) / 2;
 
-    let rx_sq = rx * rx;
-    let ry_sq = ry * ry;
-    let x1p_sq = x1p * x1p;
-    let y1p_sq = y1p * y1p;
+    const rx_sq = rx * rx;
+    const ry_sq = ry * ry;
+    const x1p_sq = x1p * x1p;
+    const y1p_sq = y1p * y1p;
 
     // Step 2.
     //
@@ -78,27 +78,27 @@ function getArcCenter(x1, y1, x2, y2, fa, fs, rx, ry, sin_φ, cos_φ) {
     radicant /= (rx_sq * y1p_sq) + (ry_sq * x1p_sq);
     radicant = Math.sqrt(radicant) * (fa === fs ? -1 : 1);
 
-    let cxp = radicant * rx / ry * y1p;
-    let cyp = radicant * -ry / rx * x1p;
+    const cxp = radicant * rx / ry * y1p;
+    const cyp = radicant * -ry / rx * x1p;
 
     // Step 3.
     //
     // Transform back to get centre coordinates (cx, cy) in the original
     // coordinate system.
     //
-    let cx = cos_φ * cxp - sin_φ * cyp + (x1 + x2) / 2;
-    let cy = sin_φ * cxp + cos_φ * cyp + (y1 + y2) / 2;
+    const cx = cos_φ * cxp - sin_φ * cyp + (x1 + x2) / 2;
+    const cy = sin_φ * cxp + cos_φ * cyp + (y1 + y2) / 2;
 
     // Step 4.
     //
     // Compute angles (θ1, Δθ).
     //
-    let v1x = (x1p - cxp) / rx;
-    let v1y = (y1p - cyp) / ry;
-    let v2x = (-x1p - cxp) / rx;
-    let v2y = (-y1p - cyp) / ry;
+    const v1x = (x1p - cxp) / rx;
+    const v1y = (y1p - cyp) / ry;
+    const v2x = (-x1p - cxp) / rx;
+    const v2y = (-y1p - cyp) / ry;
 
-    let θ1 = vectorAngle(1, 0, v1x, v1y);
+    const θ1 = vectorAngle(1, 0, v1x, v1y);
     let Δθ = vectorAngle(v1x, v1y, v2x, v2y);
 
     if (fs === 0 && Δθ > 0) {
@@ -115,25 +115,25 @@ function approximateUnitArc(θ1, Δθ) {
     // Approximate one unit arc segment with bézier curves,
     // see http://math.stackexchange.com/questions/873224/
     //      calculate-control-points-of-cubic-bezier-curve-approximating-a-part-of-a-circle
-    let α = 4 / 3 * Math.tan(Δθ / 4);
+    const α = 4 / 3 * Math.tan(Δθ / 4);
 
-    let x1 = Math.cos(θ1);
-    let y1 = Math.sin(θ1);
-    let x2 = Math.cos(θ1 + Δθ);
-    let y2 = Math.sin(θ1 + Δθ);
+    const x1 = Math.cos(θ1);
+    const y1 = Math.sin(θ1);
+    const x2 = Math.cos(θ1 + Δθ);
+    const y2 = Math.sin(θ1 + Δθ);
 
     return [x1, y1, x1 - y1 * α, y1 + x1 * α, x2 + y2 * α, y2 - x2 * α, x2, y2];
 }
 
 
 function a2c(x1, y1, x2, y2, fa, fs, rx, ry, φ) {
-    let sin_φ = Math.sin(φ * TAU / 360);
-    let cos_φ = Math.cos(φ * TAU / 360);
+    const sin_φ = Math.sin(φ * TAU / 360);
+    const cos_φ = Math.cos(φ * TAU / 360);
 
     // Make sure radii are valid
     //
-    let x1p = cos_φ * (x1 - x2) / 2 + sin_φ * (y1 - y2) / 2;
-    let y1p = -sin_φ * (x1 - x2) / 2 + cos_φ * (y1 - y2) / 2;
+    const x1p = cos_φ * (x1 - x2) / 2 + sin_φ * (y1 - y2) / 2;
+    const y1p = -sin_φ * (x1 - x2) / 2 + cos_φ * (y1 - y2) / 2;
 
     if (x1p === 0 && y1p === 0) {
         // we're asked to draw line to itself
@@ -145,22 +145,22 @@ function a2c(x1, y1, x2, y2, fa, fs, rx, ry, φ) {
         return [];
     }
 
-    let radii = correctRadii(x1p, y1p, rx, ry);
+    const radii = correctRadii(x1p, y1p, rx, ry);
     rx = radii[0];
     ry = radii[1];
 
     // Get center parameters (cx, cy, θ1, Δθ)
     //
-    let cc = getArcCenter(x1, y1, x2, y2, fa, fs, rx, ry, sin_φ, cos_φ);
+    const cc = getArcCenter(x1, y1, x2, y2, fa, fs, rx, ry, sin_φ, cos_φ);
 
-    let result = [];
+    const result = [];
     let θ1 = cc[2];
     let Δθ = cc[3];
 
     // Split an arc to multiple segments, so each segment
     // will be less than τ/4 (= 90°)
     //
-    let segments = Math.max(Math.ceil(Math.abs(Δθ) / (TAU / 4)), 1);
+    const segments = Math.max(Math.ceil(Math.abs(Δθ) / (TAU / 4)), 1);
     Δθ /= segments;
 
     for (let i = 0; i < segments; i++) {
@@ -171,7 +171,7 @@ function a2c(x1, y1, x2, y2, fa, fs, rx, ry, φ) {
     // We have a bezier approximation of a unit circle,
     // now need to transform back to the original ellipse
     //
-    return result.map(function (curve) {
+    return result.map(curve => {
         for (let i = 0; i < curve.length; i += 2) {
             let x = curve[i + 0];
             let y = curve[i + 1];
@@ -181,8 +181,8 @@ function a2c(x1, y1, x2, y2, fa, fs, rx, ry, φ) {
             y *= ry;
 
             // rotate
-            let xp = cos_φ * x - sin_φ * y;
-            let yp = sin_φ * x + cos_φ * y;
+            const xp = cos_φ * x - sin_φ * y;
+            const yp = sin_φ * x + cos_φ * y;
 
             // translate
             curve[i + 0] = xp + cc[0];
@@ -206,8 +206,8 @@ function a2c(x1, y1, x2, y2, fa, fs, rx, ry, φ) {
  * @return {Array} 分割后的路径
  */
 export default function getArc(rx, ry, angle, largeArc, sweep, p0, p1) {
-    let result = a2c(p0.x, p0.y, p1.x, p1.y, largeArc, sweep, rx, ry, angle);
-    let path = [];
+    const result = a2c(p0.x, p0.y, p1.x, p1.y, largeArc, sweep, rx, ry, angle);
+    const path = [];
 
     if (result.length) {
         path.push({
@@ -217,8 +217,8 @@ export default function getArc(rx, ry, angle, largeArc, sweep, p0, p1) {
         });
 
         // 将三次曲线转换成二次曲线
-        result.forEach(function (c, index) {
-            let q2Array = bezierCubic2Q2({
+        result.forEach(c => {
+            const q2Array = bezierCubic2Q2({
                 x: c[0],
                 y: c[1]
             }, {

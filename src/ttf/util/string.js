@@ -34,7 +34,7 @@ function stringify(str) {
 
 export default {
 
-    stringify: stringify,
+    stringify,
 
     /**
      * 将双字节编码字符转换成`\uxxxx`形式
@@ -46,9 +46,7 @@ export default {
         if (!str) {
             return str;
         }
-        return String(str).replace(/[\uff-\uffff]/g, function (c) {
-            return escape(c).replace('%', '\\');
-        });
+        return String(str).replace(/[\uff-\uffff]/g, c => escape(c).replace('%', '\\'));
     },
 
     /**
@@ -72,7 +70,7 @@ export default {
      * @return {string} 名字
      */
     getUnicodeName(unicode) {
-        let unicodeNameIndex = unicodeName[unicode];
+        const unicodeNameIndex = unicodeName[unicode];
         if (undefined !== unicodeNameIndex) {
             return postName[unicodeNameIndex];
         }
@@ -88,17 +86,17 @@ export default {
      */
     toUTF8Bytes(str) {
         str = stringify(str);
-        let byteArray = [];
+        const byteArray = [];
         for (let i = 0, l = str.length; i < l; i++) {
             if (str.charCodeAt(i) <= 0x7F) {
                 byteArray.push(str.charCodeAt(i));
             }
             else {
-                let codePoint = str.codePointAt(i)
-                if(codePoint > 0xffff) {
-                  i = i + 1;
+                const codePoint = str.codePointAt(i);
+                if (codePoint > 0xffff) {
+                    i++;
                 }
-                let h = encodeURIComponent(String.fromCodePoint(codePoint)).slice(1).split('%');
+                const h = encodeURIComponent(String.fromCodePoint(codePoint)).slice(1).split('%');
                 for (let j = 0; j < h.length; j++) {
                     byteArray.push(parseInt(h[j], 16));
                 }
@@ -115,7 +113,7 @@ export default {
      */
     toUCS2Bytes(str) {
         str = stringify(str);
-        let byteArray = [];
+        const byteArray = [];
 
         for (let i = 0, l = str.length, ch; i < l; i++) {
             ch = str.charCodeAt(i);
@@ -134,12 +132,12 @@ export default {
      * @return {Array.<byte>} byteArray byte数组
      */
     toPascalStringBytes(str) {
-        let bytes = [];
-        let length = str ? (str.length < 256 ? str.length : 255) : 0;
+        const bytes = [];
+        const length = str ? (str.length < 256 ? str.length : 255) : 0;
         bytes.push(length);
 
         for (let i = 0, l = str.length; i < l; i++) {
-            let c = str.charCodeAt(i);
+            const c = str.charCodeAt(i);
             // non-ASCII characters are substituted with '*'
             bytes.push(c < 128 ? c : 42);
         }
@@ -188,9 +186,9 @@ export default {
      * @return {Array.<string>} 读取后的字符串数组
      */
     getPascalString(byteArray) {
-        let strArray = [];
+        const strArray = [];
         let i = 0;
-        let l = byteArray.length;
+        const l = byteArray.length;
 
         while (i < l) {
             let strLength = byteArray[i++];

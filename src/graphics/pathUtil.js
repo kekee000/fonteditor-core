@@ -12,9 +12,9 @@ import {getPointHash} from './util';
  * @return {Array} 路径
  */
 export function interpolate(path) {
-    let newPath = [];
+    const newPath = [];
     for (let i = 0, l = path.length; i < l; i++) {
-        let next = i === l - 1 ? 0 : i + 1;
+        const next = i === l - 1 ? 0 : i + 1;
         newPath.push(path[i]);
         // 插值
         if (!path[i].onCurve && !path[next].onCurve) {
@@ -37,11 +37,11 @@ export function interpolate(path) {
  * @return {Array} 路径
  */
 export function deInterpolate(path) {
-    let newPath = [];
+    const newPath = [];
 
     for (let i = 0, l = path.length; i < l; i++) {
-        let next = i === l - 1 ? 0 : i + 1;
-        let prev = i === 0 ? l - 1 : i - 1;
+        const next = i === l - 1 ? 0 : i + 1;
+        const prev = i === 0 ? l - 1 : i - 1;
         // 插值
         if (
             !path[prev].onCurve && path[i].onCurve && !path[next].onCurve
@@ -75,10 +75,10 @@ export function isClockWise(path) {
 
     let zCount = 0;
     for (let i = 0, l = path.length; i < l; i++) {
-        let cur = path[i];
-        let prev = i === 0 ? path[l - 1] : path[i - 1];
-        let next = i === l - 1 ? path[0] : path[i + 1];
-        let z = (cur.x - prev.x) * (next.y - cur.y)
+        const cur = path[i];
+        const prev = i === 0 ? path[l - 1] : path[i - 1];
+        const next = i === l - 1 ? path[0] : path[i + 1];
+        const z = (cur.x - prev.x) * (next.y - cur.y)
             - (cur.y - prev.y) * (next.x - cur.x);
 
         if (z < 0) {
@@ -102,9 +102,9 @@ export function isClockWise(path) {
  */
 export function getPathHash(path) {
     let hash = 0;
-    let seed = 131;
+    const seed = 131;
 
-    path.forEach(function (p) {
+    path.forEach(p => {
         hash = 0x7FFFFFFF & (hash * seed + getPointHash(p) + (p.onCurve ? 1 : 0));
     });
 
@@ -119,10 +119,10 @@ export function getPathHash(path) {
  * @return {Array} 移除后点集合
  */
 export function removeOverlapPoints(points) {
-    let hash = {};
-    let ret = [];
+    const hash = {};
+    const ret = [];
     for (let i = 0, l = points.length; i < l; i++) {
-        let hashcode = points[i].x * 31 + points[i].y;
+        const hashcode = points[i].x * 31 + points[i].y;
         if (!hash[hashcode]) {
             ret.push(points[i]);
             hash[hashcode] = 1;
@@ -139,9 +139,9 @@ export function removeOverlapPoints(points) {
  */
 export function makeLink(path) {
     for (let i = 0, l = path.length; i < l; i++) {
-        let cur = path[i];
-        let prev = i === 0 ? path[l - 1] : path[i - 1];
-        let next = i === l - 1 ? path[0] : path[i + 1];
+        const cur = path[i];
+        const prev = i === 0 ? path[l - 1] : path[i - 1];
+        const next = i === l - 1 ? path[0] : path[i + 1];
         cur.index = i;
         cur.next = next;
         cur.prev = prev;
@@ -160,7 +160,7 @@ export function makeLink(path) {
  */
 export function scale(path, ratio) {
     for (let i = 0, l = path.length; i < l; i++) {
-        let cur = path[i];
+        const cur = path[i];
         cur.x *= ratio;
         cur.y *= ratio;
     }
@@ -170,8 +170,8 @@ export function scale(path, ratio) {
 
 
 export function clone(path) {
-    return path ? path.map(function (p) {
-        let newP = {
+    return path ? path.map(p => {
+        const newP = {
             x: p.x,
             y: p.y
         };

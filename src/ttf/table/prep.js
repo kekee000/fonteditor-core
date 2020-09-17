@@ -13,7 +13,7 @@ export default table.create(
     {
 
         read(reader, ttf) {
-            let length = ttf.tables.prep.length;
+            const length = ttf.tables.prep.length;
             return reader.readBytes(this.offset, length);
         },
 

@@ -17,8 +17,8 @@
 export default function pathAdjust(contour, scaleX, scaleY, offsetX, offsetY) {
     scaleX = scaleX === undefined ? 1 : scaleX;
     scaleY = scaleY === undefined ? 1 : scaleY;
-    let x = offsetX || 0;
-    let y = offsetY || 0;
+    const x = offsetX || 0;
+    const y = offsetY || 0;
     let p;
     for (let i = 0, l = contour.length; i < l; i++) {
         p = contour[i];

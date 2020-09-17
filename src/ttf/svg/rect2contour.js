@@ -20,13 +20,13 @@ export default function rect2contour(x, y, width, height) {
 
     return [
         {
-            x: x,
-            y: y,
+            x,
+            y,
             onCurve: true
         },
         {
             x: x + width,
-            y: y,
+            y,
             onCurve: true
         },
         {
@@ -35,7 +35,7 @@ export default function rect2contour(x, y, width, height) {
             onCurve: true
         },
         {
-            x: x,
+            x,
             y: y + height,
             onCurve: true
         }

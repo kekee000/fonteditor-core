@@ -3,8 +3,6 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-/* globals btoa */
-
 /**
  * 二进制byte流转base64编码
  *
@@ -18,7 +16,7 @@ export default function bytes2base64(buffer) {
     // ArrayBuffer
     if (buffer instanceof ArrayBuffer) {
         length = buffer.byteLength;
-        let view = new DataView(buffer, 0, length);
+        const view = new DataView(buffer, 0, length);
         for (i = 0; i < length; i++) {
             str += String.fromCharCode(view.getUint8(i, false));
         }

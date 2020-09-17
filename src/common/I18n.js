@@ -4,8 +4,8 @@
  */
 
 function appendLanguage(store, languageList) {
-    languageList.forEach(function (item) {
-        let language = item[0];
+    languageList.forEach(item => {
+        const language = item[0];
         store[language] = Object.assign(store[language] || {}, item[1]);
     });
     return store;
@@ -65,7 +65,7 @@ export default class I18n {
      * @return {string}      语言字符串
      */
     get(path) {
-        let ref = path.split('.');
+        const ref = path.split('.');
         let refObject = this.lang;
         let level;
         while (refObject != null && (level = ref.shift())) {

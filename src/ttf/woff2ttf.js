@@ -17,18 +17,18 @@ import error from './error';
  * @return {ArrayBuffer} ttf格式byte流
  */
 export default function woff2ttf(woffBuffer, options = {}) {
-    let reader = new Reader(woffBuffer);
-    let signature = reader.readUint32(0);
-    let flavor = reader.readUint32(4);
+    const reader = new Reader(woffBuffer);
+    const signature = reader.readUint32(0);
+    const flavor = reader.readUint32(4);
 
     if (signature !== 0x774F4646 || (flavor !== 0x10000 && flavor !== 0x4f54544f)) {
         reader.dispose();
         error.raise(10102);
     }
 
-    let numTables = reader.readUint16(12);
-    let ttfSize =  reader.readUint32(16);
-    let tableEntries = [];
+    const numTables = reader.readUint16(12);
+    const ttfSize =  reader.readUint32(16);
+    const tableEntries = [];
     let tableEntry;
     let i;
     let l;
@@ -45,7 +45,7 @@ export default function woff2ttf(woffBuffer, options = {}) {
         };
 
         // ttf 表数据
-        let deflateData = reader.readBytes(tableEntry.offset, tableEntry.compLength);
+        const deflateData = reader.readBytes(tableEntry.offset, tableEntry.compLength);
         // 需要解压
         if (deflateData.length < tableEntry.length) {
 
@@ -65,11 +65,11 @@ export default function woff2ttf(woffBuffer, options = {}) {
     }
 
 
-    let writer = new Writer(new ArrayBuffer(ttfSize));
+    const writer = new Writer(new ArrayBuffer(ttfSize));
     // 写头部
-    let entrySelector = Math.floor(Math.log(numTables) / Math.LN2);
-    let searchRange = Math.pow(2, entrySelector) * 16;
-    let rangeShift = numTables * 16 - searchRange;
+    const entrySelector = Math.floor(Math.log(numTables) / Math.LN2);
+    const searchRange = Math.pow(2, entrySelector) * 16;
+    const rangeShift = numTables * 16 - searchRange;
 
     writer.writeUint32(flavor);
     writer.writeUint16(numTables);

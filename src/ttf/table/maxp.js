@@ -32,7 +32,7 @@ export default table.create(
             return writer;
         },
 
-        size(ttf) {
+        size() {
             return 32;
         }
     }

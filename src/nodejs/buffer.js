@@ -13,8 +13,8 @@ export default {
      * @return {ArrayBuffer}
      */
     toArrayBuffer(buffer) {
-        let length = buffer.length;
-        let view = new DataView(new ArrayBuffer(length), 0, length);
+        const length = buffer.length;
+        const view = new DataView(new ArrayBuffer(length), 0, length);
         for (let i = 0, l = length; i < l; i++) {
             view.setUint8(i, buffer[i], false);
         }
@@ -32,9 +32,9 @@ export default {
             return Buffer.from(arrayBuffer);
         }
 
-        let length = arrayBuffer.byteLength;
-        let view = new DataView(arrayBuffer, 0, length);
-        let buffer = Buffer.alloc(length);
+        const length = arrayBuffer.byteLength;
+        const view = new DataView(arrayBuffer, 0, length);
+        const buffer = Buffer.alloc(length);
         for (let i = 0, l = length; i < l; i++) {
             buffer[i] = view.getUint8(i, false);
         }

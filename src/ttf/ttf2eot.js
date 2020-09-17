@@ -43,11 +43,12 @@ const EotHead = table.create(
  * @param {Object} options 选项
  * @return {ArrayBuffer} eot格式byte流
  */
+// eslint-disable-next-line no-unused-vars
 export default function ttf2eot(ttfBuffer, options = {}) {
     // 构造eot头部
-    let eotHead = new EotHead();
-    let eotHeaderSize = eotHead.size();
-    let eot = {};
+    const eotHead = new EotHead();
+    const eotHeaderSize = eotHead.size();
+    const eot = {};
     eot.head = eotHead.read(new Reader(new ArrayBuffer(eotHeaderSize)));
 
     // set fields
@@ -58,9 +59,9 @@ export default function ttf2eot(ttfBuffer, options = {}) {
     eot.head.MagicNumber = 0x504C;
     eot.head.Padding1 = 0;
 
-    let ttfReader = new Reader(ttfBuffer);
+    const ttfReader = new Reader(ttfBuffer);
     // 读取ttf表个数
-    let numTables = ttfReader.readUint16(4);
+    const numTables = ttfReader.readUint16(4);
 
     if (numTables <= 0 || numTables > 100) {
         error.raise(10101);
@@ -72,14 +73,14 @@ export default function ttf2eot(ttfBuffer, options = {}) {
     let tblReaded = 0;
     for (let i = 0; i < numTables && tblReaded !== 0x7; ++i) {
 
-        let tableEntry = {
+        const tableEntry = {
             tag: ttfReader.readString(ttfReader.offset, 4),
             checkSum: ttfReader.readUint32(),
             offset: ttfReader.readUint32(),
             length: ttfReader.readUint32()
         };
 
-        let entryOffset = ttfReader.offset;
+        const entryOffset = ttfReader.offset;
 
         if (tableEntry.tag === 'head') {
             eot.head.CheckSumAdjustment = ttfReader.readUint32(tableEntry.offset + 8);
@@ -97,7 +98,7 @@ export default function ttf2eot(ttfBuffer, options = {}) {
 
         // 设置名字信息
         else if (tableEntry.tag === 'name') {
-            let names = new NameTbl(tableEntry.offset).read(ttfReader);
+            const names = new NameTbl(tableEntry.offset).read(ttfReader);
 
             eot.FamilyName = string.toUCS2Bytes(names.fontFamily || '');
             eot.FamilyNameSize = eot.FamilyName.length;
@@ -127,7 +128,7 @@ export default function ttf2eot(ttfBuffer, options = {}) {
         + eot.head.FontDataSize;
 
     // 这里用小尾方式写入
-    let eotWriter = new Writer(new ArrayBuffer(eot.head.EOTSize), 0, eot.head.EOTSize, true);
+    const eotWriter = new Writer(new ArrayBuffer(eot.head.EOTSize), 0, eot.head.EOTSize, true);
 
     // write head
     eotHead.write(eotWriter, eot);

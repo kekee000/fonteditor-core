@@ -18,13 +18,13 @@ export default table.create(
             let offset = this.offset;
             reader.seek(offset);
 
-            let nameTbl = {};
+            const nameTbl = {};
             nameTbl.format = reader.readUint16();
             nameTbl.count = reader.readUint16();
             nameTbl.stringOffset = reader.readUint16();
 
-            let nameRecordTbl = [];
-            let count = nameTbl.count;
+            const nameRecordTbl = [];
+            const count = nameTbl.count;
             let i;
             let nameRecord;
 
@@ -39,7 +39,7 @@ export default table.create(
                 nameRecordTbl.push(nameRecord);
             }
 
-            offset = offset + nameTbl.stringOffset;
+            offset += nameTbl.stringOffset;
 
             // 读取字符名字
             for (i = 0; i < count; ++i) {
@@ -47,7 +47,7 @@ export default table.create(
                 nameRecord.name = reader.readBytes(offset + nameRecord.offset, nameRecord.length);
             }
 
-            let names = {};
+            const names = {};
 
             // mac 下的english name
             let platform = platformTbl.Macintosh;
@@ -55,11 +55,9 @@ export default table.create(
             let language = 0;
 
             // 如果有windows 下的 english，则用windows下的 name
-            if (nameRecordTbl.some(function (record) {
-                return record.platform === platformTbl.Microsoft
+            if (nameRecordTbl.some((record) => record.platform === platformTbl.Microsoft
                     && record.encoding === win.UCS2
-                    && record.language === 1033;
-            })) {
+                    && record.language === 1033)) {
                 platform = platformTbl.Microsoft;
                 encoding = win.UCS2;
                 language = 1033;
@@ -81,7 +79,7 @@ export default table.create(
         },
 
         write(writer, ttf) {
-            let nameRecordTbl = ttf.support.name;
+            const nameRecordTbl = ttf.support.name;
 
             writer.writeUint16(0); // format
             writer.writeUint16(nameRecordTbl.length); // count
@@ -89,7 +87,7 @@ export default table.create(
 
             // write name tbl header
             let offset = 0;
-            nameRecordTbl.forEach(function (nameRecord) {
+            nameRecordTbl.forEach((nameRecord) => {
                 writer.writeUint16(nameRecord.platform);
                 writer.writeUint16(nameRecord.encoding);
                 writer.writeUint16(nameRecord.language);
@@ -100,7 +98,7 @@ export default table.create(
             });
 
             // write name tbl strings
-            nameRecordTbl.forEach(function (nameRecord) {
+            nameRecordTbl.forEach((nameRecord) => {
                 writer.writeBytes(nameRecord.name);
             });
 
@@ -108,18 +106,18 @@ export default table.create(
         },
 
         size(ttf) {
-            let names = ttf.name;
+            const names = ttf.name;
             let nameRecordTbl = [];
 
             // 写入name信息
             // 这里为了简化书写，仅支持英文编码字符，
             // 中文编码字符将被转化成url encode
             let size = 6;
-            Object.keys(names).forEach(function (name) {
-                let id = nameIdTbl.names[name];
+            Object.keys(names).forEach((name) => {
+                const id = nameIdTbl.names[name];
 
-                let utf8Bytes = string.toUTF8Bytes(names[name]);
-                let usc2Bytes = string.toUCS2Bytes(names[name]);
+                const utf8Bytes = string.toUTF8Bytes(names[name]);
+                const usc2Bytes = string.toUCS2Bytes(names[name]);
 
                 if (undefined !== id) {
                     // mac
@@ -145,15 +143,16 @@ export default table.create(
                 }
             });
 
-            let namingOrder = ['platform', 'encoding', 'language', 'nameId'];
-            nameRecordTbl = nameRecordTbl.sort(function (a, b) {
+            const namingOrder = ['platform', 'encoding', 'language', 'nameId'];
+            nameRecordTbl = nameRecordTbl.sort((a, b) => {
                 let l = 0;
-                namingOrder.some(function (name) {
-                    let o = a[name] - b[name];
+                namingOrder.some(name => {
+                    const o = a[name] - b[name];
                     if (o) {
                         l = o;
                         return true;
                     }
+                    return false;
                 });
                 return l;
             });

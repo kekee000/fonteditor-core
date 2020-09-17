@@ -14,17 +14,15 @@ import pathCeil from '../../graphics/pathCeil';
  */
 export default function optimizettf(ttf) {
 
-    let checkUnicodeRepeat = {}; // 检查是否有重复代码点
-    let repeatList = [];
+    const checkUnicodeRepeat = {}; // 检查是否有重复代码点
+    const repeatList = [];
 
-    ttf.glyf.forEach(function (glyf, index) {
+    ttf.glyf.forEach((glyf, index) => {
         if (glyf.unicode) {
             glyf.unicode = glyf.unicode.sort();
 
             // 将glyf的代码点按小到大排序
-            glyf.unicode.sort(function (a, b) {
-                return a - b;
-            }).forEach(function (u) {
+            glyf.unicode.sort((a, b) => a - b).forEach((u) => {
                 if (checkUnicodeRepeat[u]) {
                     repeatList.push(index);
                 }
@@ -37,7 +35,7 @@ export default function optimizettf(ttf) {
 
         if (!glyf.compound && glyf.contours) {
             // 整数化
-            glyf.contours.forEach(function (contour) {
+            glyf.contours.forEach((contour) => {
                 pathCeil(contour);
             });
             // 缩减glyf
@@ -54,12 +52,8 @@ export default function optimizettf(ttf) {
     });
 
     // 过滤无轮廓字体，如果存在复合字形不进行过滤
-    if (!ttf.glyf.some(function (a) {
-        return a.compound;
-    })) {
-        ttf.glyf = ttf.glyf.filter(function (glyf, index) {
-            return index === 0 || glyf.contours && glyf.contours.length;
-        });
+    if (!ttf.glyf.some((a) => a.compound)) {
+        ttf.glyf = ttf.glyf.filter((glyf, index) => index === 0 || glyf.contours && glyf.contours.length);
     }
 
     if (!repeatList.length) {

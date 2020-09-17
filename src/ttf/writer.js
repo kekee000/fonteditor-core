@@ -35,7 +35,7 @@ const dataType = {
  */
 class Writer {
     constructor(buffer, offset, length, littleEndian) {
-        let bufferLength = buffer.byteLength || buffer.length;
+        const bufferLength = buffer.byteLength || buffer.length;
         this.offset = offset || 0;
         this.length = length || (bufferLength - this.offset);
         this.littleEndian = littleEndian || false;
@@ -69,7 +69,7 @@ class Writer {
             return this['write' + type](value, offset, littleEndian);
         }
 
-        let size = dataType[type];
+        const size = dataType[type];
         this.offset = offset + size;
         this.view['set' + type](offset, value, littleEndian);
         return this;
@@ -100,9 +100,9 @@ class Writer {
             error.raise(10002, this.length, offset + length);
         }
 
-        let littleEndian = this.littleEndian;
+        const littleEndian = this.littleEndian;
         if (value instanceof ArrayBuffer) {
-            let view = new DataView(value, 0, length);
+            const view = new DataView(value, 0, length);
             for (i = 0; i < length; ++i) {
                 this.view.setUint8(offset + i, view.getUint8(i, littleEndian), littleEndian);
             }
@@ -135,7 +135,7 @@ class Writer {
             offset = this.offset;
         }
 
-        let littleEndian = this.littleEndian;
+        const littleEndian = this.littleEndian;
         for (let i = 0; i < length; ++i) {
             this.view.setUint8(offset + i, 0, littleEndian);
         }
@@ -160,6 +160,7 @@ class Writer {
             offset = this.offset;
         }
 
+        // eslint-disable-next-line no-control-regex
         length = length || str.replace(/[^\x00-\xff]/g, '11').length;
 
         if (length < 0 || offset + length > this.length) {
@@ -227,7 +228,7 @@ class Writer {
         }
 
         // new Date(1970, 1, 1).getTime() - new Date(1904, 1, 1).getTime();
-        let delta = -2077545600000;
+        const delta = -2077545600000;
 
         if (typeof value === 'undefined') {
             value = delta;
@@ -242,7 +243,7 @@ class Writer {
             value = Date.parse(value);
         }
 
-        let time = Math.round((value - delta) / 1000);
+        const time = Math.round((value - delta) / 1000);
         this.writeUint32(0, offset);
         this.writeUint32(time, offset + 4);
 
@@ -298,7 +299,7 @@ class Writer {
 }
 
 // 直接支持的数据类型
-Object.keys(dataType).forEach(function (type) {
+Object.keys(dataType).forEach(type => {
     Writer.prototype['write' + type] = curry(Writer.prototype.write, type);
 });
 

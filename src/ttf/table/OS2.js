@@ -82,7 +82,7 @@ export default table.create(
     {
 
         read(reader, ttf) {
-            let format = reader.readUint16(this.offset);
+            const format = reader.readUint16(this.offset);
             let struct = this.struct;
 
             // format2
@@ -93,11 +93,11 @@ export default table.create(
                 struct = struct.slice(0, 41);
             }
 
-            let OS2Head = table.create('os2head', struct);
-            let tbl = new OS2Head(this.offset).read(reader, ttf);
+            const OS2Head = table.create('os2head', struct);
+            const tbl = new OS2Head(this.offset).read(reader, ttf);
 
             // 补齐其他version的字段
-            let os2Fields = {
+            const os2Fields = {
                 ulCodePageRange1: 1,
                 ulCodePageRange2: 0,
                 sxHeight: 0,
@@ -139,7 +139,7 @@ export default table.create(
             let maxComponentElements = 0;
 
             let glyfNotEmpty = 0; // 非空glyf
-            let hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
+            const hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
 
             // 计算instructions和functiondefs
             if (hinting) {
@@ -159,20 +159,20 @@ export default table.create(
             }
 
 
-            ttf.glyf.forEach(function (glyf, index) {
+            ttf.glyf.forEach((glyf) => {
 
                 // 统计control point信息
                 if (glyf.compound) {
                     let compositeContours = 0;
                     let compositePoints = 0;
-                    glyf.glyfs.forEach(function (g) {
-                        let cglyf = ttf.glyf[g.glyphIndex];
+                    glyf.glyfs.forEach((g) => {
+                        const cglyf = ttf.glyf[g.glyphIndex];
                         if (!cglyf) {
                             return;
                         }
                         compositeContours += cglyf.contours ? cglyf.contours.length : 0;
                         if (cglyf.contours && cglyf.contours.length) {
-                            cglyf.contours.forEach(function (contour) {
+                            cglyf.contours.forEach((contour) => {
                                 compositePoints += contour.length;
                             });
                         }
@@ -187,7 +187,7 @@ export default table.create(
                     maxContours = Math.max(maxContours, glyf.contours.length);
 
                     let points = 0;
-                    glyf.contours.forEach(function (contour) {
+                    glyf.contours.forEach((contour) => {
                         points += contour.length;
                     });
                     maxPoints = Math.max(maxPoints, points);
@@ -230,7 +230,7 @@ export default table.create(
                 }
 
                 if (Array.isArray(unicodes)) {
-                    unicodes.forEach(function (unicode) {
+                    unicodes.forEach((unicode) => {
                         if (unicode !== 0xFFFF) {
                             usFirstCharIndex = Math.min(usFirstCharIndex, unicode);
                             usLastCharIndex = Math.max(usLastCharIndex, unicode);
@@ -264,7 +264,7 @@ export default table.create(
 
             // head rewrite
             if (ttf.support.head) {
-                let {xMin, yMin, xMax, yMax} = ttf.support.head;
+                const {xMin, yMin, xMax, yMax} = ttf.support.head;
                 if (xMin != null) {
                     ttf.head.xMin = xMin;
                 }
@@ -281,7 +281,7 @@ export default table.create(
             }
             // hhea rewrite
             if (ttf.support.hhea) {
-                let {advanceWidthMax, xMaxExtent, minLeftSideBearing, minRightSideBearing} = ttf.support.hhea;
+                const {advanceWidthMax, xMaxExtent, minLeftSideBearing, minRightSideBearing} = ttf.support.hhea;
                 if (advanceWidthMax != null) {
                     ttf.hhea.advanceWidthMax = advanceWidthMax;
                 }
@@ -300,17 +300,17 @@ export default table.create(
             ttf.support.maxp = {
                 version: 1.0,
                 numGlyphs: ttf.glyf.length,
-                maxPoints: maxPoints,
-                maxContours: maxContours,
-                maxCompositePoints: maxCompositePoints,
-                maxCompositeContours: maxCompositeContours,
+                maxPoints,
+                maxContours,
+                maxCompositePoints,
+                maxCompositeContours,
                 maxZones: ttf.maxp.maxZones || 0,
                 maxTwilightPoints: ttf.maxp.maxTwilightPoints || 0,
                 maxStorage: ttf.maxp.maxStorage || 0,
                 maxFunctionDefs: ttf.maxp.maxFunctionDefs || 0,
                 maxStackElements: ttf.maxp.maxStackElements || 0,
-                maxSizeOfInstructions: maxSizeOfInstructions,
-                maxComponentElements: maxComponentElements,
+                maxSizeOfInstructions,
+                maxComponentElements,
                 maxComponentDepth: maxComponentElements ? 1 : 0
             };
 

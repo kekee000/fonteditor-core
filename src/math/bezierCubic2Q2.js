@@ -10,8 +10,8 @@
 
 function toQuad(p1, c1, c2, p2) {
     // Quad control point is (3*c2 - p2 + 3*c1 - p1)/4
-    let x = (3 * c2.x - p2.x + 3 * c1.x - p1.x) / 4;
-    let y = (3 * c2.y - p2.y + 3 * c1.y - p1.y) / 4;
+    const x = (3 * c2.x - p2.x + 3 * c1.x - p1.x) / 4;
+    const y = (3 * c2.y - p2.y + 3 * c1.y - p1.y) / 4;
     return [
         p1,
         {x, y},
@@ -45,9 +45,8 @@ export default function bezierCubic2Q2(p1, c1, c2, p2) {
         ];
     }
 
-
-    let mx = p2.x - 3 * c2.x + 3 * c1.x - p1.x;
-    let my = p2.y - 3 * c2.y + 3 * c1.y - p1.y;
+    const mx = p2.x - 3 * c2.x + 3 * c1.x - p1.x;
+    const my = p2.y - 3 * c2.y + 3 * c1.y - p1.y;
 
     // control points near
     if (mx * mx + my * my <= 4) {
@@ -58,10 +57,9 @@ export default function bezierCubic2Q2(p1, c1, c2, p2) {
 
     // Split to 2 qubic beziers by midpoints
     // (p2 + 3*c2 + 3*c1 + p1)/8
-    let mp = {
+    const mp = {
         x: (p2.x + 3 * c2.x + 3 * c1.x + p1.x) / 8,
         y: (p2.y + 3 * c2.y + 3 * c1.y + p1.y) / 8
-
     };
 
     return [

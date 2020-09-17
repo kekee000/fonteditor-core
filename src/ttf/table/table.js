@@ -5,7 +5,7 @@
 
 import struct from './struct';
 import error from '../error';
-
+/* eslint-disable no-invalid-this */
 /**
  * 读取表结构
  *
@@ -14,51 +14,51 @@ import error from '../error';
  */
 function read(reader) {
 
-    let offset = this.offset;
+    const offset = this.offset;
 
     if (undefined !== offset) {
         reader.seek(offset);
     }
 
-    let me = this;
+    const me = this;
 
-    this.struct.forEach(function (item) {
-        let name = item[0];
-        let type = item[1];
-
+    this.struct.forEach((item) => {
+        const name = item[0];
+        const type = item[1];
+        let typeName = null;
         switch (type) {
-            case struct.Int8:
-            case struct.Uint8:
-            case struct.Int16:
-            case struct.Uint16:
-            case struct.Int32:
-            case struct.Uint32:
-                let typeName = struct.names[type];
-                me[name] = reader.read(typeName);
-                break;
+        case struct.Int8:
+        case struct.Uint8:
+        case struct.Int16:
+        case struct.Uint16:
+        case struct.Int32:
+        case struct.Uint32:
+            typeName = struct.names[type];
+            me[name] = reader.read(typeName);
+            break;
 
-            case struct.Fixed:
-                me[name] = reader.readFixed();
-                break;
+        case struct.Fixed:
+            me[name] = reader.readFixed();
+            break;
 
-            case struct.LongDateTime:
-                me[name] = reader.readLongDateTime();
-                break;
+        case struct.LongDateTime:
+            me[name] = reader.readLongDateTime();
+            break;
 
-            case struct.Bytes:
-                me[name] = reader.readBytes(reader.offset, item[2] || 0);
-                break;
+        case struct.Bytes:
+            me[name] = reader.readBytes(reader.offset, item[2] || 0);
+            break;
 
-            case struct.Char:
-                me[name] = reader.readChar();
-                break;
+        case struct.Char:
+            me[name] = reader.readChar();
+            break;
 
-            case struct.String:
-                me[name] = reader.readString(reader.offset, item[2] || 0);
-                break;
+        case struct.String:
+            me[name] = reader.readString(reader.offset, item[2] || 0);
+            break;
 
-            default:
-                error.raise(10003, name, type);
+        default:
+            error.raise(10003, name, type);
         }
     });
 
@@ -74,49 +74,49 @@ function read(reader) {
  * @return {Writer} 返回writer对象
  */
 function write(writer, ttf) {
-    let table = ttf[this.name];
+    const table = ttf[this.name];
 
     if (!table) {
         error.raise(10203, this.name);
     }
 
-    this.struct.forEach(function (item) {
-        let name = item[0];
-        let type = item[1];
-
+    this.struct.forEach((item) => {
+        const name = item[0];
+        const type = item[1];
+        let typeName = null;
         switch (type) {
-            case struct.Int8:
-            case struct.Uint8:
-            case struct.Int16:
-            case struct.Uint16:
-            case struct.Int32:
-            case struct.Uint32:
-                let typeName = struct.names[type];
-                writer.write(typeName, table[name]);
-                break;
+        case struct.Int8:
+        case struct.Uint8:
+        case struct.Int16:
+        case struct.Uint16:
+        case struct.Int32:
+        case struct.Uint32:
+            typeName = struct.names[type];
+            writer.write(typeName, table[name]);
+            break;
 
-            case struct.Fixed:
-                writer.writeFixed(table[name]);
-                break;
+        case struct.Fixed:
+            writer.writeFixed(table[name]);
+            break;
 
-            case struct.LongDateTime:
-                writer.writeLongDateTime(table[name]);
-                break;
+        case struct.LongDateTime:
+            writer.writeLongDateTime(table[name]);
+            break;
 
-            case struct.Bytes:
-                writer.writeBytes(table[name], item[2] || 0);
-                break;
+        case struct.Bytes:
+            writer.writeBytes(table[name], item[2] || 0);
+            break;
 
-            case struct.Char:
-                writer.writeChar(table[name]);
-                break;
+        case struct.Char:
+            writer.writeChar(table[name]);
+            break;
 
-            case struct.String:
-                writer.writeString(table[name], item[2] || 0);
-                break;
+        case struct.String:
+            writer.writeString(table[name], item[2] || 0);
+            break;
 
-            default:
-                error.raise(10003, name, type);
+        default:
+            error.raise(10003, name, type);
         }
     });
 
@@ -132,43 +132,43 @@ function write(writer, ttf) {
 function size() {
 
     let sz = 0;
-    this.struct.forEach(function (item) {
-        let type = item[1];
+    this.struct.forEach((item) => {
+        const type = item[1];
         switch (type) {
-            case struct.Int8:
-            case struct.Uint8:
-                sz += 1;
-                break;
+        case struct.Int8:
+        case struct.Uint8:
+            sz += 1;
+            break;
 
-            case struct.Int16:
-            case struct.Uint16:
-                sz += 2;
-                break;
+        case struct.Int16:
+        case struct.Uint16:
+            sz += 2;
+            break;
 
-            case struct.Int32:
-            case struct.Uint32:
-            case struct.Fixed:
-                sz += 4;
-                break;
+        case struct.Int32:
+        case struct.Uint32:
+        case struct.Fixed:
+            sz += 4;
+            break;
 
-            case struct.LongDateTime:
-                sz += 8;
-                break;
+        case struct.LongDateTime:
+            sz += 8;
+            break;
 
-            case struct.Bytes:
-                sz += item[2] || 0;
-                break;
+        case struct.Bytes:
+            sz += item[2] || 0;
+            break;
 
-            case struct.Char:
-                sz += 1;
-                break;
+        case struct.Char:
+            sz += 1;
+            break;
 
-            case struct.String:
-                sz += item[2] || 0;
-                break;
+        case struct.String:
+            sz += item[2] || 0;
+            break;
 
-            default:
-                error.raise(10003, name, type);
+        default:
+            error.raise(10003, name, type);
         }
     });
 
@@ -181,10 +181,9 @@ function size() {
  * @return {*} 当前对象的值
  */
 function valueOf() {
-    let val = {};
-    let me = this;
-
-    this.struct.forEach(function (item) {
+    const val = {};
+    const me = this;
+    this.struct.forEach(item => {
         val[item[0]] = me[item[0]];
     });
 
@@ -192,10 +191,10 @@ function valueOf() {
 }
 
 export default {
-    read: read,
-    write: write,
-    size: size,
-    valueOf: valueOf,
+    read,
+    write,
+    size,
+    valueOf,
 
     /**
      * 创建一个表结构

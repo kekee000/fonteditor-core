@@ -23,9 +23,9 @@ export default function transformGlyfContours(glyf, ttf, contoursList = {}, glyf
         return glyf;
     }
 
-    let compoundContours = [];
-    glyf.glyfs.forEach(function (g) {
-        let glyph = ttf.glyf[g.glyphIndex];
+    const compoundContours = [];
+    glyf.glyfs.forEach(g => {
+        const glyph = ttf.glyf[g.glyphIndex];
 
         if (!glyph || glyph === glyf) {
             return;
@@ -37,8 +37,8 @@ export default function transformGlyfContours(glyf, ttf, contoursList = {}, glyf
         }
 
         // 这里需要进行matrix变换，需要复制一份
-        let contours = clone(glyph.compound ? (contoursList[g.glyphIndex] || []) : glyph.contours);
-        let transform = g.transform;
+        const contours = clone(glyph.compound ? (contoursList[g.glyphIndex] || []) : glyph.contours);
+        const transform = g.transform;
         for (let i = 0, l = contours.length; i < l; i++) {
             pathTransform(
                 contours[i],
@@ -53,6 +53,7 @@ export default function transformGlyfContours(glyf, ttf, contoursList = {}, glyf
         }
     });
 
+    // eslint-disable-next-line eqeqeq
     if (null != glyfIndex) {
         contoursList[glyfIndex] = compoundContours;
     }

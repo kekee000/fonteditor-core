@@ -24,16 +24,16 @@ import config from './data/default';
  */
 function adjustToEmBox(glyfList, ascent, descent, ajdustToEmPadding) {
 
-    glyfList.forEach(function (g) {
+    glyfList.forEach((g) => {
 
         if (g.contours && g.contours.length) {
-            let rightSideBearing = g.advanceWidth - g.xMax;
-            let bound = computePath.apply(null, g.contours);
-            let scale = (ascent - descent - ajdustToEmPadding) / bound.height;
-            let center = (ascent + descent) / 2;
-            let yOffset = center - (bound.y + bound.height / 2) * scale;
+            const rightSideBearing = g.advanceWidth - g.xMax;
+            const bound = computePath(...g.contours);
+            const scale = (ascent - descent - ajdustToEmPadding) / bound.height;
+            const center = (ascent + descent) / 2;
+            const yOffset = center - (bound.y + bound.height / 2) * scale;
 
-            g.contours.forEach(function (contour) {
+            g.contours.forEach((contour) => {
                 if (scale !== 1) {
                     pathAdjust(contour, scale, scale);
                 }
@@ -42,7 +42,7 @@ function adjustToEmBox(glyfList, ascent, descent, ajdustToEmPadding) {
                 pathCeil(contour);
             });
 
-            let box = computePathBox.apply(null, g.contours);
+            const box = computePathBox(...g.contours);
 
             g.xMin = box.x;
             g.xMax = box.x + box.width;
@@ -77,7 +77,7 @@ function adjustPos(glyfList, leftSideBearing, rightSideBearing, verticalAlign) {
     if (null != leftSideBearing) {
         changed = true;
 
-        glyfList.forEach(function (g) {
+        glyfList.forEach((g) => {
             if (g.leftSideBearing !== leftSideBearing) {
                 glyfAdjust(g, 1, 1, leftSideBearing - g.leftSideBearing);
             }
@@ -88,7 +88,7 @@ function adjustPos(glyfList, leftSideBearing, rightSideBearing, verticalAlign) {
     if (null != rightSideBearing) {
         changed = true;
 
-        glyfList.forEach(function (g) {
+        glyfList.forEach((g) => {
             g.advanceWidth = g.xMax + rightSideBearing;
         });
     }
@@ -97,10 +97,10 @@ function adjustPos(glyfList, leftSideBearing, rightSideBearing, verticalAlign) {
     if (null != verticalAlign) {
         changed = true;
 
-        glyfList.forEach(function (g) {
+        glyfList.forEach(g => {
             if (g.contours && g.contours.length) {
-                let bound = computePath.apply(this, g.contours);
-                let offset = verticalAlign - bound.y;
+                const bound = computePath(...g.contours);
+                const offset = verticalAlign - bound.y;
                 glyfAdjust(g, 1, 1, 0, offset);
             }
         });
@@ -125,22 +125,22 @@ function adjustPos(glyfList, leftSideBearing, rightSideBearing, verticalAlign) {
  */
 function merge(ttf, imported, options = {scale: true}) {
 
-    let list = imported.glyf.filter(function (g, index) {
+    const list = imported.glyf.filter((g) =>
         // 简单轮廓
-        return g.contours && g.contours.length
+        g.contours && g.contours.length
             // 非预定义字形
-            && g.name !== '.notdef' && g.name !== '.null' && g.name !== 'nonmarkingreturn';
-    });
+            && g.name !== '.notdef' && g.name !== '.null' && g.name !== 'nonmarkingreturn'
+    );
 
     // 调整字形以适应边界
     if (options.adjustGlyf) {
-        let ascent = ttf.hhea.ascent;
-        let descent = ttf.hhea.descent;
-        let ajdustToEmPadding = 16;
+        const ascent = ttf.hhea.ascent;
+        const descent = ttf.hhea.descent;
+        const ajdustToEmPadding = 16;
         adjustPos(list, 16, 16);
         adjustToEmBox(list, ascent, descent, ajdustToEmPadding);
 
-        list.forEach(function (g) {
+        list.forEach((g) => {
             ttf.glyf.push(g);
         });
     }
@@ -154,7 +154,7 @@ function merge(ttf, imported, options = {scale: true}) {
             scale = ttf.head.unitsPerEm / imported.head.unitsPerEm;
         }
 
-        list.forEach(function (g) {
+        list.forEach((g) => {
             glyfAdjust(g, scale, scale);
             ttf.glyf.push(g);
         });
@@ -192,8 +192,8 @@ export default class TTF {
      * @return {?number} 返回glyf索引号
      */
     getGlyfIndexByCode(c) {
-        let charCode = typeof c === 'number' ? c : c.codePointAt(0);
-        let glyfIndex = this.ttf.cmap[charCode] || -1;
+        const charCode = typeof c === 'number' ? c : c.codePointAt(0);
+        const glyfIndex = this.ttf.cmap[charCode] || -1;
         return glyfIndex;
     }
 
@@ -205,8 +205,8 @@ export default class TTF {
      * @return {?Object} 返回glyf对象
      */
     getGlyfByIndex(glyfIndex) {
-        let glyfList = this.ttf.glyf;
-        let glyf = glyfList[glyfIndex];
+        const glyfList = this.ttf.glyf;
+        const glyf = glyfList[glyfIndex];
         return glyf;
     }
 
@@ -218,7 +218,7 @@ export default class TTF {
      * @return {?Object} 返回glyf对象
      */
     getGlyfByCode(c) {
-        let glyfIndex = this.getGlyfIndexByCode(c);
+        const glyfIndex = this.getGlyfIndexByCode(c);
         return this.getGlyfByIndex(glyfIndex);
     }
 
@@ -283,7 +283,7 @@ export default class TTF {
      * @return {Array} 添加的glyf
      */
     mergeGlyf(imported, options) {
-        let list = merge(this.ttf, imported, options);
+        const list = merge(this.ttf, imported, options);
         return list;
     }
 
@@ -295,8 +295,8 @@ export default class TTF {
      * @return {Array} 删除的glyf
      */
     removeGlyf(indexList) {
-        let glyf = this.ttf.glyf;
-        let removed = [];
+        const glyf = this.ttf.glyf;
+        const removed = [];
         for (let i = glyf.length - 1; i >= 0; i--) {
             if (indexList.indexOf(i) >= 0) {
                 removed.push(glyf[i]);
@@ -316,16 +316,14 @@ export default class TTF {
      * @return {Array} 改变的glyf
      */
     setUnicode(unicode, indexList, isGenerateName) {
-        let glyf = this.ttf.glyf;
+        const glyf = this.ttf.glyf;
         let list = [];
         if (indexList && indexList.length) {
-            let first = indexList.indexOf(0);
+            const first = indexList.indexOf(0);
             if (first >= 0) {
                 indexList.splice(first, 1);
             }
-            list = indexList.map(function (item) {
-                return glyf[item];
-            });
+            list = indexList.map((item) => glyf[item]);
         }
         else {
             list = glyf.slice(1);
@@ -333,17 +331,15 @@ export default class TTF {
 
         // 需要选出 unicode >32 的glyf
         if (list.length > 1) {
-            let less32 = function (u) {
+            const less32 = function (u) {
                 return u < 33;
             };
-            list = list.filter(function (g) {
-                return !g.unicode || !g.unicode.some(less32);
-            });
+            list = list.filter((g) => !g.unicode || !g.unicode.some(less32));
         }
 
         if (list.length) {
             unicode = Number('0x' + unicode.slice(1));
-            list.forEach(function (g) {
+            list.forEach((g) => {
                 // 空格有可能会放入 nonmarkingreturn 因此不做编码
                 if (unicode === 0xA0 || unicode === 0x3000) {
                     unicode++;
@@ -368,31 +364,27 @@ export default class TTF {
      * @return {Array} 改变的glyf
      */
     genGlyfName(indexList) {
-        let glyf = this.ttf.glyf;
+        const glyf = this.ttf.glyf;
         let list = [];
         if (indexList && indexList.length) {
-            list = indexList.map(function (item) {
-                return glyf[item];
-            });
+            list = indexList.map((item) => glyf[item]);
         }
         else {
             list = glyf;
         }
 
         if (list.length) {
-            let first = this.ttf.glyf[0];
+            const first = this.ttf.glyf[0];
 
-            list.forEach(function (g) {
+            list.forEach((g) => {
                 if (g === first) {
                     g.name = '.notdef';
                 }
+                else if (g.unicode && g.unicode.length) {
+                    g.name = string.getUnicodeName(g.unicode[0]);
+                }
                 else {
-                    if (g.unicode && g.unicode.length) {
-                        g.name = string.getUnicodeName(g.unicode[0]);
-                    }
-                    else {
-                        g.name = '.notdef';
-                    }
+                    g.name = '.notdef';
                 }
             });
         }
@@ -407,12 +399,10 @@ export default class TTF {
      * @return {Array} 改变的glyf
      */
     clearGlyfName(indexList) {
-        let glyf = this.ttf.glyf;
+        const glyf = this.ttf.glyf;
         let list = [];
         if (indexList && indexList.length) {
-            list = indexList.map(function (item) {
-                return glyf[item];
-            });
+            list = indexList.map((item) => glyf[item]);
         }
         else {
             list = glyf;
@@ -420,7 +410,7 @@ export default class TTF {
 
         if (list.length) {
 
-            list.forEach(function (g) {
+            list.forEach((g) => {
                 delete g.name;
             });
         }
@@ -436,11 +426,11 @@ export default class TTF {
      * @return {Array} 改变的glyf
      */
     appendGlyf(glyfList, indexList) {
-        let glyf = this.ttf.glyf;
-        let result = glyfList.slice(0);
+        const glyf = this.ttf.glyf;
+        const result = glyfList.slice(0);
 
         if (indexList && indexList.length) {
-            let l = Math.min(glyfList.length, indexList.length);
+            const l = Math.min(glyfList.length, indexList.length);
             for (let i = 0; i < l; i++) {
                 glyf[indexList[i]] = glyfList[i];
             }
@@ -467,7 +457,7 @@ export default class TTF {
      */
     adjustGlyfPos(indexList, setting) {
 
-        let glyfList = this.getGlyf(indexList);
+        const glyfList = this.getGlyf(indexList);
         return adjustPos(
             glyfList,
             setting.leftSideBearing,
@@ -491,18 +481,18 @@ export default class TTF {
      */
     adjustGlyf(indexList, setting) {
 
-        let glyfList = this.getGlyf(indexList);
+        const glyfList = this.getGlyf(indexList);
         let changed = false;
 
         if (setting.reverse || setting.mirror) {
 
             changed = true;
 
-            glyfList.forEach(function (g) {
+            glyfList.forEach((g) => {
                 if (g.contours && g.contours.length) {
-                    let offsetX = g.xMax + g.xMin;
-                    let offsetY = g.yMax + g.yMin;
-                    g.contours.forEach(function (contour) {
+                    const offsetX = g.xMax + g.xMin;
+                    const offsetY = g.yMax + g.yMin;
+                    g.contours.forEach((contour) => {
                         pathAdjust(contour, setting.mirror ? -1 : 1, setting.reverse ? -1 : 1);
                         pathAdjust(contour, 1, 1, setting.mirror ? offsetX : 0, setting.reverse ? offsetY : 0);
                     });
@@ -515,8 +505,8 @@ export default class TTF {
 
             changed = true;
 
-            let scale = setting.scale;
-            glyfList.forEach(function (g) {
+            const scale = setting.scale;
+            glyfList.forEach((g) => {
                 if (g.contours && g.contours.length) {
                     glyfAdjust(g, scale, scale);
                 }
@@ -526,9 +516,9 @@ export default class TTF {
         else if (setting.ajdustToEmBox) {
 
             changed = true;
-            let ascent = this.ttf.hhea.ascent;
-            let descent = this.ttf.hhea.descent;
-            let ajdustToEmPadding = 2 * (setting.ajdustToEmPadding || 0);
+            const ascent = this.ttf.hhea.ascent;
+            const descent = this.ttf.hhea.descent;
+            const ajdustToEmPadding = 2 * (setting.ajdustToEmPadding || 0);
 
             adjustToEmBox(glyfList, ascent, descent, ajdustToEmPadding);
         }
@@ -543,11 +533,9 @@ export default class TTF {
      * @return {Array} glyflist
      */
     getGlyf(indexList) {
-        let glyf = this.ttf.glyf;
+        const glyf = this.ttf.glyf;
         if (indexList && indexList.length) {
-            return indexList.map(function (item) {
-                return glyf[item];
-            });
+            return indexList.map((item) => glyf[item]);
         }
 
         return glyf;
@@ -573,20 +561,20 @@ export default class TTF {
         }
 
 
-        let filters = [];
+        const filters = [];
 
         // 按unicode数组查找
         if (condition.unicode) {
-            let unicodeList = Array.isArray(condition.unicode) ? condition.unicode : [condition.unicode];
-            let unicodeHash = {};
-            unicodeList.forEach(function (unicode) {
+            const unicodeList = Array.isArray(condition.unicode) ? condition.unicode : [condition.unicode];
+            const unicodeHash = {};
+            unicodeList.forEach((unicode) => {
                 if (typeof unicode === 'string') {
                     unicode = Number('0x' + unicode.slice(1));
                 }
                 unicodeHash[unicode] = true;
             });
 
-            filters.push(function (glyf) {
+            filters.push((glyf) => {
                 if (!glyf.unicode || !glyf.unicode.length) {
                     return false;
                 }
@@ -601,10 +589,8 @@ export default class TTF {
 
         // 按名字查找
         if (condition.name) {
-            let name = condition.name;
-            filters.push(function (glyf) {
-                return glyf.name && glyf.name.indexOf(name) === 0;
-            });
+            const name = condition.name;
+            filters.push((glyf) => glyf.name && glyf.name.indexOf(name) === 0);
         }
 
         // 按筛选函数查找
@@ -612,8 +598,8 @@ export default class TTF {
             filters.push(condition.filter);
         }
 
-        let indexList = [];
-        this.ttf.glyf.forEach(function (glyf, index) {
+        const indexList = [];
+        this.ttf.glyf.forEach((glyf, index) => {
             for (let filterIndex = 0, filter; (filter = filters[filterIndex++]);) {
                 if (true === filter(glyf)) {
                     indexList.push(index);
@@ -660,19 +646,17 @@ export default class TTF {
      * @return {Array} 设置的glyf列表
      */
     sortGlyf() {
-        let glyf = this.ttf.glyf;
+        const glyf = this.ttf.glyf;
         if (glyf.length > 1) {
 
             // 如果存在复合字形则退出
-            if (glyf.some(function (a) {
-                return a.compound;
-            })) {
+            if (glyf.some((a) => a.compound)) {
                 return -2;
             }
 
-            let notdef = glyf.shift();
+            const notdef = glyf.shift();
             // 按代码点排序, 首先将空字形排到最后，然后按照unicode第一个编码进行排序
-            glyf.sort(function (a, b) {
+            glyf.sort((a, b) => {
                 if ((!a.unicode || !a.unicode.length) && (!b.unicode || !b.unicode.length)) {
                     return 0;
                 }
@@ -799,11 +783,11 @@ export default class TTF {
     calcMetrics() {
         let ascent = -16384;
         let descent = 16384;
-        let uX = 0x78;
-        let uH = 0x48;
+        const uX = 0x78;
+        const uH = 0x48;
         let sxHeight;
         let sCapHeight;
-        this.ttf.glyf.forEach(function (g) {
+        this.ttf.glyf.forEach((g) => {
 
             if (g.yMax > ascent) {
                 ascent = g.yMax;
@@ -829,8 +813,8 @@ export default class TTF {
         return {
 
             // 此处非必须自动设置
-            ascent: ascent,
-            descent: descent,
+            ascent,
+            descent,
             sTypoAscender: ascent,
             sTypoDescender: descent,
 
@@ -860,7 +844,7 @@ export default class TTF {
      */
     compound2simple(indexList) {
 
-        let ttf = this.ttf;
+        const ttf = this.ttf;
         if (ttf.maxp && !ttf.maxp.maxComponentElements) {
             return [];
         }
@@ -877,9 +861,9 @@ export default class TTF {
             }
         }
 
-        let list = [];
+        const list = [];
         for (i = 0, l = indexList.length; i < l; ++i) {
-            let glyfIndex = indexList[i];
+            const glyfIndex = indexList[i];
             if (ttf.glyf[glyfIndex] && ttf.glyf[glyfIndex].compound) {
                 compound2simpleglyf(glyfIndex, ttf, true);
                 list.push(ttf.glyf[glyfIndex]);

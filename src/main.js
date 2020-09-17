@@ -47,5 +47,6 @@ const modules = {
 
 export default modules;
 if (typeof exports !== 'undefined') {
+    // eslint-disable-next-line import/no-commonjs
     module.exports = modules;
 }

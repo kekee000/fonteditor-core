@@ -14,8 +14,8 @@ import {computePath} from './computeBoundingBox';
  */
 export default function pathSkewX(contour, angle) {
     angle = angle === undefined ? 0 : angle;
-    let y = computePath(contour).y;
-    let tan = Math.tan(angle);
+    const y = computePath(contour).y;
+    const tan = Math.tan(angle);
     let p;
     // x 平移
     for (let i = 0, l = contour.length; i < l; i++) {

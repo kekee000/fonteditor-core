@@ -57,30 +57,30 @@ export default function svgnode2contours(xmlNodes) {
     let j;
     let jlength;
     let segment; // 当前指令
-    let parsedSegments = []; // 解析后的指令
+    const parsedSegments = []; // 解析后的指令
 
     if (xmlNodes.length) {
         for (i = 0, length = xmlNodes.length; i < length; i++) {
-            let node = xmlNodes[i];
-            let name = node.tagName;
+            const node = xmlNodes[i];
+            const name = node.tagName;
             if (support[name]) {
-                let supportParams = support[name].params;
-                let params = [];
+                const supportParams = support[name].params;
+                const params = [];
                 for (j = 0, jlength = supportParams.length; j < jlength; j++) {
                     params.push(node.getAttribute(supportParams[j]));
                 }
 
                 segment = {
-                    name: name,
-                    params: params,
+                    name,
+                    params,
                     transform: parseTransform(node.getAttribute('transform'))
                 };
 
                 if (node.parentNode) {
                     let curNode = node.parentNode;
-                    let transforms = segment.transform || [];
+                    const transforms = segment.transform || [];
                     let transAttr;
-                    let iterator = function (t) {
+                    const iterator = function (t) {
                         transforms.unshift(t);
                     };
                     while (curNode !== null && curNode.tagName !== 'svg') {
@@ -99,11 +99,11 @@ export default function svgnode2contours(xmlNodes) {
     }
 
     if (parsedSegments.length) {
-        let result = [];
+        const result = [];
         for (i = 0, length = parsedSegments.length; i < length; i++) {
             segment = parsedSegments[i];
-            let parser = support[segment.name];
-            let contour = parser.parse.apply(null, segment.params);
+            const parser = support[segment.name];
+            const contour = parser.parse.apply(null, segment.params);
             if (contour && contour.length) {
                 let contours = parser.contours ? contour : [contour];
 

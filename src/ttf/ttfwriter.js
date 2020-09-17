@@ -65,14 +65,14 @@ export default class TTFWriter {
             ttf.head.modified = ttf.head.created;
         }
 
-        let checkUnicodeRepeat = {}; // 检查是否有重复代码点
+        const checkUnicodeRepeat = {}; // 检查是否有重复代码点
 
         // 将glyf的代码点按小到大排序
-        ttf.glyf.forEach(function (glyf, index) {
+        ttf.glyf.forEach((glyf, index) => {
             if (glyf.unicode) {
                 glyf.unicode = glyf.unicode.sort();
 
-                glyf.unicode.forEach(function (u) {
+                glyf.unicode.forEach((u) => {
                     if (checkUnicodeRepeat[u]) {
                         error.raise({
                             number: 10200,
@@ -105,10 +105,10 @@ export default class TTFWriter {
 
         // 构造tables
         ttf.support.tables = [];
-        ttf.writeOptions.tables.forEach(function (tableName) {
-            let offset = ttfSize;
-            let TableClass = supportTables[tableName];
-            let tableSize = new TableClass().size(ttf); // 原始的表大小
+        ttf.writeOptions.tables.forEach((tableName) => {
+            const offset = ttfSize;
+            const TableClass = supportTables[tableName];
+            const tableSize = new TableClass().size(ttf); // 原始的表大小
             let size = tableSize; // 对齐后的表大小
 
             if (tableName === 'head') {
@@ -123,15 +123,15 @@ export default class TTFWriter {
             ttf.support.tables.push({
                 name: tableName,
                 checkSum: 0,
-                offset: offset,
+                offset,
                 length: tableSize,
-                size: size
+                size
             });
 
             ttfSize += size;
         });
 
-        let writer = new Writer(new ArrayBuffer(ttfSize));
+        const writer = new Writer(new ArrayBuffer(ttfSize));
 
         // 写头部
         writer.writeFixed(ttf.version);
@@ -141,14 +141,14 @@ export default class TTFWriter {
         writer.writeUint16(ttf.rangeShift);
 
         // 写表偏移
-        !new Directory().write(writer, ttf);
+        new Directory().write(writer, ttf);
 
         // 写支持的表数据
-        ttf.support.tables.forEach(function (table) {
+        ttf.support.tables.forEach((table) => {
 
-            let tableStart = writer.offset;
-            let TableClass = supportTables[table.name];
-            !new TableClass().write(writer, ttf);
+            const tableStart = writer.offset;
+            const TableClass = supportTables[table.name];
+            new TableClass().write(writer, ttf);
 
             if (table.length % 4) {
                 // 对齐字节
@@ -161,19 +161,19 @@ export default class TTFWriter {
         });
 
         // 重新写入每个表校验和
-        ttf.support.tables.forEach(function (table, index) {
-            let offset = 12 + index * 16 + 4;
+        ttf.support.tables.forEach((table, index) => {
+            const offset = 12 + index * 16 + 4;
             writer.writeUint32(table.checkSum, offset);
         });
 
         // 写入总校验和
-        let ttfCheckSum = (0xB1B0AFBA - checkSum(writer.getBuffer()) + 0x100000000) % 0x100000000;
+        const ttfCheckSum = (0xB1B0AFBA - checkSum(writer.getBuffer()) + 0x100000000) % 0x100000000;
         writer.writeUint32(ttfCheckSum, ttfHeadOffset + 8);
 
         delete ttf.writeOptions;
         delete ttf.support;
 
-        let buffer = writer.getBuffer();
+        const buffer = writer.getBuffer();
         writer.dispose();
 
         return buffer;
@@ -195,11 +195,11 @@ export default class TTFWriter {
         }
 
 
-        let tables = SUPPORT_TABLES.slice(0);
+        const tables = SUPPORT_TABLES.slice(0);
         ttf.writeOptions = {};
         // hinting tables direct copy
         if (this.options.hinting) {
-            ['cvt', 'fpgm', 'prep', 'gasp', 'GPOS', 'kern'].forEach(function (table) {
+            ['cvt', 'fpgm', 'prep', 'gasp', 'GPOS', 'kern'].forEach((table) => {
                 if (ttf[table]) {
                     tables.push(table);
                 }
@@ -219,7 +219,7 @@ export default class TTFWriter {
     write(ttf) {
         this.prepareDump(ttf);
         this.resolveTTF(ttf);
-        let buffer = this.dump(ttf);
+        const buffer = this.dump(ttf);
         return buffer;
     }
 

@@ -43,7 +43,7 @@ function getOffset(reader, offSize) {
  * @return {Object}        头部字段
  */
 function parseCFFHead(reader) {
-    let head = {};
+    const head = {};
     head.startOffset = reader.offset;
     head.endOffset = head.startOffset + 4;
     head.formatMajor = reader.readUint8();
@@ -65,14 +65,14 @@ function parseCFFIndex(reader, offset, conversionFn) {
     if (offset) {
         reader.seek(offset);
     }
-    let start = reader.offset;
-    let offsets = [];
-    let objects = [];
-    let count = reader.readUint16();
+    const start = reader.offset;
+    const offsets = [];
+    const objects = [];
+    const count = reader.readUint16();
     let i;
     let l;
     if (count !== 0) {
-        let offsetSize = reader.readUint8();
+        const offsetSize = reader.readUint8();
         for (i = 0, l = count + 1; i < l; i++) {
             offsets.push(getOffset(reader, offsetSize));
         }
@@ -87,7 +87,7 @@ function parseCFFIndex(reader, offset, conversionFn) {
     }
 
     return {
-        objects: objects,
+        objects,
         startOffset: start,
         endOffset: reader.offset
     };
@@ -117,17 +117,17 @@ export default table.create(
     {
         read(reader, font) {
 
-            let offset = this.offset;
+            const offset = this.offset;
             reader.seek(offset);
 
-            let head = parseCFFHead(reader);
-            let nameIndex = parseCFFIndex(reader, head.endOffset, string.getString);
-            let topDictIndex = parseCFFIndex(reader, nameIndex.endOffset);
-            let stringIndex = parseCFFIndex(reader, topDictIndex.endOffset, string.getString);
-            let globalSubrIndex = parseCFFIndex(reader, stringIndex.endOffset);
+            const head = parseCFFHead(reader);
+            const nameIndex = parseCFFIndex(reader, head.endOffset, string.getString);
+            const topDictIndex = parseCFFIndex(reader, nameIndex.endOffset);
+            const stringIndex = parseCFFIndex(reader, topDictIndex.endOffset, string.getString);
+            const globalSubrIndex = parseCFFIndex(reader, stringIndex.endOffset);
 
-            let cff = {
-                head: head
+            const cff = {
+                head
             };
 
             // 全局子glyf数据
@@ -135,8 +135,8 @@ export default table.create(
             cff.gsubrsBias = calcCFFSubroutineBias(globalSubrIndex.objects);
 
             // 顶级字典数据
-            let dictReader = new Reader(new Uint8Array(topDictIndex.objects[0]).buffer);
-            let topDict = parseCFFDict.parseTopDict(
+            const dictReader = new Reader(new Uint8Array(topDictIndex.objects[0]).buffer);
+            const topDict = parseCFFDict.parseTopDict(
                 dictReader,
                 0,
                 dictReader.length,
@@ -145,7 +145,7 @@ export default table.create(
             cff.topDict = topDict;
 
             // 私有字典数据
-            let privateDictLength = topDict.private[0];
+            const privateDictLength = topDict.private[0];
             let privateDict = {};
             let privateDictOffset;
             if (privateDictLength) {
@@ -166,8 +166,8 @@ export default table.create(
 
             // 私有子glyf数据
             if (privateDict.subrs) {
-                let subrOffset = privateDictOffset + privateDict.subrs;
-                let subrIndex = parseCFFIndex(reader, subrOffset);
+                const subrOffset = privateDictOffset + privateDict.subrs;
+                const subrIndex = parseCFFIndex(reader, subrOffset);
                 cff.subrs = subrIndex.objects;
                 cff.subrsBias = calcCFFSubroutineBias(cff.subrs);
             }
@@ -178,20 +178,20 @@ export default table.create(
             cff.privateDict = privateDict;
 
             // 解析glyf数据和名字
-            let charStringsIndex = parseCFFIndex(reader, offset + topDict.charStrings);
-            let nGlyphs = charStringsIndex.objects.length;
+            const charStringsIndex = parseCFFIndex(reader, offset + topDict.charStrings);
+            const nGlyphs = charStringsIndex.objects.length;
 
             if (topDict.charset < 3) {
-              /*@author: fr33z00
-              See end of chapter 13 (p22) of #5176.CFF.pdf :
-              Still more optimization is possible by
-              observing that many fonts adopt one of 3 common charsets. In
-              these cases the operand to the charset operator in the Top DICT
-              specifies a predefined charset id, in place of an offset, as shown in table 22*/
-              cff.charset = cffStandardStrings;
+                // @author: fr33z00
+                // See end of chapter 13 (p22) of #5176.CFF.pdf :
+                // Still more optimization is possible by
+                // observing that many fonts adopt one of 3 common charsets. In
+                // these cases the operand to the charset operator in the Top DICT
+                // specifies a predefined charset id, in place of an offset, as shown in table 22
+                cff.charset = cffStandardStrings;
             }
             else {
-              cff.charset = parseCFFCharset(reader, offset + topDict.charset, nGlyphs, stringIndex.objects);
+                cff.charset = parseCFFCharset(reader, offset + topDict.charset, nGlyphs, stringIndex.objects);
             }
 
             // Standard encoding
@@ -209,27 +209,27 @@ export default table.create(
             cff.glyf = [];
 
             // only parse subset glyphs
-            let subset = font.readOptions.subset;
+            const subset = font.readOptions.subset;
             if (subset && subset.length > 0) {
 
                 // subset map
-                let subsetMap = {
+                const subsetMap = {
                     0: true // 设置.notdef
                 };
-                let codes = font.cmap;
+                const codes = font.cmap;
 
                 // unicode to index
-                Object.keys(codes).forEach(function (c) {
+                Object.keys(codes).forEach((c) => {
                     if (subset.indexOf(+c) > -1) {
-                        let i = codes[c];
+                        const i = codes[c];
                         subsetMap[i] = true;
                     }
                 });
                 font.subsetMap = subsetMap;
 
-                Object.keys(subsetMap).forEach(function (i) {
+                Object.keys(subsetMap).forEach((i) => {
                     i = +i;
-                    let glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
+                    const glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
                     glyf.name = cff.charset[i];
                     cff.glyf[i] = glyf;
                 });
@@ -237,7 +237,7 @@ export default table.create(
             // parse all
             else {
                 for (let i = 0, l = nGlyphs; i < l; i++) {
-                    let glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
+                    const glyf = parseCFFGlyph(charStringsIndex.objects[i], cff, i);
                     glyf.name = cff.charset[i];
                     cff.glyf.push(glyf);
                 }
@@ -246,10 +246,12 @@ export default table.create(
             return cff;
         },
 
+        // eslint-disable-next-line no-unused-vars
         write(writer, font) {
             throw new Error('not support write cff table');
         },
 
+        // eslint-disable-next-line no-unused-vars
         size(font) {
             throw new Error('not support get cff table size');
         }

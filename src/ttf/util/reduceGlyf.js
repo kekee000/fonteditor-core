@@ -13,7 +13,7 @@ import reducePath from '../../graphics/reducePath';
  */
 export default function reduceGlyf(glyf) {
 
-    let contours = glyf.contours;
+    const contours = glyf.contours;
     let contour;
     for (let j = contours.length - 1; j >= 0; j--) {
         contour = reducePath(contours[j]);

@@ -15,15 +15,15 @@
  * @param {Object=} options.params 参数集合
  */
 export default function ajaxFile(options) {
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            let status = xhr.status;
+            const status = xhr.status;
             if (status >= 200 && status < 300 || status === 304) {
                 if (options.onSuccess) {
                     if (options.type === 'binary') {
-                        let buffer = xhr.responseBlob || xhr.response;
+                        const buffer = xhr.responseBlob || xhr.response;
                         options.onSuccess(buffer);
                     }
                     else if (options.type === 'xml') {
@@ -38,20 +38,18 @@ export default function ajaxFile(options) {
                 }
 
             }
-            else {
-                if (options.onError) {
-                    options.onError(xhr, xhr.status);
-                }
+            else if (options.onError) {
+                options.onError(xhr, xhr.status);
             }
         }
     };
 
-    let method = (options.method || 'GET').toUpperCase();
+    const method = (options.method || 'GET').toUpperCase();
     let params = null;
     if (options.params) {
 
         let str = [];
-        Object.keys(options.params).forEach(function (key) {
+        Object.keys(options.params).forEach(key => {
             str.push(key + '=' + encodeURIComponent(options.params[key]));
         });
         str = str.join('&');

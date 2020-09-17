@@ -20,11 +20,11 @@ function sizeofSimple(glyf, glyfSupport, hinting) {
         + (glyf.contours || []).length * 2
         + (glyfSupport.flags || []).length;
 
-    (glyfSupport.xCoord || []).forEach(function (x) {
+    (glyfSupport.xCoord || []).forEach((x) => {
         result += 0 <= x && x <= 0xFF ? 1 : 2;
     });
 
-    (glyfSupport.yCoord || []).forEach(function (y) {
+    (glyfSupport.yCoord || []).forEach((y) => {
         result += 0 <= y && y <= 0xFF ? 1 : 2;
     });
 
@@ -38,10 +38,11 @@ function sizeofSimple(glyf, glyfSupport, hinting) {
  * @param {boolean} hinting 是否保留hints, compound 图元暂时不做hinting
  * @return {number} size大小
  */
+// eslint-disable-next-line no-unused-vars
 function sizeofCompound(glyf, hinting) {
     let size = 10;
     let transform;
-    glyf.glyfs.forEach(function (g) {
+    glyf.glyfs.forEach((g) => {
         transform = g.transform;
         // flags + glyfIndex
         size += 4;
@@ -59,11 +60,9 @@ function sizeofCompound(glyf, hinting) {
         if (transform.b || transform.c) {
             size += 8;
         }
-        else {
-            // scale
-            if (transform.a !== 1 || transform.d !== 1) {
-                size += transform.a === transform.d ? 2 : 4;
-            }
+        // scale
+        else  if (transform.a !== 1 || transform.d !== 1) {
+            size += transform.a === transform.d ? 2 : 4;
         }
 
     });
@@ -84,11 +83,11 @@ function getFlags(glyf, glyfSupport) {
         return glyfSupport;
     }
 
-    let flags = [];
-    let xCoord = [];
-    let yCoord = [];
+    const flags = [];
+    const xCoord = [];
+    const yCoord = [];
 
-    let contours = glyf.contours;
+    const contours = glyf.contours;
     let contour;
     let prev;
     let first = true;
@@ -98,7 +97,7 @@ function getFlags(glyf, glyfSupport) {
 
         for (let i = 0, l = contour.length; i < l; i++) {
 
-            let point = contour[i];
+            const point = contour[i];
             if (first) {
                 xCoord.push(point.x);
                 yCoord.push(point.y);
@@ -114,15 +113,15 @@ function getFlags(glyf, glyfSupport) {
     }
 
     // compress
-    let flagsC = [];
-    let xCoordC = [];
-    let yCoordC = [];
+    const flagsC = [];
+    const xCoordC = [];
+    const yCoordC = [];
     let x;
     let y;
     let prevFlag;
     let repeatPoint = -1;
 
-    flags.forEach(function (flag, index) {
+    flags.forEach((flag, index) => {
 
         x = xCoord[index];
         y = yCoord[index];
@@ -221,12 +220,12 @@ function getFlags(glyf, glyfSupport) {
 export default function sizeof(ttf) {
     ttf.support.glyf = [];
     let tableSize = 0;
-    let hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
-    ttf.glyf.forEach(function (glyf) {
+    const hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
+    ttf.glyf.forEach((glyf) => {
         let glyfSupport = {};
         glyfSupport = glyf.compound ? glyfSupport : getFlags(glyf, glyfSupport);
 
-        let glyfSize = glyf.compound
+        const glyfSize = glyf.compound
             ? sizeofCompound(glyf, hinting)
             : sizeofSimple(glyf, glyfSupport, hinting);
         let size = glyfSize;

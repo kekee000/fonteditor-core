@@ -25,7 +25,8 @@ export function isDate(obj) {
 }
 
 export function isEmptyObject(object) {
-    for (let name in object) {
+    for (const name in object) {
+        // eslint-disable-next-line no-prototype-builtins
         if (object.hasOwnProperty(name)) {
             return false;
         }
@@ -43,7 +44,8 @@ export function isEmptyObject(object) {
  */
 export function curry(fn, ...cargs) {
     return function (...rargs) {
-        let args = cargs.concat(rargs);
+        const args = cargs.concat(rargs);
+        // eslint-disable-next-line no-invalid-this
         return fn.apply(this, args);
     };
 }
@@ -78,7 +80,7 @@ export function overwrite(thisObj, thatObj, fields) {
 
     // 这里`fields`未指定则仅overwrite自身可枚举的字段，指定`fields`则不做限制
     fields = fields || Object.keys(thatObj);
-    fields.forEach(function (field) {
+    fields.forEach(field => {
         // 拷贝对象
         if (
             thisObj[field] && typeof thisObj[field] === 'object'
@@ -112,7 +114,7 @@ export function clone(source) {
     }
     else if (isObject(source) && 'isPrototypeOf' in source) {
         cloned = {};
-        for (let key of Object.keys(source)) {
+        for (const key of Object.keys(source)) {
             cloned[key] = clone(source[key]);
         }
     }
@@ -130,15 +132,16 @@ export function throttle(func, wait) {
     let timeout;
     let result;
     let previous = 0;
-    let later = function () {
+    const later = function () {
         previous = new Date();
         timeout = null;
         result = func.apply(context, args);
     };
 
     return function (...args) {
-        let now = new Date();
-        let remaining = wait - (now - previous);
+        const now = new Date();
+        const remaining = wait - (now - previous);
+        // eslint-disable-next-line no-invalid-this
         context = this;
         if (remaining <= 0) {
             clearTimeout(timeout);
@@ -163,15 +166,16 @@ export function debounce(func, wait, immediate) {
     let result;
 
     return function (...args) {
-        let context = this;
-        let later = function () {
+        // eslint-disable-next-line no-invalid-this
+        const context = this;
+        const later = function () {
             timeout = null;
             if (!immediate) {
                 result = func.apply(context, args);
             }
         };
 
-        let callNow = immediate && !timeout;
+        const callNow = immediate && !timeout;
 
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
@@ -208,8 +212,8 @@ export function equals(thisObj, thatObj, fields) {
 
     // 这里`fields`未指定则仅overwrite自身可枚举的字段，指定`fields`则不做限制
     fields = fields || (typeof thisObj === 'object'
-            ? Object.keys(thisObj)
-            : []);
+        ? Object.keys(thisObj)
+        : []);
 
     if (!fields.length) {
         return thisObj === thatObj;

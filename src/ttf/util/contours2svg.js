@@ -18,7 +18,5 @@ export default function contours2svg(contours, precision) {
         return '';
     }
 
-    return contours.map(function (contour) {
-        return contour2svg(contour, precision);
-    }).join('');
+    return contours.map((contour) => contour2svg(contour, precision)).join('');
 }

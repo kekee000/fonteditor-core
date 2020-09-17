@@ -25,9 +25,9 @@ export default function parseCFFCharset(reader, start, nGlyphs, strings) {
     let count;
     // The .notdef glyph is not included, so subtract 1.
     nGlyphs -= 1;
-    let charset = ['.notdef'];
+    const charset = ['.notdef'];
 
-    let format = reader.readUint8();
+    const format = reader.readUint8();
     if (format === 0) {
         for (i = 0; i < nGlyphs; i += 1) {
             sid = reader.readUint16();
