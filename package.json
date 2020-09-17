@@ -48,7 +48,9 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{jsx,txs,ts,js,vue}": ["eslint"]
+    "src/**/*.{jsx,txs,ts,js,vue}": [
+      "eslint"
+    ]
   },
   "dependencies": {
     "xmldom": "~0.1.19"
