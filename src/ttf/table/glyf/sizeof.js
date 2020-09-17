@@ -15,20 +15,16 @@ import glyFlag from '../../enum/glyFlag';
  */
 function sizeofSimple(glyf, glyfSupport, hinting) {
 
-    if (!glyf.contours || 0 === glyf.contours.length) {
-        return 0;
-    }
-
     // fixed header + endPtsOfContours
     let result = 12
-        + glyf.contours.length * 2
-        + glyfSupport.flags.length;
+        + (glyf.contours || []).length * 2
+        + (glyfSupport.flags || []).length;
 
-    glyfSupport.xCoord.forEach(function (x) {
+    (glyfSupport.xCoord || []).forEach(function (x) {
         result += 0 <= x && x <= 0xFF ? 1 : 2;
     });
 
-    glyfSupport.yCoord.forEach(function (y) {
+    (glyfSupport.yCoord || []).forEach(function (y) {
         result += 0 <= y && y <= 0xFF ? 1 : 2;
     });
 
