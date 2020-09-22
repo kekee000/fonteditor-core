@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata></metadata>
+<defs>
+<font id="High-Code-Points-Test" >
+<font-face font-family="High-Code-Points-Test" font-stretch="normal" units-per-em="1000" panose-1="0 0 0 0 0 0 0 0 0 0" />
+<missing-glyph />
+<glyph unicode="&#x0ffffa;" d="M450 0 L50 700 L800 700 Z"/>
+<glyph unicode="&#x0ffffb;" d="M450 0 L50 700 L400 700 Z"/>
+<glyph unicode="&x0ffffa;&#x0ffffb;" d="M450 0 L50 700 L550 900 Z"/>
+</font>
+</defs>
+</svg>
+
