@@ -13,7 +13,7 @@ describe('读ttf数据', function () {
     it('test read ttf', function () {
         assert.equal(fontObject.version, 1);
         assert.equal(fontObject.numTables, 15);
-        assert.equal(fontObject.rengeShift, 112);
+        assert.equal(fontObject.rangeShift, 112);
         assert.equal(fontObject.searchRenge, 128);
     });
 

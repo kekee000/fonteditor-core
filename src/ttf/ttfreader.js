@@ -63,8 +63,8 @@ export default class TTFReader {
         // entrySelector
         ttf.entrySelector = reader.readUint16();
 
-        // rengeShift
-        ttf.rengeShift = reader.readUint16();
+        // rangeShift
+        ttf.rangeShift = reader.readUint16();
 
         ttf.tables = new Directory(reader.offset).read(reader, ttf);
 

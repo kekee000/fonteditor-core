@@ -4,10 +4,9 @@
  * https://github.com/alimilhim/woff2-wasm
  * @author mengke01(kekee000@gmail.com)
  */
-/* eslint-disable fecs-camel-case */
 
 function convertFromVecToUint8Array(vector) {
-    let arr = [];
+    const arr = [];
     for (let i = 0, l = vector.size(); i < l; i++) {
         arr.push(vector.get(i));
     }
@@ -15,7 +14,9 @@ function convertFromVecToUint8Array(vector) {
 }
 
 
+// eslint-disable-next-line import/no-commonjs
 module.exports = {
+
     woff2Module: null,
 
     /**
@@ -36,7 +37,7 @@ module.exports = {
      * @return {Promise}
      */
     init(wasmUrl) {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             if (this.woff2Module) {
                 resolve(this);
                 return;
@@ -76,7 +77,7 @@ module.exports = {
      * @return {Uint8Array} uint8 array
      */
     encode(ttfBuffer) {
-        let buffer = new Uint8Array(ttfBuffer);
+        const buffer = new Uint8Array(ttfBuffer);
         const woffbuff = this.woff2Module.woff2Enc(buffer, buffer.byteLength);
         return convertFromVecToUint8Array(woffbuff);
     },
@@ -88,7 +89,7 @@ module.exports = {
      * @return {Uint8Array} uint8 array
      */
     decode(woff2Buffer) {
-        let buffer = new Uint8Array(woff2Buffer);
+        const buffer = new Uint8Array(woff2Buffer);
         const ttfbuff = this.woff2Module.woff2Dec(buffer, buffer.byteLength);
         return convertFromVecToUint8Array(ttfbuff);
     }

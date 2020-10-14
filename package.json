@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform, glyph adjust.",
   "keywords": [
     "sfnt",
@@ -60,11 +60,13 @@
     "url": "git://github.com/kekee000/fonteditor-core.git"
   },
   "files": [
+    "index.d.ts",
     "lib",
     "src",
     "woff2"
   ],
   "main": "./lib/main.js",
+  "module": "./src/main.js",
   "devDependencies": {
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",

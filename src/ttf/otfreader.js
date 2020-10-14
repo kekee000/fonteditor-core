@@ -52,8 +52,8 @@ export default class OTFReader {
         // entrySelector
         font.entrySelector = reader.readUint16();
 
-        // rengeShift
-        font.rengeShift = reader.readUint16();
+        // rangeShift
+        font.rangeShift = reader.readUint16();
 
         font.tables = new Directory(reader.offset).read(reader, font);
 

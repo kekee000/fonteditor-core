@@ -23,6 +23,9 @@ import ttftowoff2 from './ttf/ttftowoff2';
 import woff2tottf from './ttf/woff2tottf';
 import woff2 from '../woff2/index';
 
+export {Font};
+export {woff2};
+
 const modules = {
     Font,
     TTF,
@@ -46,6 +49,7 @@ const modules = {
 };
 
 export default modules;
+
 if (typeof exports !== 'undefined') {
     // eslint-disable-next-line import/no-commonjs
     module.exports = modules;

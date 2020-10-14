@@ -41,7 +41,7 @@ const GLYPH_TPL = '<glyph glyph-name="${name}" unicode="${unicode}" d="${d}" />'
  *
  * @param {ttfObject} ttf ttfObject对象
  * @param {Object} options 选项
- * @param {Object} options.metadata 字体相关的信息
+ * @param {string} options.metadata 字体相关的信息
  * @return {string} svg字符串
  */
 function ttfobject2svg(ttf, options) {

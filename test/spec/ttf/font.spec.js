@@ -56,7 +56,7 @@ describe('读otf数据', function () {
     it('test read otf', function () {
         assert.equal(font.data.version, 0x1);
         assert.equal(font.data.numTables, 9);
-        assert.equal(font.data.rengeShift, 16);
+        assert.equal(font.data.rangeShift, 16);
         assert.equal(font.data.searchRenge, 128);
     });
 });
@@ -246,7 +246,7 @@ describe('写woff2数据', function () {
             assert.ok(buffer.byteLength > 1000);
             assert.ok(buffer.byteLength < 10000);
         });
-    
+
         let font = Font.create(buffer, {
             type: 'woff2'
         });

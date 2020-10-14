@@ -14,7 +14,7 @@ describe('读otf数据', function () {
     it('test read otf', function () {
         assert.equal(fontObject.version, 'OTTO');
         assert.equal(fontObject.numTables, 9);
-        assert.equal(fontObject.rengeShift, 16);
+        assert.equal(fontObject.rangeShift, 16);
         assert.equal(fontObject.searchRenge, 128);
     });
 

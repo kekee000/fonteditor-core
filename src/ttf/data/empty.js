@@ -9,7 +9,7 @@ export default {
     "numTables": 10,
     "searchRenge": 128,
     "entrySelector": 3,
-    "rengeShift": 64,
+    "rangeShift": 64,
     "head": {
         "version": 1,
         "fontRevision": 1,
