@@ -411,7 +411,7 @@ export namespace FontEditor {
         }) => any;
         ttftowoff2: (ttfBuffer: ArrayBuffer, options?: any) => Uint8Array;
         woff2tottf: (woff2Buffer: ArrayBuffer, options?: any) => Uint8Array;
-    };
+    }
 
     /**
      * core exports
