@@ -158,7 +158,7 @@ export namespace TTF {
     type TTFObject = {
         version: number;
         numTables: number;
-        searchRenge: number;
+        searchRange: number;
         entrySelector: number;
         rangeShift: number;
         head: Head;
@@ -214,7 +214,6 @@ export namespace FontEditor {
          * combine svg paths to one glyph in one svg file. default true
          */
         combinePath?: boolean;
-
     }
 
     interface FontWriteOptions {
@@ -302,7 +301,7 @@ export namespace FontEditor {
          * write font data
          * @param options write options
          */
-        ewrite(options: FontWriteOptions): FontOutput;
+        write(options: FontWriteOptions): FontOutput;
 
         write(options: {type: 'svg'} & FontWriteOptions): string;
 

@@ -8,7 +8,7 @@ import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import TTFWriter from 'fonteditor-core/ttf/ttfwriter';
 
 
-describe('写ttf数据', function () {
+describe('write ttf buffer', function () {
 
     let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
 
@@ -133,7 +133,7 @@ describe('写ttf数据', function () {
 });
 
 
-describe('写ttf hinting数据', function () {
+describe('write ttf hinting', function () {
 
     let fontObject = new TTFReader({
         hinting: true

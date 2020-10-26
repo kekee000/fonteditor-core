@@ -7,7 +7,7 @@ import assert from 'assert';
 import Writer from 'fonteditor-core/ttf/writer';
 import Reader from 'fonteditor-core/ttf/reader';
 
-describe('读数据', function () {
+describe('read buffer', function () {
     let buffer = new ArrayBuffer(100);
     let writer = new Writer(buffer, 0, 100);
     let now = Math.round(new Date().getTime() / 1000) * 1000;

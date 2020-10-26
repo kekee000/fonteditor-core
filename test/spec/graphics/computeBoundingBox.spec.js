@@ -28,7 +28,7 @@ const p1 = {
     onCurve: true
 };
 
-describe('计算包围盒', function () {
+describe('compute bounds', function () {
 
     it('test computeBounding', function () {
 

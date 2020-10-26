@@ -7,7 +7,7 @@ import assert from 'assert';
 import {readData} from '../data';
 import OTFReader from 'fonteditor-core/ttf/otfreader';
 
-describe('读otf数据', function () {
+describe('read otf buffer', function () {
 
     let fontObject = new OTFReader().read(readData('BalladeContour.otf'));
 
@@ -15,7 +15,7 @@ describe('读otf数据', function () {
         assert.equal(fontObject.version, 'OTTO');
         assert.equal(fontObject.numTables, 9);
         assert.equal(fontObject.rangeShift, 16);
-        assert.equal(fontObject.searchRenge, 128);
+        assert.equal(fontObject.searchRange, 128);
     });
 
     it('test read otf head', function () {
@@ -77,7 +77,7 @@ describe('读otf数据', function () {
 
 });
 
-describe('读otf hinting GPOS kern', function () {
+describe('read otf hinting GPOS kern', function () {
     let fontObject = new OTFReader().read(readData('SFNSDisplayCondensed-Black.otf'));
 
     it('test read hinting', function () {
@@ -86,7 +86,7 @@ describe('读otf hinting GPOS kern', function () {
 
 });
 
-describe('读错误otf数据', function () {
+describe('read erro otf buffer', function () {
 
     it('test read version error', function () {
         assert.throws(function () {

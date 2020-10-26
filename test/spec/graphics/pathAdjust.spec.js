@@ -18,7 +18,7 @@ const path = [
     }
 ];
 
-describe('调整路径', function () {
+describe('adjust path by scale, rotate, translate', function () {
 
     it('test default', function () {
 

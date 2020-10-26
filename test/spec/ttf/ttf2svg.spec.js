@@ -9,7 +9,7 @@ import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2svg from 'fonteditor-core/ttf/ttf2svg';
 import svg2ttfobject from 'fonteditor-core/ttf/svg2ttfobject';
 
-describe('ttf 转 svg', function () {
+describe('ttf to svg', function () {
 
     let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
     let svg = ttf2svg(fontObject);

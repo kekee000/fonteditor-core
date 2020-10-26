@@ -8,7 +8,7 @@ import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2symbol from 'fonteditor-core/ttf/ttf2symbol';
 
-describe('ttf 转 symbol', function () {
+describe('ttf to symbol', function () {
 
     let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
     let svg = ttf2symbol(fontObject);

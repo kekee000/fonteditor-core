@@ -6,7 +6,7 @@ import assert from 'assert';
 import * as lang from 'fonteditor-core/common/lang';
 
 
-describe('测试overwrite', function () {
+describe('test overwrite', function () {
 
     it('test normal object', function () {
         let result = lang.overwrite(
@@ -133,7 +133,7 @@ describe('测试overwrite', function () {
 
 
 
-describe('测试equals', function () {
+describe('test equals', function () {
 
     it('test normal object', function () {
         let result = lang.equals(

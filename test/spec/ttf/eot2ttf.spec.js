@@ -8,7 +8,7 @@ import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2eot from 'fonteditor-core/ttf/ttf2eot';
 import eot2ttf from 'fonteditor-core/ttf/eot2ttf';
 
-describe('eot 转 ttf', function () {
+describe('eot to ttf', function () {
 
     let eotBuffer = ttf2eot(readData('baiduHealth-hinting.ttf'));
     let ttf = new TTFReader({

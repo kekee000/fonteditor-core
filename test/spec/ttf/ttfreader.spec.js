@@ -6,7 +6,7 @@ import assert from 'assert';
 import {readData} from '../data';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 
-describe('读ttf数据', function () {
+describe('read ttf buffer', function () {
 
     let fontObject = new TTFReader().read(readData('baiduHealth.ttf'));
 
@@ -14,7 +14,7 @@ describe('读ttf数据', function () {
         assert.equal(fontObject.version, 1);
         assert.equal(fontObject.numTables, 15);
         assert.equal(fontObject.rangeShift, 112);
-        assert.equal(fontObject.searchRenge, 128);
+        assert.equal(fontObject.searchRange, 128);
     });
 
     it('test read ttf head', function () {
@@ -62,7 +62,7 @@ describe('读ttf数据', function () {
     });
 });
 
-describe('转换compound到simple', function () {
+describe('transform compound to simple', function () {
 
     let fontObject = new TTFReader({
         compound2simple: true
@@ -75,7 +75,7 @@ describe('转换compound到simple', function () {
     });
 });
 
-describe('读ttf hinting数据', function () {
+describe('read ttf hinting', function () {
     let fontObject = new TTFReader({
         hinting: true
     }).read(readData('baiduHealth-hinting.ttf'));
@@ -91,7 +91,7 @@ describe('读ttf hinting数据', function () {
 
 });
 
-describe('读ttf hinting GPOS kern', function () {
+describe('read ttf hinting GPOS kern', function () {
     let fontObject = new TTFReader({
         hinting: true
     }).read(readData('baiduHealth-hinting.ttf'));
@@ -141,7 +141,7 @@ describe('ttf subset with compound', function () {
     });
 });
 
-describe('读错误ttf数据', function () {
+describe('read error ttf buffer', function () {
 
     it('test read version error', function () {
         assert.throws(function () {

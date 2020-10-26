@@ -11,7 +11,7 @@ import woff2ttf from 'fonteditor-core/ttf/woff2ttf';
 import pako from 'pako';
 import { fstat } from 'fs';
 
-describe('ttf 转 woff', function () {
+describe('ttf to woff', function () {
 
     let woffBuffer = ttf2woff(readData('baiduHealth.ttf'));
 
@@ -52,7 +52,7 @@ describe('ttf 转 woff', function () {
 });
 
 
-describe('ttf 转 woff with deflate', function () {
+describe('ttf to woff with deflate', function () {
 
     let woffBuffer = ttf2woff(readData('baiduHealth.ttf'), {
         deflate: pako.deflate

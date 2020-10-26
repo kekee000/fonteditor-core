@@ -57,8 +57,8 @@ export default class TTFReader {
             error.raise(10101);
         }
 
-        // searchRenge
-        ttf.searchRenge = reader.readUint16();
+        // searchRange
+        ttf.searchRange = reader.readUint16();
 
         // entrySelector
         ttf.entrySelector = reader.readUint16();

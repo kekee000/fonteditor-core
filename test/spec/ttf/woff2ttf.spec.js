@@ -9,7 +9,7 @@ import ttf2woff from 'fonteditor-core/ttf/ttf2woff';
 import woff2ttf from 'fonteditor-core/ttf/woff2ttf';
 import assert from 'assert';
 
-describe('woff 转 ttf', function () {
+describe('woff to ttf', function () {
     let woffBuffer = ttf2woff(readData('baiduHealth-hinting.ttf'));
     let ttf = new TTFReader({
         hinting: true

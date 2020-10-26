@@ -8,7 +8,7 @@ import {readData} from '../data';
 import OTFReader from 'fonteditor-core/ttf/otfreader';
 import otf2ttfobject from 'fonteditor-core/ttf/otf2ttfobject';
 
-describe('otf 转ttf object', function () {
+describe('otf to ttf object', function () {
 
     let fontObject = new OTFReader().read(readData('BalladeContour.otf'));
     let numGlyphs = fontObject.maxp.numGlyphs;

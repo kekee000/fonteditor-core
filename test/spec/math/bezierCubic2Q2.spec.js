@@ -26,10 +26,10 @@ const p1 = {
     y: 100
 };
 
-describe('三次bezier曲线转二次', function () {
+describe('Cubic bezier to quadratic bezier', function () {
 
 
-    it('test c0=p0, c1 = p1', function () {
+    it('test c0=p0, c1 = p1sa', function () {
         let result = bezierCubic2Q2(p0, p0, p1, p1);
         assert.deepEqual(result[0], [
             {

@@ -6,7 +6,7 @@ import assert from 'assert';
 import Writer from 'fonteditor-core/ttf/writer';
 import Reader from 'fonteditor-core/ttf/reader';
 
-describe('写基本数据', function () {
+describe('write basic datatypes', function () {
 
     let buffer = new ArrayBuffer(100);
 

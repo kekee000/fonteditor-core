@@ -46,8 +46,8 @@ export default class OTFReader {
             error.raise(10302);
         }
 
-        // searchRenge
-        font.searchRenge = reader.readUint16();
+        // searchRange
+        font.searchRange = reader.readUint16();
 
         // entrySelector
         font.entrySelector = reader.readUint16();

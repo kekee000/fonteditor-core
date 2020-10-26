@@ -9,7 +9,7 @@ import {readData} from '../data';
 import Font from 'fonteditor-core/ttf/font';
 import main from 'fonteditor-core/main';
 
-describe('测试 Font 对象============================', function () {
+describe('test Font Class ============================', function () {
 
     it('test create empty', function () {
         let font = Font.create();
@@ -27,7 +27,7 @@ describe('测试 Font 对象============================', function () {
     });
 });
 
-describe('读ttf数据', function () {
+describe('read ttf buffer', function () {
     let font = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     });
@@ -37,7 +37,7 @@ describe('读ttf数据', function () {
     });
 });
 
-describe('转换compound到simple', function () {
+describe('transform compound to simple', function () {
     let font = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf',
         compound2simple: true
@@ -49,7 +49,7 @@ describe('转换compound到simple', function () {
     });
 });
 
-describe('读otf数据', function () {
+describe('read otf buffer', function () {
     let font = Font.create(readData('BalladeContour.otf'), {
         type: 'otf'
     });
@@ -57,11 +57,11 @@ describe('读otf数据', function () {
         assert.equal(font.data.version, 0x1);
         assert.equal(font.data.numTables, 9);
         assert.equal(font.data.rangeShift, 16);
-        assert.equal(font.data.searchRenge, 128);
+        assert.equal(font.data.searchRange, 128);
     });
 });
 
-describe('读取 woff 数据', function () {
+describe('read woff buffer', function () {
     let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
@@ -78,7 +78,7 @@ describe('读取 woff 数据', function () {
     });
 });
 
-describe('读取 woff2 数据', function () {
+describe('read woff2 buffer', function () {
     this.timeout(2000);
     before(function (done) {
         main.woff2.init().then(() => done());
@@ -99,7 +99,7 @@ describe('读取 woff2 数据', function () {
     });
 });
 
-describe('读取 eot 数据', function () {
+describe('read eot buffer', function () {
     let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
@@ -116,7 +116,7 @@ describe('读取 eot 数据', function () {
     });
 });
 
-describe('读取 svg 文件', function () {
+describe('read svg text', function () {
     let font = Font.create(readData('iconfont-xin.svg'), {
         type: 'svg'
     });
@@ -128,7 +128,7 @@ describe('读取 svg 文件', function () {
     });
 });
 
-describe('读取 svg 字体', function () {
+describe('read svg font text', function () {
     let font = Font.create(readData('icomoon.svg'), {
         type: 'svg'
     });
@@ -150,7 +150,7 @@ describe('读取 svg 字体', function () {
 
 
 
-describe('写ttf数据', function () {
+describe('write ttf buffer', function () {
 
     it('test write ttf', function () {
         let buffer = Font.create(readData('baiduHealth.ttf'), {
@@ -188,7 +188,7 @@ describe('写ttf数据', function () {
     });
 });
 
-describe('写eot数据', function () {
+describe('write eot buffer', function () {
     let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
@@ -209,7 +209,7 @@ describe('写eot数据', function () {
     });
 });
 
-describe('写woff数据', function () {
+describe('write woff buffer', function () {
     let buffer = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     }).write({
@@ -230,7 +230,7 @@ describe('写woff数据', function () {
     });
 });
 
-describe('写woff2数据', function () {
+describe('write woff2 buffer', function () {
     this.timeout(2000);
     before(function (done) {
         main.woff2.init().then(() => done());
@@ -256,7 +256,7 @@ describe('写woff2数据', function () {
     });
 });
 
-describe('写svg数据', function () {
+describe('write svg text', function () {
     let font = Font.create(readData('baiduHealth.ttf'), {
         type: 'ttf'
     });
