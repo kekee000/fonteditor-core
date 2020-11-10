@@ -4,6 +4,6 @@
  */
 
 /* eslint-disable no-undef */
-export default typeof exports !== 'undefined'
-    ? require('xmldom').DOMParser
-    : window.DOMParser;
+export default typeof window !== 'undefined' && window.DOMParser
+    ? window.DOMParser
+    : require('xmldom').DOMParser;
