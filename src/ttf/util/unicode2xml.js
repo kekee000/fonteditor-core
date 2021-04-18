@@ -19,7 +19,7 @@ export default function unicode2xml(unicodeList) {
             return '';
         }
         return u >= 0x20 && u <= 255
-            ? string.encodeHTML(String.fromCharCode(u).toLowerCase())
+            ? string.encodeHTML(String.fromCharCode(u))
             : '&#x' + u.toString(16) + ';';
     }).join('');
 }
