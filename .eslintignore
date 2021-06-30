@@ -4,3 +4,4 @@ node_modules
 release
 test/data
 tool
+lib
