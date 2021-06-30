@@ -6,7 +6,7 @@ const util = require('./util');
 function readotf(file) {
     var data = fs.readFileSync(file);
     var buffer = util.toArrayBuffer(data);
-    var fontObject  = new OTFReader().read(buffer);
+    var fontObject = new OTFReader().read(buffer);
     return fontObject;
 }
 

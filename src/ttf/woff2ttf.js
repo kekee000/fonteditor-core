@@ -27,7 +27,7 @@ export default function woff2ttf(woffBuffer, options = {}) {
     }
 
     const numTables = reader.readUint16(12);
-    const ttfSize =  reader.readUint32(16);
+    const ttfSize = reader.readUint32(16);
     const tableEntries = [];
     let tableEntry;
     let i;

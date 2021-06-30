@@ -2,7 +2,7 @@
  * @file font
  * @author mengke01(kekee000@gmail.com)
  */
-/* globals Int8Array, before */
+
 const assert = require('assert');
 const fs = require('fs');
 const Font = require('./fonteditor-core').Font;

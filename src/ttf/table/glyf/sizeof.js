@@ -61,7 +61,7 @@ function sizeofCompound(glyf, hinting) {
             size += 8;
         }
         // scale
-        else  if (transform.a !== 1 || transform.d !== 1) {
+        else if (transform.a !== 1 || transform.d !== 1) {
             size += transform.a === transform.d ? 2 : 4;
         }
 

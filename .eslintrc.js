@@ -3,9 +3,10 @@ module.exports = {
     'env': {
         'browser': true,
         'es2021': true,
-        'node': true
+        'node': true,
+        'mocha': true
     },
-    'extends': ['eslint:recommended', 'esnext'],
+    'extends': ['eslint:recommended', 'plugin:import/recommended'],
     'parserOptions': {
         'ecmaVersion': 12,
         'sourceType': 'module'
@@ -34,6 +35,24 @@ module.exports = {
                 'null': 'ignore'
             }
         ],
+        'key-spacing': [
+            2,
+            {
+                beforeColon: false,
+                afterColon: true
+            }
+        ],
+        'no-multi-spaces': 2,
         'class-methods-use-this': 0
-    }
+    },
+    'overrides': [
+        {
+            files: [
+                'test/**/*.js'
+            ],
+            rules: {
+                'import/no-unresolved': 0
+            }
+        }
+    ]
 };

@@ -12,14 +12,14 @@ import error from './error';
 // xml 模板
 const XML_TPL = ''
     + '<svg style="position: absolute; width: 0; height: 0;" width="0" height="0" version="1.1"'
-    +   ' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'
-    +   '<defs>${symbolList}</defs>'
+    + ' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'
+    + '<defs>${symbolList}</defs>'
     + '</svg>';
 
 // symbol 模板
 const SYMBOL_TPL = ''
     + '<symbol id="${id}" viewBox="0 ${descent} ${unitsPerEm} ${unitsPerEm}">'
-    +   '<path d="${d}"></path>'
+    + '<path d="${d}"></path>'
     + '</symbol>';
 
 

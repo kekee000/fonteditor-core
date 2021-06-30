@@ -20,7 +20,7 @@ function readttf(file) {
 describe('readoft', function () {
     it('readoft', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
-        let ttfObject  = new TTFReader().read(buffer);
+        let ttfObject = new TTFReader().read(buffer);
 
         assert(ttfObject.name.fontFamily === 'Bebas', 'test read ttf');
         assert(JSON.stringify(ttfObject), 'test writettf');

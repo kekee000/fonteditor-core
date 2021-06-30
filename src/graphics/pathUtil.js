@@ -91,7 +91,7 @@ export function isClockWise(path) {
 
     return zCount === 0
         ? 0
-        : zCount  < 0 ? 1 : -1;
+        : zCount < 0 ? 1 : -1;
 }
 
 /**

@@ -18,6 +18,7 @@ import config from './data/default';
 const SVG_FONT_ID = config.fontId;
 
 // xml 模板
+/* eslint-disable no-multi-spaces */
 const XML_TPL = ''
     + '<?xml version="1.0" standalone="no"?>'
     +   '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >'
@@ -32,7 +33,7 @@ const XML_TPL = ''
     +       '${glyphList}'
     +   '</font></defs>'
     + '</svg>';
-
+/* eslint-enable no-multi-spaces */
 // glyph 模板
 const GLYPH_TPL = '<glyph glyph-name="${name}" unicode="${unicode}" d="${d}" />';
 

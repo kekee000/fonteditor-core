@@ -2,7 +2,7 @@
  * @file adjustttf
  * @author mengke01(kekee000@gmail.com)
  */
-/* globals Int8Array */
+
 const assert = require('assert');
 const fs = require('fs');
 const TTFReader = require('./fonteditor-core').TTFReader;

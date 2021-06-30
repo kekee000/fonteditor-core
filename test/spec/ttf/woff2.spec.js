@@ -2,7 +2,6 @@
  * @file woff2 enc and dec
  * @author mengke01(kekee000@gmail.com)
  */
-/* globals before */
 
 import assert from 'assert';
 import {readData} from '../data';
@@ -44,13 +43,13 @@ describe('woff2', function () {
             assert.ok(result.byteLength);
             return woff2tottf(result);
         })
-        .then(function (result) {
-            assert.ok(result.byteLength);
-            let fontObject = new TTFReader().read(result);
-            assert.equal(fontObject.version, 1);
-            assert.equal(fontObject.numTables, 16);
-            done();
-        });
+            .then(function (result) {
+                assert.ok(result.byteLength);
+                let fontObject = new TTFReader().read(result);
+                assert.equal(fontObject.version, 1);
+                assert.equal(fontObject.numTables, 16);
+                done();
+            });
     });
 
     it('woff2tottfasync', function (done) {
@@ -68,13 +67,13 @@ describe('woff2', function () {
             assert.ok(result.byteLength);
             return woff2tottfasync(result);
         })
-        .then(function (result) {
-            assert.ok(result.byteLength);
-            let fontObject = new TTFReader().read(result);
-            assert.equal(fontObject.version, 1);
-            assert.equal(fontObject.numTables, 14);
-            done();
-        });
+            .then(function (result) {
+                assert.ok(result.byteLength);
+                let fontObject = new TTFReader().read(result);
+                assert.equal(fontObject.version, 1);
+                assert.equal(fontObject.numTables, 14);
+                done();
+            });
     });
 
     it('woff2tottfasync compound', function (done) {

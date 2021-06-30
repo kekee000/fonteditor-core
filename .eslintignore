@@ -2,5 +2,5 @@ src/ttf/data/*
 demo/*
 node_modules
 release
-test
+test/data
 tool

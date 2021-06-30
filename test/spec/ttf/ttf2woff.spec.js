@@ -9,7 +9,6 @@ import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import ttf2woff from 'fonteditor-core/ttf/ttf2woff';
 import woff2ttf from 'fonteditor-core/ttf/woff2ttf';
 import pako from 'pako';
-import { fstat } from 'fs';
 
 describe('ttf to woff', function () {
 

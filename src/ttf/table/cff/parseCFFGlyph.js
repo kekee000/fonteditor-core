@@ -170,8 +170,8 @@ export default function parseCFFCharstring(code, font, index) {
                 switch (v) {
                 case 35: // flex
                     // |- dx1 dy1 dx2 dy2 dx3 dy3 dx4 dy4 dx5 dy5 dx6 dy6 fd flex (12 35) |-
-                    c1x = x   + stack.shift(); // dx1
-                    c1y = y   + stack.shift(); // dy1
+                    c1x = x + stack.shift(); // dx1
+                    c1y = y + stack.shift(); // dy1
                     c2x = c1x + stack.shift(); // dx2
                     c2y = c1y + stack.shift(); // dy2
                     jpx = c2x + stack.shift(); // dx3
@@ -188,7 +188,7 @@ export default function parseCFFCharstring(code, font, index) {
                     break;
                 case 34: // hflex
                     // |- dx1 dx2 dy2 dx3 dx4 dx5 dx6 hflex (12 34) |-
-                    c1x = x   + stack.shift(); // dx1
+                    c1x = x + stack.shift(); // dx1
                     c1y = y; // dy1
                     c2x = c1x + stack.shift(); // dx2
                     c2y = c1y + stack.shift(); // dy2
@@ -204,8 +204,8 @@ export default function parseCFFCharstring(code, font, index) {
                     break;
                 case 36: // hflex1
                     // |- dx1 dy1 dx2 dy2 dx3 dx4 dx5 dy5 dx6 hflex1 (12 36) |-
-                    c1x = x   + stack.shift(); // dx1
-                    c1y = y   + stack.shift(); // dy1
+                    c1x = x + stack.shift(); // dx1
+                    c1y = y + stack.shift(); // dy1
                     c2x = c1x + stack.shift(); // dx2
                     c2y = c1y + stack.shift(); // dy2
                     jpx = c2x + stack.shift(); // dx3
@@ -220,8 +220,8 @@ export default function parseCFFCharstring(code, font, index) {
                     break;
                 case 37: // flex1
                     // |- dx1 dy1 dx2 dy2 dx3 dy3 dx4 dy4 dx5 dy5 d6 flex1 (12 37) |-
-                    c1x = x   + stack.shift(); // dx1
-                    c1y = y   + stack.shift(); // dy1
+                    c1x = x + stack.shift(); // dx1
+                    c1y = y + stack.shift(); // dy1
                     c2x = c1x + stack.shift(); // dx2
                     c2y = c1y + stack.shift(); // dy2
                     jpx = c2x + stack.shift(); // dx3

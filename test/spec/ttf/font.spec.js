@@ -2,8 +2,7 @@
  * @file font
  * @author mengke01(kekee000@gmail.com)
  */
-/* eslint-disable fecs-no-require */
-/* globals before */
+
 import assert from 'assert';
 import {readData} from '../data';
 import Font from 'fonteditor-core/ttf/font';

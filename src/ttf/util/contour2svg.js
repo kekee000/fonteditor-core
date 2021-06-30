@@ -44,7 +44,7 @@ export default function contour2svg(contour, precision = 2) {
             else {
                 x = (prevPoint.x + curPoint.x) / 2;
                 y = (prevPoint.y + curPoint.y) / 2;
-                pathArr.push('M' + ceil(x)  + ' ' + ceil(y));
+                pathArr.push('M' + ceil(x) + ' ' + ceil(y));
             }
         }
 

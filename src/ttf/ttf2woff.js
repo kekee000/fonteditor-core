@@ -9,7 +9,7 @@
  * https://github.com/fontello/ttf2woff
  * https://github.com/nodeca/pako
  */
-
+/* eslint-disable no-multi-spaces */
 import Reader from './reader';
 import Writer from './writer';
 import string from '../common/string';
