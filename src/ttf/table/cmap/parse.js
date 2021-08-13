@@ -180,10 +180,12 @@ function readSubTable(reader, ttf, subTable, cmapOffset) {
         format14.length = reader.readUint32();
         const numVarSelectorRecords = reader.readUint32();
         const groups = [];
+        let offset = reader.offset;
         for (let i = 0; i < numVarSelectorRecords; i++) {
-            const varSelector = reader.readUint24();
-            const defaultUVSOffset = reader.readUint32();
-            const nonDefaultUVSOffset = reader.readUint32();
+            const varSelector = reader.readUint24(offset);
+            const defaultUVSOffset = reader.readUint32(offset + 3);
+            const nonDefaultUVSOffset = reader.readUint32(offset + 7);
+            offset += 11;
 
             if (defaultUVSOffset) {
                 const numUnicodeValueRanges = reader.readUint32(startOffset + defaultUVSOffset);
