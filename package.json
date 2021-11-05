@@ -53,9 +53,6 @@
       "eslint"
     ]
   },
-  "dependencies": {
-    "xmldom": "^0.5.0"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/kekee000/fonteditor-core.git"
@@ -88,5 +85,8 @@
     "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.7.5"
   }
 }
