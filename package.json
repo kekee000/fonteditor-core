@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform, glyph adjust.",
   "keywords": [
     "sfnt",
@@ -87,6 +87,6 @@
     "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
-    "@xmldom/xmldom": "^0.7.5"
+    "@xmldom/xmldom": "^0.8.3"
   }
 }

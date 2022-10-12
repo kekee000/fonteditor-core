@@ -3,7 +3,6 @@
 **FontEditor core functions**
 
 [![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
 [![Downloads][downloads-image]][npm-url]
 
 ## Feature
@@ -149,7 +148,7 @@ Browser: Chrome, Safari
 
 - [fonteditor](https://github.com/ecomfe/fonteditor)
 - [fontmin](https://github.com/ecomfe/fontmin)
-- [fonteditor online](http://fontstore.baidu.com/editor)
+- [fonteditor online](https://kekee000.github.io/fonteditor/index.html)
 
 ## License
 
