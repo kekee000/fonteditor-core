@@ -110,7 +110,7 @@ font.merge(font1, {
 
 ### woff2
 
-**Notice: ** woff2 use wasm build of google woff2, before read and write `woff2`, we should first call `woff2.init()`.
+**Notice:** woff2 use wasm build of google woff2, before read and write `woff2`, we should first call `woff2.init()`.
 
 ```javascript
 import {Font, woff2} from 'fonteditor-core';
