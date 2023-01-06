@@ -199,7 +199,8 @@ export namespace FontEditor {
         hinting?: boolean;
 
         /**
-         * tranfrom compound glyph to simple, default true
+         * tranfrom compound glyph to simple,
+         * @default true
          */
         compound2simple?: boolean;
 
@@ -211,7 +212,8 @@ export namespace FontEditor {
         inflate?: (deflatedData: UInt8[]) => UInt8[];
 
         /**
-         * combine svg paths to one glyph in one svg file. default true
+         * combine svg paths to one glyph in one svg file.
+         * @default true
          */
         combinePath?: boolean;
     }
@@ -270,6 +272,11 @@ export namespace FontEditor {
     class Font {
 
         /**
+         * create empty font object
+         */
+        static create(): Font;
+
+        /**
          * create font object with font data
          *
          * @param buffer font data, support format: ArrayBuffer, Buffer, string
@@ -285,7 +292,7 @@ export namespace FontEditor {
         static toBase64(buffer: FontInput): string;
 
         /**
-         * create empty ttf object
+         * read empty ttf object
          */
         readEmpty(): Font;
 
@@ -322,9 +329,9 @@ export namespace FontEditor {
 
         /**
          * optimize glyphs
-         * @param outRef optimize results
+         * @param outRef optimize results, will get result field after optimize
          */
-        optimize(outRef: {result: any}): Font;
+        optimize(outRef?: {result: true | {repeatList: number[]}}): Font;
 
         /**
          * tranfrom compound glyph to simple, default true

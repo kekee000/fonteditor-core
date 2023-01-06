@@ -62,7 +62,7 @@ export default class Font {
     }
 
     /**
-     * 创建一个空的ttfObject对象
+     * 设置一个空的 ttfObject 对象
      *
      * @return {Font}
      */
@@ -335,7 +335,7 @@ export default class Font {
 }
 
 /**
- * 读取字体数据
+ * 读取字体数据返回字体对象
  *
  * @param {ArrayBuffer|Buffer|string} buffer 字体数据
  * @param {Object} options  读取参数

@@ -9,6 +9,7 @@ import fonteditor from 'fonteditor-core/main';
 describe('main', function () {
     it('entries', function () {
         assert.ok(fonteditor.Font, 'exports');
+        assert.ok(fonteditor.Font.create, 'exports');
         assert.ok(fonteditor.TTF, 'exports');
         assert.ok(fonteditor.TTFReader, 'exports');
         assert.ok(fonteditor.TTFWriter, 'exports');
