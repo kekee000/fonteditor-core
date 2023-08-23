@@ -22,9 +22,9 @@ import ttf2icon from './ttf/ttf2icon';
 import ttftowoff2 from './ttf/ttftowoff2';
 import woff2tottf from './ttf/woff2tottf';
 import woff2 from '../woff2/index';
+import bufferUtil from './nodejs/buffer';
 
-export {Font};
-export {woff2};
+export {Font, woff2};
 
 const modules = {
     Font,
@@ -45,7 +45,9 @@ const modules = {
     ttf2icon,
     ttftowoff2,
     woff2tottf,
-    woff2
+    woff2,
+    toArrayBuffer: bufferUtil.toArrayBuffer,
+    toBuffer: bufferUtil.toBuffer,
 };
 
 export default modules;

@@ -191,7 +191,7 @@ export default class Font {
      * 其他 options参数, 参考 write
      * @see write
      *
-     * @param {ArrayBuffer} buffer  如果提供了buffer数据则使用 buffer数据, 否则转换现有的 font
+     * @param {ArrayBuffer=} buffer  如果提供了buffer数据则使用 buffer数据, 否则转换现有的 font
      * @return {string}
      */
     toBase64(options, buffer) {

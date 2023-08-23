@@ -7,6 +7,8 @@
 
 ## Feature
 
+Read and write sfnt font like ttf, woff, woff2, eot, svg, otf.
+
 - sfnt parse
 - read, write, transform fonts
   - ttf (read and write)
@@ -37,7 +39,7 @@ const font = Font.create(buffer, {
     // transform ttf compound glyph to simple
     compound2simple: true,
     // inflate function for woff
-    inflate: null,
+    inflate: undefined,
     // for svg path
     combinePath: false,
 });
@@ -70,7 +72,7 @@ const buffer = font.write({
     // save font hinting
     hinting: true,
     // deflate function for woff, eg. pako.deflate
-    deflate: null,
+    deflate: undefined,
     // for user to overwrite head.xMin, head.xMax, head.yMin, head.yMax, hhea etc.
     support: {head: {}, hhea: {}}
 });
@@ -98,7 +100,7 @@ const result = font.find({
 
 const result = font.find({
   filter: function (glyf) {
-    return glyf.name == 'icon'
+    return glyf.name === 'icon'
   }
 });
 
@@ -155,7 +157,7 @@ npm run test
 
 ## support
 
-Node.js:>= 8.0
+Node.js:>= 12.0
 
 Browser: Chrome, Safari
 

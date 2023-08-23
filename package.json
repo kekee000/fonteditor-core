@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "2.1.11",
+  "version": "2.2.0",
   "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform, glyph adjust.",
   "keywords": [
     "sfnt",
@@ -39,6 +39,7 @@
     "test": "npm run test:browser && npm run test:node",
     "test:browser": "./node_modules/.bin/mocha --require @babel/register  test/spec/*.spec.js test/spec/**/*.spec.js",
     "test:node": "npm run build && ./node_modules/mocha/bin/mocha test/node-spec/**/*.spec.js ",
+    "test:example": "cd test/example && npm i && npm run test",
     "dev": "webpack-dev-server --open --config ./config/webpack.dev.js",
     "build": "babel src --out-dir lib",
     "lint": "eslint ./src ./test"

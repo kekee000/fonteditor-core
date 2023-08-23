@@ -247,11 +247,46 @@ export namespace FontEditor {
          * @see pako.deflate https://github.com/nodeca/pako
          */
         deflate?: (rawData: UInt8[]) => UInt8[];
+
+        /**
+         * for user to overwrite head.xMin, head.xMax, head.yMin, head.yMax, hhea etc.
+         */
+        support?:  {
+            /**
+             * overwrite head
+             */
+            head?: {
+                xMin?: number;
+                yMin?: number;
+                xMax?: number;
+                yMax?: number;
+            },
+            /**
+             * overwrite hhea
+             */
+            hhea?: {
+                advanceWidthMax?: number;
+                xMaxExtent?: number;
+                minLeftSideBearing?: number;
+                minRightSideBearing?: number;
+            }
+        };
     }
 
     type FindCondition = {
+        /**
+         * find glyfs with unicode array
+         */
         unicode?: TTF.CodePoint[];
+        /**
+         * find by glyf name
+         */
         name?: string;
+        /**
+         * use filter function to find glyfs
+         * @param glyph glyf object
+         * @returns
+         */
         filter?: (glyph: TTF.Glyph) => boolean;
     };
 
@@ -260,7 +295,7 @@ export namespace FontEditor {
         /**
          * scale glyphs to fit fonts. default true
          */
-        scale: boolean;
+        scale: number;
     }) | ({
 
         /**
@@ -268,6 +303,22 @@ export namespace FontEditor {
          */
         adjustGlyf: boolean;
     });
+
+    type OptimizeResult = {
+        /**
+         * result
+         *
+         * - true optimize success
+         * - {repeatList} repeat glyf codepoints
+         */
+        result: true | {
+            /**
+             * repeat glyf codepoints
+             */
+            repeatList: number[];
+        };
+
+    };
 
     class Font {
 
@@ -305,16 +356,29 @@ export namespace FontEditor {
         read(buffer: FontInput, options: FontReadOptions): Font;
 
         /**
+         * write font to svg string
+         * @param options font write options
+         */
+        write(options: {type: 'svg'} & FontWriteOptions): string;
+
+        /**
+         * write font to Buffer
+         * @param options font write options
+         */
+        write(options: {toBuffer: true} & FontWriteOptions): Buffer;
+
+        /**
          * write font data
          * @param options write options
          */
         write(options: FontWriteOptions): FontOutput;
 
-        write(options: {type: 'svg'} & FontWriteOptions): string;
-
-        write(options: {toBuffer: true} & FontWriteOptions): Buffer;
-
-        toBase64(options: FontWriteOptions, buffer: FontInput): string;
+        /**
+         * write font to base64 uri
+         * @param options font write options
+         * @param buffer use another font buffer to base64
+         */
+        toBase64(options: FontWriteOptions, buffer?: FontInput): string;
 
         /**
          * use ttf object data
@@ -331,7 +395,7 @@ export namespace FontEditor {
          * optimize glyphs
          * @param outRef optimize results, will get result field after optimize
          */
-        optimize(outRef?: {result: true | {repeatList: number[]}}): Font;
+        optimize(outRef?: OptimizeResult): Font;
 
         /**
          * tranfrom compound glyph to simple, default true
@@ -369,9 +433,9 @@ export namespace FontEditor {
         /**
          * init woff2 wasm module
          *
-         * @param wasmUrl wasm file url or wasm file buffer
+         * @param wasmUrl wasm file url or wasm file buffer, in nodejs enviroment wasmUrl can be omited.
          */
-        init(wasmUrl: string | ArrayBuffer): Promise<Woff2>;
+        init(wasmUrl?: string | ArrayBuffer): Promise<Woff2>;
 
         /**
          * convert ttf buffer to woff buffer
@@ -389,34 +453,135 @@ export namespace FontEditor {
     }
 
     interface Core {
+        /**
+         * Font class
+         */
         Font: typeof Font;
+        /**
+         * woff2 module
+         */
         woff2: Woff2;
+        /**
+         * TTF class
+         */
         TTF: any;
+        /**
+         * TTFReader class
+         */
         TTFReader: any;
+        /**
+         * TTFWriter class
+         */
         TTFWriter: any;
+        /**
+         * Reader Table base class
+         */
         Reader: any;
+        /**
+         * Writer Table base class
+         */
         Writer: any;
+        /**
+         * OTFReader class
+         */
         OTFReader: any;
-        otf2ttfobject: (otfBuffer: any, options: any) => any;
-        ttf2eot: (ttfBuffer: ArrayBuffer, options?: any) => ArrayBuffer;
-        eot2ttf: (eotBuffer: ArrayBuffer, options?: any) => ArrayBuffer;
-        ttf2woff: (ttfBuffer: ArrayBuffer, options?: {
+        /**
+         * convert otf font buffer to ttf object
+         * @param arrayBuffer font data
+         * @param options
+         * @returns
+         */
+        otf2ttfobject: (arrayBuffer: ArrayBuffer, options: any) => TTF.TTFObject;
+        /**
+         * convert ttf font buffer to eot font
+         * @param arrayBuffer font data
+         * @param options
+         * @returns
+         */
+        ttf2eot: (arrayBuffer: ArrayBuffer, options?: any) => ArrayBuffer;
+        /**
+         * convert eot font buffer to ttf
+         * @param arrayBuffer font data
+         * @param options
+         * @returns
+         */
+        eot2ttf: (arrayBuffer: ArrayBuffer, options?: any) => ArrayBuffer;
+        /**
+         * convert ttf font buffer to woff
+         * @param arrayBuffer font data
+         * @param options
+         * @returns
+         */
+        ttf2woff: (arrayBuffer: ArrayBuffer, options?: {
             metadata: any;
             deflate?: (rawData: UInt8[]) => UInt8[];
         }) => ArrayBuffer;
-        woff2ttf: (woffBuffer: ArrayBuffer, options?: {
+        /**
+         * convert woff font buffer to ttf
+         * @param arrayBuffer font data
+         * @param options
+         * @returns
+         */
+        woff2ttf: (buffer: ArrayBuffer, options?: {
             inflate?: (deflatedData: UInt8[]) => UInt8[];
         }) => ArrayBuffer;
-        ttf2svg: (ttfBuffer: ArrayBuffer | TTF.TTFObject, options?: {
+        /**
+         * convert ttf font buffer to svg font
+         * @param arrayBuffer font data
+         * @param options
+         * @returns
+         */
+        ttf2svg: (arrayBuffer: ArrayBuffer | TTF.TTFObject, options?: {
             metadata: string;
         }) => string;
+        /**
+         * convert svg font to ttf object
+         * @param svg svg text
+         * @param options
+         * @returns
+         */
         svg2ttfobject: (svg: string, options?: any) => TTF.TTFObject;
+        /**
+         * convert ttf font buffer to base64 uri
+         * @param arrayBuffer ttf data
+         * @returns
+         */
         ttf2base64: (arrayBuffer: ArrayBuffer) => string;
-        ttf2icon: (ttfBuffer: ArrayBuffer | TTF.TTFObject, options?: {
+        /**
+         * convert ttf font to icon array
+         * @param arrayBuffer ttf data
+         * @param options
+         * @returns
+         */
+        ttf2icon: (arrayBuffer: ArrayBuffer | TTF.TTFObject, options?: {
             metadata: any;
         }) => any;
-        ttftowoff2: (ttfBuffer: ArrayBuffer, options?: any) => Uint8Array;
-        woff2tottf: (woff2Buffer: ArrayBuffer, options?: any) => Uint8Array;
+        /**
+         * convert ttf font buffer to woff2 font
+         * @param arrayBuffer ttf data
+         * @param options
+         * @returns
+         */
+        ttftowoff2: (arrayBuffer: ArrayBuffer, options?: any) => Uint8Array;
+        /**
+         * convert woff2 font buffer to ttf font
+         * @param arrayBuffer ttf data
+         * @param options
+         * @returns
+         */
+        woff2tottf: (arrayBuffer: ArrayBuffer, options?: any) => Uint8Array;
+        /**
+         * convert Buffer to ArrayBuffer
+         * @param buffer
+         * @returns
+         */
+        toArrayBuffer: (buffer: Buffer | UInt8[]) => ArrayBuffer;
+        /**
+         * convert ArrayBuffer to Buffer
+         * @param buffer
+         * @returns
+         */
+        toBuffer: (buffer: ArrayBuffer | UInt8[]) => Buffer;
     }
 
     /**
