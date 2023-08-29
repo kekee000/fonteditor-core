@@ -309,13 +309,13 @@ export namespace FontEditor {
          * result
          *
          * - true optimize success
-         * - {repeatList} repeat glyf codepoints
+         * - {repeat} repeat glyf codepoints
          */
         result: true | {
             /**
              * repeat glyf codepoints
              */
-            repeatList: number[];
+            repeat: number[];
         };
 
     };
