@@ -237,6 +237,11 @@ export namespace FontEditor {
         hinting?: boolean;
 
         /**
+         * write glyf data when simple glyph has no contours, default false
+         */
+        writeZeroContoursGlyfData?: boolean;
+
+        /**
          * svg output meta data
          */
         metadata?: string;

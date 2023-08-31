@@ -69,8 +69,10 @@ console.log(Object.keys(fontObject));
 const buffer = font.write({
     // support ttf, woff, woff2, eot, svg
     type: 'woff',
-    // save font hinting
+    // save font hinting, default false
     hinting: true,
+    // write glyf data when simple glyph has no contours, default false
+    writeZeroContoursGlyfData: false,
     // deflate function for woff, eg. pako.deflate
     deflate: undefined,
     // for user to overwrite head.xMin, head.xMax, head.yMin, head.yMax, hhea etc.

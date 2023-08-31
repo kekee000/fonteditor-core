@@ -268,12 +268,17 @@ export default function parseGlyf(reader, ttf, offset) {
     // 读取简单字形
     if (numberOfContours >= 0) {
         // endPtsOfConturs
-        const endPtsOfContours = [];
-        if (numberOfContours >= 0) {
+        glyf.endPtsOfContours = [];
+        if (numberOfContours > 0) {
             for (i = 0; i < numberOfContours; i++) {
-                endPtsOfContours.push(reader.readUint16());
+                glyf.endPtsOfContours.push(reader.readUint16());
             }
-            glyf.endPtsOfContours = endPtsOfContours;
+        }
+        else {
+            delete glyf.xMin;
+            delete glyf.yMin;
+            delete glyf.xMax;
+            delete glyf.yMax;
         }
 
         // instructions

@@ -26,6 +26,7 @@ const SUPPORT_TABLES = [
 export default class TTFWriter {
     constructor(options = {}) {
         this.options = {
+            writeZeroContoursGlyfData: options.writeZeroContoursGlyfData || false, // 不写入空 glyf 数据
             hinting: options.hinting || false, // 不保留hints信息
             support: options.support // 自定义的导出表结构，可以自己修改某些表项目
         };
@@ -205,7 +206,7 @@ export default class TTFWriter {
                 }
             });
         }
-
+        ttf.writeOptions.writeZeroContoursGlyfData = !!this.options.writeZeroContoursGlyfData;
         ttf.writeOptions.hinting = !!this.options.hinting;
         ttf.writeOptions.tables = tables.sort();
     }

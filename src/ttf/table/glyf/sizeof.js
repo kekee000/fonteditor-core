@@ -11,9 +11,13 @@ import glyFlag from '../../enum/glyFlag';
  * @param {Object} glyf glyf对象
  * @param {Object} glyfSupport glyf相关统计
  * @param {boolean} hinting 是否保留hints
+ * @param {boolean} writeZeroContoursGlyfData 是否写空轮廓 glyph
  * @return {number} size大小
  */
-function sizeofSimple(glyf, glyfSupport, hinting) {
+function sizeofSimple(glyf, glyfSupport, hinting, writeZeroContoursGlyfData) {
+    if (!writeZeroContoursGlyfData && (!glyf.contours || !glyf.contours.length)) {
+        return 0;
+    }
 
     // fixed header + endPtsOfContours
     let result = 12
@@ -221,13 +225,14 @@ export default function sizeof(ttf) {
     ttf.support.glyf = [];
     let tableSize = 0;
     const hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
+    const writeZeroContoursGlyfData = ttf.writeOptions ? ttf.writeOptions.writeZeroContoursGlyfData : false;
     ttf.glyf.forEach((glyf) => {
         let glyfSupport = {};
         glyfSupport = glyf.compound ? glyfSupport : getFlags(glyf, glyfSupport);
 
         const glyfSize = glyf.compound
             ? sizeofCompound(glyf, hinting)
-            : sizeofSimple(glyf, glyfSupport, hinting);
+            : sizeofSimple(glyf, glyfSupport, hinting, writeZeroContoursGlyfData);
         let size = glyfSize;
 
         // 4字节对齐

@@ -13,10 +13,13 @@ import componentFlag from '../../enum/componentFlag';
  * @return {Object}        写入器
  */
 export default function write(writer, ttf) {
-
     const hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
+    const writeZeroContoursGlyfData = ttf.writeOptions ? ttf.writeOptions.writeZeroContoursGlyfData : false;
     ttf.glyf.forEach((glyf, index) => {
-
+        // 非复合图元没有轮廓则不写
+        if (!glyf.compound && !writeZeroContoursGlyfData && (!glyf.contours || !glyf.contours.length)) {
+            return;
+        }
         // header
         writer.writeInt16(glyf.compound ? -1 : (glyf.contours || []).length);
         writer.writeInt16(glyf.xMin);
@@ -102,7 +105,6 @@ export default function write(writer, ttf) {
 
         }
         else {
-
             let endPtsOfContours = -1;
             (glyf.contours || []).forEach((contour) => {
                 endPtsOfContours += contour.length;

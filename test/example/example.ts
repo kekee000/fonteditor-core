@@ -34,6 +34,7 @@ fs.writeFileSync(`${baseDir}/output/font.eot`, utils.toBuffer(utils.ttf2eot(util
         const out = font.write({
             type: 'woff2',
             toBuffer: true,
+            writeZeroContoursGlyfData: true,
         });
         fs.writeFileSync(`${baseDir}/output/font.woff`, out);
     });
