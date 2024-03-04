@@ -28,7 +28,9 @@ import {Font} from 'fonteditor-core';
 import fs from 'fs';
 
 const buffer = fs.readFileSync('font.ttf');
-// read font data, support ArrayBuffer | Buffer | string
+// read font data, support format:
+// - for ttf, otf, woff, woff2, support ArrayBuffer, Buffer
+// - for svg, support string or Document(parsed svg)
 const font = Font.create(buffer, {
     // support ttf, woff, woff2, eot, otf, svg
     type: 'ttf',

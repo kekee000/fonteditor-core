@@ -176,8 +176,8 @@ export namespace FontEditor {
 
     type FontType = 'ttf' | 'otf' | 'eot' | 'woff' | 'woff2' | 'svg';
 
-    type FontInput = ArrayBuffer | Buffer | string;
-    type FontOutput = FontInput;
+    type FontInput = ArrayBuffer | Buffer | string | Document;
+    type FontOutput = ArrayBuffer | Buffer | string;
 
     type UInt8 = number;
 
@@ -335,7 +335,9 @@ export namespace FontEditor {
         /**
          * create font object with font data
          *
-         * @param buffer font data, support format: ArrayBuffer, Buffer, string
+         * @param buffer font data, support format
+         * - for ttf, otf, woff, woff2, support ArrayBuffer, Buffer
+         * - for svg, support string or Document(parsed svg)
          * @param options font read options
          */
         static create(buffer: FontInput, options: FontReadOptions): Font;
@@ -355,7 +357,7 @@ export namespace FontEditor {
         /**
          * read font data
          *
-         * @param buffer font data, support format: ArrayBuffer, Buffer, string
+         * @param buffer font data, support format: ArrayBuffer, Buffer, string, Document(parsed svg)
          * @param options font read options
          */
         read(buffer: FontInput, options: FontReadOptions): Font;

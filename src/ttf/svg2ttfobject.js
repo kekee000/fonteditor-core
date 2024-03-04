@@ -18,7 +18,7 @@ import reduceGlyf from './util/reduceGlyf';
  * 加载xml字符串
  *
  * @param {string} xml xml字符串
- * @return {XMLDocument}
+ * @return {Document}
  */
 function loadXML(xml) {
     if (DOMParser) {
@@ -170,7 +170,7 @@ function resolve(ttf) {
 /**
  * 解析字体信息相关节点
  *
- * @param {XMLDocument} xmlDoc XML文档对象
+ * @param {Document} xmlDoc XML文档对象
  * @param {Object} ttf ttf对象
  * @return {Object} ttf对象
  */
@@ -235,7 +235,7 @@ function parseFont(xmlDoc, ttf) {
 /**
  * 解析字体信息相关节点
  *
- * @param {XMLDocument} xmlDoc XML文档对象
+ * @param {Document} xmlDoc XML文档对象
  * @param {Object} ttf ttf对象
  * @return {Object} ttf对象
  */
@@ -315,7 +315,7 @@ function parseGlyf(xmlDoc, ttf) {
 /**
  * 解析字体信息相关节点
  *
- * @param {XMLDocument} xmlDoc XML文档对象
+ * @param {Document} xmlDoc XML文档对象
  * @param {Object} ttf ttf对象
  */
 function parsePath(xmlDoc, ttf) {
@@ -355,7 +355,7 @@ function parsePath(xmlDoc, ttf) {
 /**
  * 解析xml文档
  *
- * @param {XMLDocument} xmlDoc XML文档对象
+ * @param {Document} xmlDoc XML文档对象
  * @param {Object} options 导入选项
  *
  * @return {Object} 解析后对象
@@ -414,7 +414,7 @@ function parseXML(xmlDoc, options) {
 /**
  * svg格式转ttfObject格式
  *
- * @param {string} svg svg格式
+ * @param {string|Document} svg svg格式
  * @param {Object=} options 导入选项
  * @param {boolean} options.combinePath 是否合并成单个字形，仅限于普通svg导入
  * @return {Object} ttfObject
