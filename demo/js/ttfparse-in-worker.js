@@ -7,8 +7,10 @@
  */
 
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
-import TTF from 'fonteditor-core/ttf/ttf';
 import ajaxFile from 'fonteditor-core/common/ajaxFile';
+
+const worker = new Worker("../js/worker.js");
+
 
 function printResult(ttfData) {
     const result = `glyphs: ${ttfData.glyf.length};
@@ -21,18 +23,15 @@ see detail in DevTools - console.
     $('#parse-result').val(result);
 }
 
+
 function onUpFileChange(e) {
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.onload = function (e) {
-
-        let ttfReader = new TTFReader({
-            hinting: true
-            // subset: [65, 0x160, 0x161, 0x162]
+        worker.postMessage({
+            type: file.name.match(/(?<=\.)(ttf|svg|woff2?|eot|otf)$/)[1],
+            binaryData: e.target.result
         });
-        let ttfData = ttfReader.read(e.target.result);
-        console.log(ttfData);
-        printResult(ttfData);
     };
 
     reader.onerror = function (e) {
@@ -48,6 +47,11 @@ let entry = {
      * 初始化
      */
     init() {
+        worker.onmessage = (e) => {
+            const ttfData = e.data;
+            printResult(ttfData);
+        };
+
         let upFile = document.getElementById('upload-file');
         upFile.addEventListener('change', onUpFileChange);
 
@@ -55,13 +59,10 @@ let entry = {
             type: 'binary',
             url: './test/tt0586m.ttf',
             onSuccess(binaryData) {
-                let ttfReader = new TTFReader({
-                    // hinting: true,
-                    subset: [65, 0x160, 0x161, 0x162]
+                worker.postMessage({
+                    type: 'ttf',
+                    binaryData
                 });
-                let ttfData = ttfReader.read(binaryData);
-                console.log(ttfData);
-                printResult(ttfData);
             },
             onError() {
                 console.error('error read file');
