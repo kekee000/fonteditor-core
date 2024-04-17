@@ -200,11 +200,11 @@ export default {
      * 创建一个表结构
      *
      * @param {string} name 表名
-     * @param {Object} struct 表结构
-     * @param {Object} prototype 原型
+     * @param {Array<[string, number]>} struct 表结构
+     * @param {Object} proto 原型
      * @return {Function} 表构造函数
      */
-    create(name, struct, prototype) {
+    create(name, struct, proto) {
         class Table {
             constructor(offset) {
                 this.name = name;
@@ -217,7 +217,7 @@ export default {
         Table.prototype.write = write;
         Table.prototype.size = size;
         Table.prototype.valueOf = valueOf;
-        Object.assign(Table.prototype, prototype);
+        Object.assign(Table.prototype, proto);
         return Table;
     }
 };

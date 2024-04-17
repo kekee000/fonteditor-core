@@ -19,7 +19,7 @@ import prep from './prep';
 import gasp from './gasp';
 import GPOS from './GPOS';
 import kern from './kern';
-
+import kerx from './kerx';
 
 export default {
     head,
@@ -37,5 +37,6 @@ export default {
     prep,
     gasp,
     GPOS,
-    kern
+    kern,
+    kerx
 };

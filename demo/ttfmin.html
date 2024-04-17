@@ -17,9 +17,13 @@
         div {
             padding: 10px;
         }
-
+        .text-title {
+            display: inline-block;
+            width: 140px;
+        }
         .ttf-text {
             font-size: 14px;
+            letter-spacing: 1px;
         }
 
         .ttf-min-with-hitting {
@@ -39,16 +43,24 @@
 </div>
 <div>
     相关文字：
-    <input id="text" type="text" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ" style="width: 400px;line-height: 30px;">
+    <input id="text" type="text" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@" style="width: 400px;line-height: 30px;">
     字号：<input id="font-size" type="range" value="12" min="8" max="100" step="1">
 </div>
 
 <div>
-    带hinting的字体：<span class="ttf-text ttf-min-with-hitting"></span>
+    <span class="text-title">带hinting的字体：</span><span class="ttf-text ttf-min-with-hitting"></span>
 </div>
 
 <div>
-    不带hinting的字体：<span class="ttf-text ttf-min-without-hitting"></span>
+    <span class="text-title">不带hinting的字体：</span><span class="ttf-text ttf-min-without-hitting"></span>
+</div>
+
+<div>
+    <span class="text-title">带kerning的字体：</span><span class="ttf-text ttf-min-with-hitting"></span>
+</div>
+
+<div>
+    <span class="text-title">不带kerning的字体：</span><span class="ttf-text ttf-min-without-hitting"></span>
 </div>
 
 </body>

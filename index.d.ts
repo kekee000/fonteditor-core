@@ -194,9 +194,15 @@ export namespace FontEditor {
         subset?: TTF.CodePoint[];
 
         /**
-         * keep hinting or not, default false
+         * keep hinting table or not, default false
          */
         hinting?: boolean;
+
+        /**
+         * keep kerning table or not, default false
+         * kerning table adjusting the space between individual letters or characters
+         */
+        kerning?: boolean;
 
         /**
          * tranfrom compound glyph to simple,

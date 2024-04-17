@@ -140,16 +140,53 @@ describe('write ttf hinting', function () {
     }).read(readData('baiduHealth-hinting.ttf'));
 
     it('test write ttf hinting', function () {
+        assert.equal(fontObject.cvt.length, 24);
+        assert.equal(fontObject.fpgm.length, 371);
+        assert.equal(fontObject.prep.length, 204);
+        assert.equal(fontObject.gasp.length, 8);
+        assert.equal(fontObject.GPOS.length, 18);
+
         let buffer = new TTFWriter({
             hinting: true
         }).write(fontObject);
         assert.ok(buffer.byteLength > 1000);
         assert.ok(buffer.byteLength < 10000);
 
-        assert.equal(fontObject.cvt.length, 24);
-        assert.equal(fontObject.fpgm.length, 371);
-        assert.equal(fontObject.prep.length, 204);
-        assert.equal(fontObject.gasp.length, 8);
-        assert.equal(fontObject.GPOS.length, 18);
+        let fontObject1 = new TTFReader({
+            hinting: true
+        }).read(buffer);
+        assert.equal(fontObject1.cvt.length, 24);
+        assert.equal(fontObject1.fpgm.length, 371);
+        assert.equal(fontObject1.prep.length, 204);
+        assert.equal(fontObject1.gasp.length, 8);
+        assert.equal(fontObject1.GPOS.length, 18);
+    });
+});
+
+describe('write ttf kerning', function () {
+
+    let fontObject = new TTFReader({
+        kerning: true
+    }).read(readData('FiraSansMedium.ttf'));
+
+    it('test write ttf no kerning', function () {
+        let buffer = new TTFWriter({
+            kerning: false
+        }).write(fontObject);
+        assert.ok(buffer.byteLength > 100000);
+        assert.ok(buffer.byteLength < 110000);
+    });
+
+    it('test write ttf kerning', function () {
+        assert.equal(fontObject.GPOS.length, 5960);
+        let buffer = new TTFWriter({
+            kerning: true
+        }).write(fontObject);
+        assert.ok(buffer.byteLength > 110000);
+        assert.ok(buffer.byteLength < 120000);
+        let fontObject1 = new TTFReader({
+            kerning: true
+        }).read(buffer);
+        assert.equal(fontObject1.GPOS.length, 5960, 'GPOS size');
     });
 });

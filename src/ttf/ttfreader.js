@@ -26,7 +26,8 @@ export default class TTFReader {
      */
     constructor(options = {}) {
         options.subset = options.subset || []; // 子集
-        options.hinting = options.hinting || false; // 不保留hints信息
+        options.hinting = options.hinting || false; // 默认不保留 hints 信息
+        options.kerning = options.kerning || false; // 默认不保留 kerning 信息
         options.compound2simple = options.compound2simple || false; // 复合字形转简单字形
         this.options = options;
     }
@@ -180,11 +181,15 @@ export default class TTFReader {
             delete ttf.fpgm;
             delete ttf.cvt;
             delete ttf.prep;
-            delete ttf.GPOS;
-            delete ttf.kern;
             ttf.glyf.forEach((glyf) => {
                 delete glyf.instructions;
             });
+        }
+
+        if (!this.options.hinting && !this.options.kerning) {
+            delete ttf.GPOS;
+            delete ttf.kern;
+            delete ttf.kerx;
         }
 
         // 复合字形转简单字形

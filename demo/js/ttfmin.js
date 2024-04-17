@@ -17,12 +17,12 @@ function onUpFileChange(e) {
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.onload = function (e) {
-
         let ttfReader = new TTFReader({
-            hinting: true
+            hinting: true,
+            kerning: true,
         });
         curttfData = ttfReader.read(e.target.result);
-
+        console.log(curttfData);
         ttfmin();
     };
 
@@ -69,7 +69,8 @@ function ttfmin() {
     let family = 'font-with-hitting';
     ttf.get().name.fontFamily = family;
     let writer = new TTFWriter({
-        hinting: true
+        hinting: true,
+        kerning: true,
     });
     let buffer = writer.write(ttf.get());
     setFont({

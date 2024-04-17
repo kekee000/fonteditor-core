@@ -36,8 +36,10 @@ const font = Font.create(buffer, {
     type: 'ttf',
     // only read `a`, `b` glyphs
     subset: [65, 66],
-    // save font hinting
+    // read font hinting tables, default false
     hinting: true,
+    // read font kerning tables, default false
+    kerning: true,
     // transform ttf compound glyph to simple
     compound2simple: true,
     // inflate function for woff
@@ -71,8 +73,10 @@ console.log(Object.keys(fontObject));
 const buffer = font.write({
     // support ttf, woff, woff2, eot, svg
     type: 'woff',
-    // save font hinting, default false
-    hinting: true,
+    // save font hinting tables, default false
+    hinting: false,
+    // save font kerning tables, default false
+    kerning: false,
     // write glyf data when simple glyph has no contours, default false
     writeZeroContoursGlyfData: false,
     // deflate function for woff, eg. pako.deflate

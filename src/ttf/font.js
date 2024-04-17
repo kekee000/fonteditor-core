@@ -79,7 +79,8 @@ export default class Font {
      * @param {string} options.type 字体类型
      *
      * ttf, woff , eot 读取配置
-     * @param {boolean} options.hinting 保留hinting信息
+     * @param {boolean} options.hinting 是否保留 hinting 信息
+     * @param {boolean} options.kerning 是否保留 kerning 信息
      * @param {boolean} options.compound2simple 复合字形转简单字形
      *
      * woff 读取配置
@@ -134,8 +135,8 @@ export default class Font {
      * @param {boolean} options.toBuffer nodejs 环境中返回 Buffer 对象, 默认 true
      *
      * ttf 字体参数
-     * @param {boolean} options.hinting 保留hinting信息
-     *
+     * @param {boolean} options.hinting 是否保留 hinting 信息
+     * @param {boolean} options.kerning 是否保留 kerning 信息
      * svg,woff 字体参数
      * @param {Object} options.metadata 字体相关的信息
      *

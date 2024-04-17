@@ -11,8 +11,10 @@ const font = Font.create(buffer, {
     type: 'ttf',
     // only read 0x21, 0x22 glyphs
     subset: [0x21, 0x22],
-    // save font hinting
+    // read font hinting
     hinting: true,
+    // read font kerning
+    kerning: true,
     // transform ttf compound glyph to simple
     compound2simple: true,
     // inflate function for woff
@@ -47,6 +49,8 @@ fs.writeFileSync(`${baseDir}/output/font.eot`, utils.toBuffer(utils.ttf2eot(util
         type: 'woff',
         // save font hinting
         hinting: true,
+        // save font kerning
+        kerning: true,
         // deflate function for woff, eg. pako.deflate
         deflate: undefined,
         // for user to overwrite head.xMin, head.xMax, head.yMin, head.yMax, hhea etc.
@@ -61,8 +65,6 @@ fs.writeFileSync(`${baseDir}/output/font.eot`, utils.toBuffer(utils.ttf2eot(util
     const svg = font.write({
         // support ttf, woff, woff2, eot, svg
         type: 'svg',
-        // save font hinting
-        hinting: true,
         // deflate function for woff, eg. pako.deflate
         deflate: undefined,
         // for user to overwrite head.xMin, head.xMax, head.yMin, head.yMax, hhea etc.

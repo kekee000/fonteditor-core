@@ -2,7 +2,7 @@
  * @file kern
  * @author fr33z00(https://github.com/fr33z00)
  *
- * @reference: https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6cvt.html
+ * @reference: https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6kern.html
  */
 
 import table from './table';

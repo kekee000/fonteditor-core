@@ -77,10 +77,10 @@ describe('read otf buffer', function () {
 
 });
 
-describe('read otf hinting GPOS kern', function () {
+describe('read otf kerning GPOS kern', function () {
     let fontObject = new OTFReader().read(readData('SFNSDisplayCondensed-Black.otf'));
 
-    it('test read hinting', function () {
+    it('test read kerning', function () {
         assert.equal(fontObject.GPOS.length, 57290);
     });
 
