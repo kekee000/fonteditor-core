@@ -441,7 +441,7 @@ export namespace FontEditor {
         /**
          * is woff2 wasm loaded
          */
-        isInited: boolean;
+        isInited: () => boolean;
 
         /**
          * init woff2 wasm module
