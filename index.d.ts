@@ -551,9 +551,10 @@ export namespace FontEditor {
          * convert svg font to ttf object
          * @param svg svg text
          * @param options
+         * @param options.combinePath if true, combine path to one glyph, default is false
          * @returns
          */
-        svg2ttfobject: (svg: string, options?: any) => TTF.TTFObject;
+        svg2ttfobject: (svg: string | Document, options?: {combinePath: boolean}) => TTF.TTFObject;
         /**
          * convert ttf font buffer to base64 uri
          * @param arrayBuffer ttf data
@@ -568,6 +569,7 @@ export namespace FontEditor {
          */
         ttf2icon: (arrayBuffer: ArrayBuffer | TTF.TTFObject, options?: {
             metadata: any;
+            iconPrefix?: string;
         }) => any;
         /**
          * convert ttf font buffer to woff2 font
