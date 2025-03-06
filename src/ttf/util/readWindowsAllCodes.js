@@ -69,7 +69,7 @@ export default function readWindowsAllCodes(tables, ttf) {
 
     // 读取format12表
     if (format12) {
-        const groups = format12.groups;
+        const { groups } = format12;
         groups.forEach(({ startId, start, end }) => {
             while (start <= end) {
                 codes[start++] = startId++;
