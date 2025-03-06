@@ -69,15 +69,12 @@ export default function readWindowsAllCodes(tables, ttf) {
 
     // 读取format12表
     if (format12) {
-        for (let i = 0, l = format12.nGroups; i < l; i++) {
-            let group = format12.groups[i];
-            let startId = group.startId;
-            let start = group.start;
-            let end = group.end;
-            for (;start <= end;) {
+        const groups = format12.groups;
+        groups.forEach(({ startId, start, end }) => {
+            while (start <= end) {
                 codes[start++] = startId++;
             }
-        }
+        });
     }
     // 读取format4表
     else if (format4) {
