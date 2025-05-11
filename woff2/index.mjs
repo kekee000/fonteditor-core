@@ -5,8 +5,8 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-// Require the woff2 module
-const woff2ModuleLoader = require("./woff2");
+// Import the woff2 module
+import woff2ModuleLoader from "./woff2";
 
 function convertFromVecToUint8Array(vector) {
   const arr = [];
@@ -16,7 +16,7 @@ function convertFromVecToUint8Array(vector) {
   return new Uint8Array(arr);
 }
 
-// Define as a named object that can be exported with CommonJS
+// Define as a named object that can be exported with ES Modules
 const woff2Module = {
   woff2Module: null,
 
@@ -101,5 +101,5 @@ const woff2Module = {
   },
 };
 
-// Export for CommonJS
-module.exports = woff2Module;
+// Export for ESM
+export default woff2Module;

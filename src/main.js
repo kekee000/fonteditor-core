@@ -24,8 +24,6 @@ import woff2tottf from './ttf/woff2tottf';
 import woff2 from '../woff2/index';
 import bufferUtil from './nodejs/buffer';
 
-export {Font, woff2};
-
 const modules = {
     Font,
     TTF,
@@ -50,6 +48,10 @@ const modules = {
     toBuffer: bufferUtil.toBuffer,
 };
 
+// Export named exports for ESM
+export { Font, woff2 };
+
+// Export default object
 export default modules;
 
 if (typeof exports !== 'undefined') {
