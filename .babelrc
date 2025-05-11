@@ -1,16 +1,25 @@
 {
-    "presets": [
-        "@babel/preset-env"
-    ],
-    "plugins": [
-        [
-            "module-resolver",
-            {
-                "alias": {
-                    "testdata": "./test/data",
-                    "fonteditor-core": "./src"
-                }
-            }
-        ]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": "commonjs",
+        "targets": {
+          "node": "10",
+          "browsers": ["last 2 versions", "not ie <= 11"]
+        }
+      }
     ]
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "testdata": "./test/data",
+          "fonteditor-core": "./src"
+        }
+      }
+    ]
+  ]
 }

@@ -19,6 +19,8 @@ Read and write sfnt font like ttf, woff, woff2, eot, svg, otf.
   - otf (only read and convert to ttf)
 - ttf glyph adjust
 - svg to glyph
+- ESM compatibility for modern bundlers (Webpack, Rollup, Vite, Next.js, etc.)
+- TypeScript support with type definitions
 
 ## Usage
 
@@ -116,6 +118,15 @@ const result = font.find({
 font.merge(font1, {
   scale: 1
 });
+```
+
+### Modern ES Module Usage
+
+This library supports both CommonJS and ES Modules. For detailed information on using with modern bundlers, please see [ESM_USAGE.md](./ESM_USAGE.md).
+
+```javascript
+// ESM import
+import fonteditorCore, { Font, woff2 } from 'fonteditor-core';
 ```
 
 ### woff2

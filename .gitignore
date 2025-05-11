@@ -17,7 +17,7 @@ node
 .vscode
 woff2/woff2
 woff2src/woff2*
-lib
+# lib
 baiduHealth-deflate.woff
 package-lock.json
 test/example/output

@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform, glyph adjust.",
   "keywords": [
     "sfnt",
@@ -22,6 +22,10 @@
     {
       "name": "junmer",
       "email": "junmer@foxmail.com"
+    },
+    {
+      "name": "pumpkinzomb",
+      "email": "pumpkinzomb@gmail.com"
     }
   ],
   "bugs": {
@@ -41,8 +45,9 @@
     "test:node": "npm run build && mocha test/node-spec/**/*.spec.js ",
     "test:example": "cd test/example && npm i && npm run test",
     "dev": "webpack-dev-server --open --config ./config/webpack.dev.js",
-    "build": "babel src --out-dir lib",
-    "lint": "eslint ./src ./test"
+    "build": "babel src --out-dir lib && cp src/main.mjs lib/",
+    "lint": "eslint ./src ./test",
+    "lint:fix": "eslint --fix ./src ./test"
   },
   "husky": {
     "hooks": {
@@ -65,7 +70,17 @@
     "woff2"
   ],
   "main": "./lib/main.js",
-  "module": "./src/main.js",
+  "module": "./lib/main.mjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/main.mjs",
+      "require": "./lib/main.js",
+      "types": "./index.d.ts",
+      "default": "./lib/main.js"
+    }
+  },
+  "type": "commonjs",
   "devDependencies": {
     "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
