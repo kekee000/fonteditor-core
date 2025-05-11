@@ -4,7 +4,8 @@
  * @author pumpkinzomb
  */
 
-import Font from "./ttf/font";
+// Font 클래스를 직접 임포트
+import { Font } from "./ttf/font";
 import TTF from "./ttf/ttf";
 import TTFReader from "./ttf/ttfreader";
 import TTFWriter from "./ttf/ttfwriter";
