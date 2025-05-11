@@ -3,7 +3,7 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
-import Font from './ttf/font';
+import { Font } from './ttf/font';
 import TTF from './ttf/ttf';
 import TTFReader from './ttf/ttfreader';
 import TTFWriter from './ttf/ttfwriter';
