@@ -21,7 +21,7 @@ The updated library supports both CommonJS and ESM module formats. In modern bun
 import fonteditorCore from 'fonteditor-core';
 
 // Or import specific modules
-import { Font, woff2 } from 'fonteditor-core';
+import { createFont, woff2 } from 'fonteditor-core';
 ```
 
 ## TypeScript Support
@@ -29,11 +29,11 @@ import { Font, woff2 } from 'fonteditor-core';
 The library includes TypeScript declarations. You can use it in TypeScript projects without any additional setup:
 
 ```typescript
-import fonteditorCore, { Font, woff2 } from 'fonteditor-core';
+import fonteditorCore, { createFont, woff2 } from 'fonteditor-core';
 import { Buffer } from 'buffer'; // If needed in browser environments
 
 // Using Font with type safety
-const font = Font.create(buffer, {
+const font = createFont(buffer, {
   type: 'ttf',
   hinting: true,
   subset: [65, 66, 67], // A, B, C
@@ -46,7 +46,7 @@ console.log(fontObject.head.xMin);
 // Using woff2 with type safety
 async function convertFont(ttfBuffer: ArrayBuffer) {
   await woff2.init('/woff2.wasm');
-  
+
   if (woff2.isInited()) {
     const woff2Buffer = fonteditorCore.ttftowoff2(ttfBuffer);
     return woff2Buffer;
@@ -78,7 +78,7 @@ import { woff2 } from 'fonteditor-core';
 
 function FontComponent() {
   const [isWoff2Ready, setIsWoff2Ready] = useState(false);
-  
+
   useEffect(() => {
     // Initialize woff2 module
     woff2.init('/woff2.wasm')
@@ -86,7 +86,7 @@ function FontComponent() {
         setIsWoff2Ready(true);
       });
   }, []);
-  
+
   // Component logic...
 }
 ```
@@ -100,14 +100,14 @@ import { woff2 } from 'fonteditor-core';
 export default {
   setup() {
     const isWoff2Ready = ref(false);
-    
+
     onMounted(() => {
       woff2.init('/woff2.wasm')
         .then(() => {
           isWoff2Ready.value = true;
         });
     });
-    
+
     // Component logic...
   }
 }
@@ -126,7 +126,7 @@ To prevent SSR issues:
 
 ```javascript
 // Use the 'use client' directive in Next.js App Router
-'use client'; 
+'use client';
 
 import { useEffect } from 'react';
 import { Font } from 'fonteditor-core';
@@ -229,4 +229,4 @@ If you encounter issues with the library in modern bundlers:
 1. Make sure you're using the latest version of fonteditor-core
 2. Check that the WASM file is properly accessible in your public assets
 3. For Node.js environments, ensure you're using a version that supports ESM
-4. In case of bundling issues, try adding fonteditor-core to your bundler's transpilation list 
+4. In case of bundling issues, try adding fonteditor-core to your bundler's transpilation list

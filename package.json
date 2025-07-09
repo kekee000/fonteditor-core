@@ -1,6 +1,6 @@
 {
   "name": "fonteditor-core",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "fonts (ttf, woff, woff2, eot, svg, otf) parse, write, transform, glyph adjust.",
   "keywords": [
     "sfnt",
@@ -40,12 +40,13 @@
   "scripts": {
     "precommit": "npm run lint",
     "publish:npm": "npm run build && npm publish --registry=https://registry.npmjs.org/",
-    "test": "npm run test:browser && npm run test:node",
+    "test": "npm run test:browser && npm run test:node && npm run test:esm",
     "test:browser": "mocha --require @babel/register  test/spec/*.spec.js test/spec/**/*.spec.js",
     "test:node": "npm run build && mocha test/node-spec/**/*.spec.js ",
+    "test:esm": "cd test/esm && npm i &&  mocha --extension mjs index.mjs",
     "test:example": "cd test/example && npm i && npm run test",
     "dev": "webpack-dev-server --open --config ./config/webpack.dev.js",
-    "build": "babel src --out-dir lib && cp src/main.mjs lib/",
+    "build": "babel src --out-dir lib",
     "lint": "eslint ./src ./test",
     "lint:fix": "eslint --fix ./src ./test"
   },
@@ -70,11 +71,11 @@
     "woff2"
   ],
   "main": "./lib/main.js",
-  "module": "./lib/main.mjs",
+  "module": "./lib/main.esm.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
-      "import": "./lib/main.mjs",
+      "import": "./lib/main.esm.js",
       "require": "./lib/main.js",
       "types": "./index.d.ts",
       "default": "./lib/main.js"
@@ -95,7 +96,7 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
-    "mocha": "^6.2.1",
+    "mocha": "^11.7.1",
     "pako": "^1.0.10",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.1",

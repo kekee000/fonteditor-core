@@ -5,7 +5,7 @@
 
 const assert = require('assert');
 const fs = require('fs');
-const Font = require('./fonteditor-core').Font;
+const {createFont, Font} = require('./fonteditor-core');
 const woff2 = require('./fonteditor-core').woff2;
 const md5 = require('./util').md5;
 
@@ -23,12 +23,12 @@ describe('font', function () {
 
     it('write ttf', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
-        let font = Font.create(buffer, {
+        let font = createFont(buffer, {
             type: 'ttf'
         });
         assert.ok(font.data.name.fontFamily === 'Bebas', 'test read ttf');
 
-        let font2 = Font.create(buffer, {
+        let font2 = createFont(buffer, {
             type: 'ttf'
         });
         let ttfBuffer = font.write();
@@ -38,12 +38,12 @@ describe('font', function () {
 
     it('write ttf', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
-        let font = Font.create(buffer, {
+        let font = createFont(buffer, {
             type: 'ttf'
         });
         assert.ok(font.data.name.fontFamily === 'Bebas', 'test read ttf');
 
-        let font2 = Font.create(buffer, {
+        let font2 = createFont(buffer, {
             type: 'ttf'
         });
         let ttfBuffer = font.write();
@@ -53,7 +53,7 @@ describe('font', function () {
 
     it('write eot', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
-        let font = Font.create(buffer, {
+        let font = createFont(buffer, {
             type: 'ttf'
         });
         // 写eot
@@ -65,7 +65,7 @@ describe('font', function () {
 
     it('write woff', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
-        let font = Font.create(buffer, {
+        let font = createFont(buffer, {
             type: 'ttf'
         });
         // 写woff
@@ -74,7 +74,7 @@ describe('font', function () {
         });
         assert.ok(woffBuffer, 'test write woff');
 
-        let font2 = Font.create(buffer, {
+        let font2 = createFont(buffer, {
             type: 'ttf'
         });
 
@@ -86,7 +86,7 @@ describe('font', function () {
 
     it('write woff2', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
-        let font = Font.create(buffer, {
+        let font = createFont(buffer, {
             type: 'ttf'
         });
         // 写woff
@@ -95,7 +95,7 @@ describe('font', function () {
         });
         assert.ok(woffBuffer, 'test write woff2');
 
-        let font2 = Font.create(buffer, {
+        let font2 = createFont(buffer, {
             type: 'ttf'
         });
 
@@ -107,7 +107,7 @@ describe('font', function () {
 
     it('write svg', function () {
         let buffer = readttf(__dirname + '/../data/bebas.ttf');
-        let font = Font.create(buffer, {
+        let font = createFont(buffer, {
             type: 'ttf'
         });
         // 写svg

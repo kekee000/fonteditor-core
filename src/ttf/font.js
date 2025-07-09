@@ -345,7 +345,10 @@ Font.toBase64 = function (buffer) {
     return bytes2base64(buffer);
 };
 
-// 기존 방식: export default Font
-// 새로운 방식: 직접 export
-export { Font };
+function createFont(buffer, options) {
+    return new Font(buffer, options);
+}
+
+export {Font, createFont};
+
 export default Font;

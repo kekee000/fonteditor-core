@@ -1,11 +1,6 @@
-/**
- * @file font
- * @author mengke01(kekee000@gmail.com)
- */
-
 import assert from 'assert';
-import {readData} from '../data';
-import {createFont, woff2, Font} from 'fonteditor-core/main';
+import {readData} from './data.mjs';
+import {createFont, woff2, Font} from 'fonteditor-core';
 import {DOMParser} from '@xmldom/xmldom';
 
 describe('test Font Class ============================', function () {

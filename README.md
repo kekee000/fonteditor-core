@@ -26,14 +26,14 @@ Read and write sfnt font like ttf, woff, woff2, eot, svg, otf.
 
 ```javascript
 // read font file
-import {Font} from 'fonteditor-core';
+import {createFont} from 'fonteditor-core';
 import fs from 'fs';
 
 const buffer = fs.readFileSync('font.ttf');
 // read font data, support format:
 // - for ttf, otf, woff, woff2, support ArrayBuffer, Buffer
 // - for svg, support string or Document(parsed svg)
-const font = Font.create(buffer, {
+const font = createFont(buffer, {
     // support ttf, woff, woff2, eot, otf, svg
     type: 'ttf',
     // only read `a`, `b` glyphs
@@ -126,7 +126,9 @@ This library supports both CommonJS and ES Modules. For detailed information on 
 
 ```javascript
 // ESM import
-import fonteditorCore, { Font, woff2 } from 'fonteditor-core';
+import fonteditorCore, { createFont, woff2 } from 'fonteditor-core';
+
+createFont(buffer, options);
 ```
 
 ### woff2
@@ -134,12 +136,12 @@ import fonteditorCore, { Font, woff2 } from 'fonteditor-core';
 **Notice:** woff2 use wasm build of google woff2, before read and write `woff2`, we should first call `woff2.init()`.
 
 ```javascript
-import {Font, woff2} from 'fonteditor-core';
+import {createFont, woff2} from 'fonteditor-core';
 
 // in nodejs
 woff2.init().then(() => {
     // read woff2
-    const font =  Font.create(buffer, {
+    const font =  createFont(buffer, {
       type: 'woff2'
     });
     // write woff2
@@ -149,7 +151,7 @@ woff2.init().then(() => {
 // in browser
 woff2.init('/assets/woff2.wasm').then(() => {
     // read woff2
-    const font = Font.createEmpty();
+    const font = createFont();
     // write woff2
     const arrayBuffer = font.write({type: 'woff2'});
 });

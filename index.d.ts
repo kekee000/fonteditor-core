@@ -353,6 +353,12 @@ export namespace FontEditor {
     static toBase64(buffer: FontInput): string;
 
     /**
+     * font data
+     * @deprecated use font.get() instead
+     */
+    data: TTF.TTFObject;
+
+    /**
      * read empty ttf object
      */
     readEmpty(): Font;
@@ -466,6 +472,17 @@ export namespace FontEditor {
      * Font class
      */
     Font: typeof Font;
+
+    /**
+     * create font object with font data
+     *
+     * @param buffer font data, support format
+     * - for ttf, otf, woff, woff2, support ArrayBuffer, Buffer
+     * - for svg, support string or Document(parsed svg)
+     * @param options font read options
+     */
+    createFont(buffer: FontInput, options: FontReadOptions): Font;
+
     /**
      * woff2 module
      */
@@ -619,6 +636,7 @@ export namespace FontEditor {
 // Named exports
 export const Font: typeof FontEditor.Font;
 export const woff2: FontEditor.Woff2;
+export const createFont: FontEditor.Core["createFont"];
 
 // Default export
 declare const fonteditorCore: FontEditor.Core;
