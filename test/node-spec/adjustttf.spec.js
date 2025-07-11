@@ -5,9 +5,7 @@
 
 const assert = require('assert');
 const fs = require('fs');
-const TTFReader = require('./fonteditor-core').TTFReader;
-const TTFWriter = require('./fonteditor-core').TTFWriter;
-const TTF = require('./fonteditor-core').TTF;
+const {TTFReader, TTFWriter, TTF} = require('./fonteditor-core');
 const util = require('./util');
 
 function readttf(file) {

@@ -4,8 +4,7 @@
  */
 const assert = require('assert');
 const fs = require('fs');
-const TTFWriter = require('./fonteditor-core').TTFWriter;
-const svg2ttfobject = require('./fonteditor-core').svg2ttfobject;
+const {TTFWriter, svg2ttfobject} = require('./fonteditor-core');
 const util = require('./util');
 const DOMParser = require('@xmldom/xmldom').DOMParser;
 

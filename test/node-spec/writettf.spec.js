@@ -4,11 +4,7 @@
  */
 const assert = require('assert');
 const fs = require('fs');
-const TTFReader = require('./fonteditor-core').TTFReader;
-const TTFWriter = require('./fonteditor-core').TTFWriter;
-const ttf2eot = require('./fonteditor-core').ttf2eot;
-const ttf2woff = require('./fonteditor-core').ttf2woff;
-const ttf2svg = require('./fonteditor-core').ttf2svg;
+const {TTFReader, TTFWriter, ttf2eot, ttf2woff, ttf2svg} = require('./fonteditor-core');
 const util = require('./util');
 
 function readttf(file) {

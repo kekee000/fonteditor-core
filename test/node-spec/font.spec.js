@@ -5,8 +5,7 @@
 
 const assert = require('assert');
 const fs = require('fs');
-const {createFont, Font} = require('./fonteditor-core');
-const woff2 = require('./fonteditor-core').woff2;
+const {createFont, Font, woff2} = require('./fonteditor-core');
 const md5 = require('./util').md5;
 
 function readttf(file) {

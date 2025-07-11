@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import utils, {Font, woff2} from 'fonteditor-core';
+import utils from 'fonteditor-core';
 import fs from 'fs';
 
 const baseDir = __dirname;
 
 const buffer = fs.readFileSync(`${baseDir}/../data/wingdings3.ttf`);
 // read font data, support ArrayBuffer | Buffer | string
-const font = Font.create(buffer, {
+const font = utils.createFont(buffer, {
     // support ttf, woff, woff2, eot, otf, svg
     type: 'ttf',
     // only read 0x21, 0x22 glyphs
@@ -28,8 +28,8 @@ console.log(Object.keys(fontObject));
 
 fs.writeFileSync(`${baseDir}/output/font.eot`, utils.toBuffer(utils.ttf2eot(utils.toArrayBuffer(buffer))));
 {
-    woff2.init().then(() => {
-        const font = Font.create(buffer, {
+    utils.woff2.init().then(() => {
+        const font = utils.createFont(buffer, {
             type: 'ttf'
         });
         // write font file
@@ -107,7 +107,7 @@ font.sort();
     console.log(result);
 }
 {
-    const font1 = Font.create();
+    const font1 = utils.createFont();
     // merge another font object
     font.merge(font1, {
         scale: 1

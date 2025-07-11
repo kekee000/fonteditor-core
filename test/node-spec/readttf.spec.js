@@ -4,7 +4,7 @@
  */
 const assert = require('assert');
 const fs = require('fs');
-const TTFReader = require('./fonteditor-core').TTFReader;
+const {TTFReader} = require('./fonteditor-core');
 const util = require('./util');
 
 

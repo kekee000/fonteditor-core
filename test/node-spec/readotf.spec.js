@@ -1,6 +1,6 @@
 const assert = require('assert');
 const fs = require('fs');
-const OTFReader = require('./fonteditor-core').OTFReader;
+const {OTFReader} = require('./fonteditor-core');
 const util = require('./util');
 
 function readotf(file) {

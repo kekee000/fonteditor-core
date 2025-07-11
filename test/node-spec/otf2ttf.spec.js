@@ -4,9 +4,7 @@
  */
 const assert = require('assert');
 const fs = require('fs');
-const OTFReader = require('./fonteditor-core').OTFReader;
-const otf2ttfobject = require('./fonteditor-core').otf2ttfobject;
-const TTFWriter = require('./fonteditor-core').TTFWriter;
+const {OTFReader, otf2ttfobject, TTFWriter} = require('./fonteditor-core');
 const util = require('./util');
 
 function readotf(file) {

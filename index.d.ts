@@ -240,6 +240,11 @@ export namespace FontEditor {
     hinting?: boolean;
 
     /**
+     * save font kerning, default false
+     * */
+    kerning?: boolean,
+
+    /**
      * write glyf data when simple glyph has no contours, default false
      */
     writeZeroContoursGlyfData?: boolean;
@@ -372,12 +377,6 @@ export namespace FontEditor {
     read(buffer: FontInput, options: FontReadOptions): Font;
 
     /**
-     * write font to svg string
-     * @param options font write options
-     */
-    write(options: { type: "svg" } & FontWriteOptions): string;
-
-    /**
      * write font to Buffer
      * @param options font write options
      */
@@ -387,7 +386,7 @@ export namespace FontEditor {
      * write font data
      * @param options write options
      */
-    write(options: FontWriteOptions): FontOutput;
+    write<T extends FontType>(options: {type: T} & FontWriteOptions): T extends 'svg' ? string : FontOutput;
 
     /**
      * write font to base64 uri
@@ -482,6 +481,11 @@ export namespace FontEditor {
      * @param options font read options
      */
     createFont(buffer: FontInput, options: FontReadOptions): Font;
+
+    /**
+     * create empty font object
+     */
+    createFont(): Font;
 
     /**
      * woff2 module
