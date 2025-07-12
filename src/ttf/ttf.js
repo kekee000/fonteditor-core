@@ -19,17 +19,17 @@ import config from './data/default';
  * @param {Array} glyfList glyf列表
  * @param {number} ascent 上升
  * @param {number} descent 下降
- * @param {number} ajdustToEmPadding  顶部和底部留白
+ * @param {number} adjustToEmPadding  顶部和底部留白
  * @return {Array} glyfList
  */
-function adjustToEmBox(glyfList, ascent, descent, ajdustToEmPadding) {
+function adjustToEmBox(glyfList, ascent, descent, adjustToEmPadding) {
 
     glyfList.forEach((g) => {
 
         if (g.contours && g.contours.length) {
             const rightSideBearing = g.advanceWidth - g.xMax;
             const bound = computePath(...g.contours);
-            const scale = (ascent - descent - ajdustToEmPadding) / bound.height;
+            const scale = (ascent - descent - adjustToEmPadding) / bound.height;
             const center = (ascent + descent) / 2;
             const yOffset = center - (bound.y + bound.height / 2) * scale;
 
@@ -136,9 +136,9 @@ function merge(ttf, imported, options = {scale: true}) {
     if (options.adjustGlyf) {
         const ascent = ttf.hhea.ascent;
         const descent = ttf.hhea.descent;
-        const ajdustToEmPadding = 16;
+        const adjustToEmPadding = 16;
         adjustPos(list, 16, 16);
-        adjustToEmBox(list, ascent, descent, ajdustToEmPadding);
+        adjustToEmBox(list, ascent, descent, adjustToEmPadding);
 
         list.forEach((g) => {
             ttf.glyf.push(g);
@@ -475,14 +475,16 @@ export default class TTF {
      * @param {boolean=} setting.reverse 字形反转操作
      * @param {boolean=} setting.mirror 字形镜像操作
      * @param {number=} setting.scale 字形缩放
-     * @param {boolean=} setting.ajdustToEmBox  是否调整字形到 em 框
-     * @param {number=} setting.ajdustToEmPadding 调整到 em 框的留白
+     * @param {boolean=} setting.adjustToEmBox  是否调整字形到 em 框
+     * @param {number=} setting.adjustToEmPadding 调整到 em 框的留白
      * @return {boolean}
      */
     adjustGlyf(indexList, setting) {
 
         const glyfList = this.getGlyf(indexList);
         let changed = false;
+        setting.adjustToEmBox = setting.ajdustToEmBox || setting.adjustToEmBox;
+        setting.adjustToEmPadding = setting.ajdustToEmPadding || setting.adjustToEmPadding;
 
         if (setting.reverse || setting.mirror) {
 
@@ -513,14 +515,14 @@ export default class TTF {
             });
         }
         // 缩放到embox
-        else if (setting.ajdustToEmBox) {
+        else if (setting.adjustToEmBox) {
 
             changed = true;
             const ascent = this.ttf.hhea.ascent;
             const descent = this.ttf.hhea.descent;
-            const ajdustToEmPadding = 2 * (setting.ajdustToEmPadding || 0);
+            const adjustToEmPadding = 2 * (setting.adjustToEmPadding || 0);
 
-            adjustToEmBox(glyfList, ascent, descent, ajdustToEmPadding);
+            adjustToEmBox(glyfList, ascent, descent, adjustToEmPadding);
         }
 
         return changed ? glyfList : [];
