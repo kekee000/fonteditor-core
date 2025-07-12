@@ -41,11 +41,11 @@ const SUPPORT_BUFFER =
 
 class Font {
     /**
-   * 字体对象构造函数
-   *
-   * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
-   * @param {Object} options  读取参数
-   */
+     * 字体对象构造函数
+     *
+     * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
+     * @param {Object} options  读取参数
+     */
     constructor(buffer, options = { type: 'ttf' }) {
     // 字形对象
         if (typeof buffer === 'object' && buffer.glyf) {
@@ -62,45 +62,45 @@ class Font {
     }
 
     /**
-   * Create a Font instance
-   *
-   * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
-   * @param {Object} options  读取参数
-   * @return {Font}
-   */
+     * Create a Font instance
+     *
+     * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
+     * @param {Object} options  读取参数
+     * @return {Font}
+     */
     static create(buffer, options) {
         return new Font(buffer, options);
     }
 
     /**
-   * 设置一个空的 ttfObject 对象
-   *
-   * @return {Font}
-   */
+     * 设置一个空的 ttfObject 对象
+     *
+     * @return {Font}
+     */
     readEmpty() {
         this.data = getEmptyttfObject();
         return this;
     }
 
     /**
-   * 读取字体数据
-   *
-   * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
-   * @param {Object} options  读取参数
-   * @param {string} options.type 字体类型
-   *
-   * ttf, woff , eot 读取配置
-   * @param {boolean} options.hinting 是否保留 hinting 信息
-   * @param {boolean} options.kerning 是否保留 kerning 信息
-   * @param {boolean} options.compound2simple 复合字形转简单字形
-   *
-   * woff 读取配置
-   * @param {Function} options.inflate 解压相关函数
-   *
-   * svg 读取配置
-   * @param {boolean} options.combinePath 是否合并成单个字形，仅限于普通svg导入
-   * @return {Font}
-   */
+     * 读取字体数据
+     *
+     * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
+     * @param {Object} options  读取参数
+     * @param {string} options.type 字体类型
+     *
+     * ttf, woff , eot 读取配置
+     * @param {boolean} options.hinting 是否保留 hinting 信息
+     * @param {boolean} options.kerning 是否保留 kerning 信息
+     * @param {boolean} options.compound2simple 复合字形转简单字形
+     *
+     * woff 读取配置
+     * @param {Function} options.inflate 解压相关函数
+     *
+     * svg 读取配置
+     * @param {boolean} options.combinePath 是否合并成单个字形，仅限于普通svg导入
+     * @return {Font}
+     */
     read(buffer, options) {
     // nodejs buffer
         if (SUPPORT_BUFFER) {
@@ -133,22 +133,22 @@ class Font {
     }
 
     /**
-   * 写入字体数据
-   *
-   * @param {Object} options  写入参数
-   * @param {string} options.type   字体类型, 默认 ttf
-   * @param {boolean} options.toBuffer nodejs 环境中返回 Buffer 对象, 默认 true
-   *
-   * ttf 字体参数
-   * @param {boolean} options.hinting 是否保留 hinting 信息
-   * @param {boolean} options.kerning 是否保留 kerning 信息
-   * svg,woff 字体参数
-   * @param {Object} options.metadata 字体相关的信息
-   *
-   * woff 字体参数
-   * @param {Function} options.deflate 压缩相关函数
-   * @return {Buffer|ArrayBuffer|string}
-   */
+     * 写入字体数据
+     *
+     * @param {Object} options  写入参数
+     * @param {string} options.type   字体类型, 默认 ttf
+     * @param {boolean} options.toBuffer nodejs 环境中返回 Buffer 对象, 默认 true
+     *
+     * ttf 字体参数
+     * @param {boolean} options.hinting 是否保留 hinting 信息
+     * @param {boolean} options.kerning 是否保留 kerning 信息
+     * svg,woff 字体参数
+     * @param {Object} options.metadata 字体相关的信息
+     *
+     * woff 字体参数
+     * @param {Function} options.deflate 压缩相关函数
+     * @return {Buffer|ArrayBuffer|string}
+     */
     write(options = {}) {
         if (!options.type) {
             options.type = this.type;
@@ -184,16 +184,16 @@ class Font {
     }
 
     /**
-   * 转换成 base64编码
-   *
-   * @param {Object} options  写入参数
-   * @param {string} options.type   字体类型, 默认 ttf
-   * 其他 options参数, 参考 write
-   * @see write
-   *
-   * @param {ArrayBuffer=} buffer  如果提供了buffer数据则使用 buffer数据, 否则转换现有的 font
-   * @return {string}
-   */
+     * 转换成 base64编码
+     *
+     * @param {Object} options  写入参数
+     * @param {string} options.type   字体类型, 默认 ttf
+     * 其他 options参数, 参考 write
+     * @see write
+     *
+     * @param {ArrayBuffer=} buffer  如果提供了buffer数据则使用 buffer数据, 否则转换现有的 font
+     * @return {string}
+     */
     toBase64(options, buffer) {
         if (!options.type) {
             options.type = this.type;
@@ -231,32 +231,32 @@ class Font {
     }
 
     /**
-   * 设置 font 对象
-   *
-   * @param {Object} data font的ttfObject对象
-   * @return {this}
-   */
+     * 设置 font 对象
+     *
+     * @param {Object} data font的ttfObject对象
+     * @return {this}
+     */
     set(data) {
         this.data = data;
         return this;
     }
 
     /**
-   * 获取 font 数据
-   *
-   * @return {Object} ttfObject 对象
-   */
+     * 获取 font 数据
+     *
+     * @return {Object} ttfObject 对象
+     */
     get() {
         return this.data;
     }
 
     /**
-   * 对字形数据进行优化
-   *
-   * @param  {Object} out  输出结果
-   * @param  {boolean|Object} out.result `true` 或者有问题的地方
-   * @return {Font}
-   */
+     * 对字形数据进行优化
+     *
+     * @param  {Object} out  输出结果
+     * @param  {boolean|Object} out.result `true` 或者有问题的地方
+     * @return {Font}
+     */
     optimize(out) {
         const result = optimizettf(this.data);
         if (out) {
@@ -266,64 +266,71 @@ class Font {
     }
 
     /**
-   * 将字体中的复合字形转为简单字形
-   *
-   * @return {this}
-   */
+     * 将字体中的复合字形转为简单字形
+     *
+     * @return {this}
+     */
     compound2simple() {
-        const ttf = new TTF(this.data);
-        ttf.compound2simple();
-        this.data = ttf.get();
+        const ttfHelper = this.getHelper();
+        ttfHelper.compound2simple();
+        this.data = ttfHelper.get();
         return this;
     }
 
     /**
-   * 对字形按照unicode编码排序
-   *
-   * @return {this}
-   */
+     * 对字形按照unicode编码排序
+     *
+     * @return {this}
+     */
     sort() {
-        const ttf = new TTF(this.data);
-        ttf.sortGlyf();
-        this.data = ttf.get();
+        const ttfHelper = this.getHelper();
+        ttfHelper.sortGlyf();
+        this.data = ttfHelper.get();
         return this;
     }
 
     /**
-   * 查找相关字形
-   *
-   * @param  {Object} condition 查询条件
-   * @param  {Array|number} condition.unicode unicode编码列表或者单个unicode编码
-   * @param  {string} condition.name glyf名字，例如`uniE001`, `uniE`
-   * @param  {Function} condition.filter 自定义过滤器
-   * @example
-   *     condition.filter(glyf) {
-   *         return glyf.name === 'logo';
-   *     }
-   * @return {Array}  glyf字形列表
-   */
+     * 查找相关字形
+     *
+     * @param  {Object} condition 查询条件
+     * @param  {Array|number} condition.unicode unicode编码列表或者单个unicode编码
+     * @param  {string} condition.name glyf名字，例如`uniE001`, `uniE`
+     * @param  {Function} condition.filter 自定义过滤器
+     * @example
+     *     condition.filter(glyf) {
+     *         return glyf.name === 'logo';
+     *     }
+     * @return {Array}  glyf字形列表
+     */
     find(condition) {
-        const ttf = new TTF(this.data);
-        const indexList = ttf.findGlyf(condition);
-        return indexList.length ? ttf.getGlyf(indexList) : indexList;
+        const ttfHelper = this.getHelper();
+        const indexList = ttfHelper.findGlyf(condition);
+        return indexList.length ? ttfHelper.getGlyf(indexList) : indexList;
     }
 
     /**
-   * 合并 font 到当前的 font
-   *
-   * @param {Object} font Font 对象
-   * @param {Object} options 参数选项
-   * @param {boolean} options.scale 是否自动缩放
-   * @param {boolean} options.adjustGlyf 是否调整字形以适应边界
-   *                                     (和 options.scale 参数互斥)
-   *
-   * @return {Font}
-   */
+     * 合并 font 到当前的 font
+     *
+     * @param {Object} font Font 对象
+     * @param {Object} options 参数选项
+     * @param {boolean} options.scale 是否自动缩放
+     * @param {boolean} options.adjustGlyf 是否调整字形以适应边界
+     *                                     (和 options.scale 参数互斥)
+     *
+     * @return {Font}
+     */
     merge(font, options) {
-        const ttf = new TTF(this.data);
-        ttf.mergeGlyf(font.get(), options);
-        this.data = ttf.get();
+        const ttfHelper = this.getHelper();
+        ttfHelper.mergeGlyf(font.get(), options);
+        this.data = ttfHelper.get();
         return this;
+    }
+
+    /**
+     * 获取 TTF helper 实例
+     */
+    getHelper() {
+        return new TTF(this.data);
     }
 }
 

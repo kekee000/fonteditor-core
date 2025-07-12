@@ -24,7 +24,7 @@ import woff2tottf from './ttf/woff2tottf';
 import woff2 from '../woff2/index';
 import bufferUtil from './nodejs/buffer';
 
-module.exports = {
+const modules = {
     createFont,
     Font,
     TTF,
@@ -48,3 +48,14 @@ module.exports = {
     toArrayBuffer: bufferUtil.toArrayBuffer,
     toBuffer: bufferUtil.toBuffer,
 };
+
+// Export named exports for ESM
+export { Font, woff2, createFont };
+
+// Export default object
+export default modules;
+
+if (typeof exports !== 'undefined') {
+    // eslint-disable-next-line import/no-commonjs
+    module.exports = modules;
+}

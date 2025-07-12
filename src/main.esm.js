@@ -27,6 +27,12 @@ import bufferUtil from './nodejs/buffer';
 export {
     createFont,
     Font,
+    woff2,
+};
+
+export default {
+    createFont,
+    Font,
     TTF,
     TTFReader,
     TTFWriter,
@@ -45,7 +51,6 @@ export {
     ttftowoff2,
     woff2tottf,
     woff2,
+    toArrayBuffer: bufferUtil.toArrayBuffer,
+    toBuffer: bufferUtil.toBuffer,
 };
-
-export const toArrayBuffer = bufferUtil.toArrayBuffer;
-export const toBuffer = bufferUtil.toBuffer;
