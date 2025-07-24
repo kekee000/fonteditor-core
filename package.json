@@ -80,7 +80,7 @@
       "types": "./index.d.ts",
       "default": "./lib/main.js"
     },
-    "./lib/*.js": "./lib/*.js"
+    "./lib/*": "./lib/*.js"
   },
   "type": "commonjs",
   "devDependencies": {
