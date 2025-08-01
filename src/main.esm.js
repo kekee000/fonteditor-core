@@ -27,8 +27,28 @@ import bufferUtil from './nodejs/buffer';
 export {
     createFont,
     Font,
+    TTF,
+    TTFReader,
+    TTFWriter,
+    ttf2eot,
+    eot2ttf,
+    ttf2woff,
+    woff2ttf,
+    ttf2svg,
+    svg2ttfobject,
+    Reader,
+    Writer,
+    OTFReader,
+    otf2ttfobject,
+    ttf2base64,
+    ttf2icon,
+    ttftowoff2,
+    woff2tottf,
     woff2,
 };
+
+export const toArrayBuffer = bufferUtil.toArrayBuffer;
+export const toBuffer = bufferUtil.toBuffer;
 
 export default {
     createFont,
