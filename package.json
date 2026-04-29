@@ -46,7 +46,9 @@
     "test:esm": "cd test/esm && npm i &&  mocha --extension mjs index.mjs",
     "test:example": "cd test/example && npm i && npm run test",
     "dev": "webpack-dev-server --open --config ./config/webpack.dev.js",
-    "build": "babel src --out-dir lib",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "babel src --out-dir lib",
+    "build:esm": "node scripts/build-esm.js",
     "lint": "eslint ./src ./test",
     "lint:fix": "eslint --fix ./src ./test"
   },
@@ -65,22 +67,28 @@
     "url": "git://github.com/kekee000/fonteditor-core.git"
   },
   "files": [
+    "esm",
     "index.d.ts",
     "lib",
     "src",
     "woff2"
   ],
   "main": "./lib/main.js",
-  "module": "./lib/main.esm.js",
+  "module": "./esm/main.esm.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
-      "import": "./lib/main.esm.js",
+      "import": "./esm/main.esm.js",
       "require": "./lib/main.js",
       "types": "./index.d.ts",
       "default": "./lib/main.js"
     },
-    "./lib/*": "./lib/*.js"
+    "./lib/*": {
+      "import": "./esm/*.js",
+      "require": "./lib/*.js",
+      "default": "./lib/*.js"
+    },
+    "./esm/*": "./esm/*.js"
   },
   "type": "commonjs",
   "devDependencies": {
@@ -104,7 +112,7 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2"
   },
-  "dependencies": {
+  "optionalDependencies": {
     "@xmldom/xmldom": "^0.8.3"
   }
 }
