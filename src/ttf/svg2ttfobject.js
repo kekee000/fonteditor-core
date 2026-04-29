@@ -4,7 +4,7 @@
  */
 
 import string from '../common/string';
-import DOMParser from '../common/DOMParser';
+import DOMParser, {getDOMParser} from '../common/DOMParser';
 import path2contours from './svg/path2contours';
 import svgnode2contours from './svg/svgnode2contours';
 import {computePathBox} from '../graphics/computeBoundingBox';
@@ -21,9 +21,11 @@ import reduceGlyf from './util/reduceGlyf';
  * @return {Document}
  */
 function loadXML(xml) {
-    if (DOMParser) {
+    const Parser = DOMParser || getDOMParser();
+
+    if (Parser) {
         try {
-            const domParser = new DOMParser();
+            const domParser = new Parser();
             const xmlDoc = domParser.parseFromString(xml, 'text/xml');
             return xmlDoc;
         }
