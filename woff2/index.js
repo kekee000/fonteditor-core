@@ -8,6 +8,29 @@
 // Require the woff2 module
 const woff2ModuleLoader = require('./woff2');
 
+const CSP_ERROR_RE = /unsafe-eval|Refused to evaluate a string as JavaScript|Content Security Policy|CSP/i;
+const CSP_ERROR_HINT = 'WOFF2 runtime failed under Content Security Policy restrictions. Use a CSP-safe woff2.js build (without eval/new Function) or process WOFF2 outside the restricted environment.';
+
+function normalizeWoff2Error(error) {
+    if (error instanceof Error) {
+        return error;
+    }
+
+    return new Error(error == null ? 'Unknown WOFF2 initialization error' : String(error));
+}
+
+function enhanceWoff2Error(error) {
+    const normalizedError = normalizeWoff2Error(error);
+
+    if (CSP_ERROR_RE.test(normalizedError.message)
+        && normalizedError.message.indexOf(CSP_ERROR_HINT) === -1
+    ) {
+        normalizedError.message += '\n' + CSP_ERROR_HINT;
+    }
+
+    return normalizedError;
+}
+
 function convertFromVecToUint8Array(vector) {
     const arr = [];
     for (let i = 0, l = vector.size(); i < l; i++) {
@@ -38,7 +61,7 @@ const woff2Module = {
      * @return {Promise}
      */
     init(wasmUrl) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             if (this.woff2Module) {
                 resolve(this);
                 return;
@@ -68,11 +91,24 @@ const woff2Module = {
                     wasmBinaryFile: wasmPath,
                 };
             }
-            const woffModule = woff2ModuleLoader(moduleLoaderConfig);
-            woffModule.onRuntimeInitialized = () => {
-                this.woff2Module = woffModule;
-                resolve(this);
+
+            const fail = (reason) => {
+                reject(enhanceWoff2Error(reason));
             };
+
+            moduleLoaderConfig.onAbort = fail;
+
+            try {
+                const woffModule = woff2ModuleLoader(moduleLoaderConfig);
+                woffModule.onAbort = fail;
+                woffModule.onRuntimeInitialized = () => {
+                    this.woff2Module = woffModule;
+                    resolve(this);
+                };
+            }
+            catch (e) {
+                fail(e);
+            }
         });
     },
 
