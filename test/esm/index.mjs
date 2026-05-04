@@ -453,8 +453,8 @@ describe('esm import', function () {
         assert.ok(typeof createFont === 'function');
         assert.ok(typeof woff2 === 'object');
         assert.ok(typeof Font === 'function');
-        assert.ok(typeof getEmptyttfObject.default === 'function');
-        assert.ok(typeof ttf2svg.default === 'function');
+        assert.ok(typeof getEmptyttfObject === 'function');
+        assert.ok(typeof ttf2svg === 'function');
     });
 
 });

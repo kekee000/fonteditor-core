@@ -4,6 +4,35 @@
  */
 
 /* eslint-disable no-undef */
-export default typeof window !== 'undefined' && window.DOMParser
+const browserDOMParser = typeof window !== 'undefined' && window.DOMParser
     ? window.DOMParser
-    : require('@xmldom/xmldom').DOMParser;
+    : null;
+
+let cachedNodeDOMParser;
+let hasResolvedNodeDOMParser = false;
+
+export function getDOMParser() {
+    if (browserDOMParser) {
+        return browserDOMParser;
+    }
+
+    if (!hasResolvedNodeDOMParser) {
+        hasResolvedNodeDOMParser = true;
+
+        if (typeof require === 'function') {
+            try {
+                cachedNodeDOMParser = require('@xmldom/xmldom').DOMParser;
+            }
+            catch (exp) {
+                cachedNodeDOMParser = null;
+            }
+        }
+        else {
+            cachedNodeDOMParser = null;
+        }
+    }
+
+    return cachedNodeDOMParser;
+}
+
+export default browserDOMParser;
