@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./lib-test",
+    "noEmit": true,
+    "types": ["node", "mocha"],
+    "baseUrl": ".",
+    "paths": {
+      "fonteditor-core": ["./src/main"],
+      "fonteditor-core/*": ["./src/*"],
+      "testdata/*": ["./test/data/*"]
+    }
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": ["node_modules", "lib", "test/example", "test/esm", "demo", "woff2src"]
+}

@@ -18,7 +18,10 @@ node
 woff2/woff2
 woff2src/woff2*
 /lib
+/lib-esm
 baiduHealth-deflate.woff
 package-lock.json
 test/example/output
 test/example/example.js
+.claude
+.comate

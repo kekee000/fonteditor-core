@@ -175,7 +175,7 @@ export namespace TTF {
   }
 
 
-  type TTFObject = {
+  interface TTFObject {
     version: number;
     numTables: number;
     searchRange: number;
@@ -188,12 +188,12 @@ export namespace TTF {
     hhea: Hhea;
     post: Post;
     maxp: Maxp;
-    "OS/2": OS2;
-  };
+    'OS/2': OS2;
+  }
 }
 
 export namespace FontEditor {
-  type FontType = "ttf" | "otf" | "eot" | "woff" | "woff2" | "svg";
+  type FontType = 'ttf' | 'otf' | 'eot' | 'woff' | 'woff2' | 'svg';
 
   type FontInput = ArrayBuffer | Buffer | string | Document;
   type FontOutput = ArrayBuffer | Buffer | string;
@@ -358,109 +358,109 @@ export namespace FontEditor {
    * ttf helper class
    */
   class TTFHelper {
-    /**
+      /**
      * Creates a new TTF instance
      * @param ttf The TTF font data structure
      */
-    constructor(ttf: TTF.TTFObject);
+      constructor(ttf: TTF.TTFObject);
 
-    /** Get all character codes in the font */
-    codes(): string[];
+      /** Get all character codes in the font */
+      codes(): string[];
 
-    /**
+      /**
      * Get glyph index by character code
      * @param c Character or character code
      */
-    getGlyfIndexByCode(c: string | number): number | undefined;
+      getGlyfIndexByCode(c: string | number): number | undefined;
 
-    /**
+      /**
      * Get glyph by index
      * @param glyfIndex Index of the glyph
      */
-    getGlyfByIndex(glyfIndex: number): TTF.Glyph | undefined;
+      getGlyfByIndex(glyfIndex: number): TTF.Glyph | undefined;
 
-    /**
+      /**
      * Get glyph by character code
      * @param c Character or character code
      */
-    getGlyfByCode(c: string | number): TTF.Glyph | undefined;
+      getGlyfByCode(c: string | number): TTF.Glyph | undefined;
 
-    /**
+      /**
      * Set TTF object
      * @param ttf TTF object to set
      */
-    set(ttf: TTF.TTFObject): this;
+      set(ttf: TTF.TTFObject): this;
 
-    /** Get TTF object */
-    get(): TTF.TTFObject;
+      /** Get TTF object */
+      get(): TTF.TTFObject;
 
-    /**
+      /**
      * Add a glyph
      * @param glyf Glyph to add
      * @return Added glyph
      */
-    addGlyf(glyf: TTF.Glyph): [TTF.Glyph];
+      addGlyf(glyf: TTF.Glyph): [TTF.Glyph];
 
-    /**
+      /**
      * Insert a glyph at specified index
      * @param glyf Glyph to insert
      * @param insertIndex Index to insert at
      * @return Inserted glyph
      */
-    insertGlyf(glyf: TTF.Glyph, insertIndex?: number): [TTF.Glyph];
+      insertGlyf(glyf: TTF.Glyph, insertIndex?: number): [TTF.Glyph];
 
-    /**
+      /**
      * Merge glyphs from another font
      * @param imported Font to import from
      * @param options Merge options
      * @return Merged glyphs
      */
-    mergeGlyf(imported: TTF.TTFObject, options?: MergeOptions): TTF.Glyph[];
+      mergeGlyf(imported: TTF.TTFObject, options?: MergeOptions): TTF.Glyph[];
 
-    /**
+      /**
      * Remove glyphs at specified indices
      * @param indexList Indices of glyphs to remove
      * @return Removed glyphs
      */
-    removeGlyf(indexList: number[]): TTF.Glyph[];
+      removeGlyf(indexList: number[]): TTF.Glyph[];
 
-    /**
+      /**
      * Set unicode values for glyphs
      * @param unicode Unicode value
      * @param indexList Indices of glyphs to modify
      * @param isGenerateName Whether to generate names
      * @return Modified glyphs
      */
-    setUnicode(unicode: string, indexList?: number[], isGenerateName?: boolean): TTF.Glyph[];
+      setUnicode(unicode: string, indexList?: number[], isGenerateName?: boolean): TTF.Glyph[];
 
-    /**
+      /**
      * Generate names for glyphs
      * @param indexList Indices of glyphs to modify
      * @return Changed glyphs
      */
-    genGlyfName(indexList?: number[]): TTF.Glyph[];
+      genGlyfName(indexList?: number[]): TTF.Glyph[];
 
-    /**
+      /**
      * Clear glyph names
      * @param indexList Indices of glyphs to modify
      * @return Changed glyphs
      */
-    clearGlyfName(indexList?: number[]): TTF.Glyph[];
+      clearGlyfName(indexList?: number[]): TTF.Glyph[];
 
-    /**
+      /**
      * Append glyphs with replacement
      * @param glyfList Glyphs to append
      * @param indexList Indices for replacement
      * @return Changed glyphs
      */
-    appendGlyf(glyfList: TTF.Glyph[], indexList?: number[]): TTF.Glyph[];
+      appendGlyf(glyfList: TTF.Glyph[], indexList?: number[]): TTF.Glyph[];
 
-    /**
+      /**
      * Adjust glyph positions
      * @param indexList Indices of glyphs to modify
      * @param setting Position adjustment settings
      */
-    adjustGlyfPos(indexList: number[] | undefined, setting: {
+      adjustGlyfPos(indexList: number[] | undefined, setting: {
       /** em box left side whitespace */
       leftSideBearing?: number;
       /** em box right side whitespace */
@@ -469,12 +469,12 @@ export namespace FontEditor {
       verticalAlign?: number
     }): TTF.Glyph[];
 
-    /**
+      /**
      * Adjust glyphs
      * @param indexList Indices of glyphs to modify
      * @param setting Glyph adjustment settings
      */
-    adjustGlyf(indexList: number[] | undefined, setting: {
+      adjustGlyf(indexList: number[] | undefined, setting: {
         /** reverse glyph contours */
         reverse?: boolean,
         /** mirror glyph horizontally */
@@ -487,124 +487,124 @@ export namespace FontEditor {
         adjustToEmPadding?: number,
     }): TTF.Glyph[];
 
-    /**
+      /**
      * Get glyphs
      * @param indexList Indices of glyphs to get
      */
-    getGlyf(indexList?: number[]): TTF.Glyph[];
+      getGlyf(indexList?: number[]): TTF.Glyph[];
 
-    /**
+      /**
      * Find glyphs by condition
      * @param condition Search condition
      * @return Indices of found glyphs
      */
-    findGlyf(condition: FindCondition): number[];
+      findGlyf(condition: FindCondition): number[];
 
-    /**
+      /**
      * Replace glyph at index
      * @param glyf Glyph to replace with
      * @param index Index to replace at
      * @return Replaced glyph
      */
-    replaceGlyf(glyf: TTF.Glyph, index: number): [TTF.Glyph];
+      replaceGlyf(glyf: TTF.Glyph, index: number): [TTF.Glyph];
 
-    /**
+      /**
      * Set glyph list
      * @param glyfList New glyph list
      */
-    setGlyf(glyfList: TTF.Glyph[]): TTF.Glyph[];
+      setGlyf(glyfList: TTF.Glyph[]): TTF.Glyph[];
 
-    /**
+      /**
      * Sort glyphs by unicode
      * - -1 sort failed
      * - -2 sort failed, has compound glyphs
      * - Glyph[] sorted glyphs
      * */
-    sortGlyf(): TTF.Glyph[] | -1 | -2;
+      sortGlyf(): TTF.Glyph[] | -1 | -2;
 
-    /**
+      /**
      * Set font name information
      * @param name Name data
      */
-    setName(name: Partial<TTF.Name>): TTF.Name;
+      setName(name: Partial<TTF.Name>): TTF.Name;
 
-    /**
+      /**
      * Set font head information
      * @param head Head data
      */
-    setHead(head: Partial<TTF.Head>): TTF.Head;
+      setHead(head: Partial<TTF.Head>): TTF.Head;
 
-    /**
+      /**
      * Set horizontal header information
      * @param fields Hhea data
      */
-    setHhea(fields: Partial<TTF.Hhea>): TTF.Hhea;
+      setHhea(fields: Partial<TTF.Hhea>): TTF.Hhea;
 
-    /**
+      /**
      * Set OS/2 table information
      * @param fields OS/2 data
      */
-    setOS2(fields: Partial<TTF.OS2>): TTF.OS2;
+      setOS2(fields: Partial<TTF.OS2>): TTF.OS2;
 
-    /**
+      /**
      * Set post table information
      * @param fields Post data
      */
-    setPost(fields: Partial<TTF.Post>): TTF.Post;
+      setPost(fields: Partial<TTF.Post>): TTF.Post;
 
-    /** Calculate font metrics */
-    calcMetrics(): TTF.Metrics;
+      /** Calculate font metrics */
+      calcMetrics(): TTF.Metrics;
 
-    /** Optimize font data */
-    optimize(): OptimizeResult;
+      /** Optimize font data */
+      optimize(): OptimizeResult;
 
-    /**
+      /**
      * Convert compound glyphs to simple glyphs
      * @param indexList Indices of glyphs to convert
      * @return Converted glyphs
      */
-    compound2simple(indexList?: number[]): TTF.Glyph[];
+      compound2simple(indexList?: number[]): TTF.Glyph[];
   }
 
   interface TTFReaderOptions {
-    subset?: number[];      // Font subset array, defaults to []
-    hinting?: boolean;      // Whether to preserve hinting information, defaults to false
-    kerning?: boolean;      // Whether to preserve kerning information, defaults to false
-    compound2simple?: boolean;  // Whether to convert compound glyphs to simple glyphs, defaults to false
+    subset?: number[]; // Font subset array, defaults to []
+    hinting?: boolean; // Whether to preserve hinting information, defaults to false
+    kerning?: boolean; // Whether to preserve kerning information, defaults to false
+    compound2simple?: boolean; // Whether to convert compound glyphs to simple glyphs, defaults to false
   }
 
   class TTFReader {
-    /**
+      /**
      * Creates a new TTFReader instance
      * @param options - Configuration options for the reader
      */
-    constructor(options?: TTFReaderOptions);
-    /**
+      constructor(options?: TTFReaderOptions);
+      /**
      * read font data from buffer
      * @param buffer
      * @return TTFObject
      */
-    protected readBuffer(buffer: ArrayBuffer): TTF.TTFObject;
-    /**
+      protected readBuffer(buffer: ArrayBuffer): TTF.TTFObject;
+      /**
      * resolve glyf data, calculate advanceWidth, maxp, subset, etc.
      * @param ttf
      */
-    protected resolveGlyf(ttf: TTF.TTFObject): void;
-    /**
+      protected resolveGlyf(ttf: TTF.TTFObject): void;
+      /**
      * clear ttf tables not used in icon font
      * @param ttf
      * @return
      */
-    protected cleanTables(ttf: TTF.TTFObject): void;
+      protected cleanTables(ttf: TTF.TTFObject): void;
 
-    /**
+      /**
      * read font data from buffer, and resolve glyf data, calculate advanceWidth, maxp, subset, etc.
      * @param buffer
      * @return TTFObject
      */
-    read(buffer: ArrayBuffer): TTF.TTFObject;
+      read(buffer: ArrayBuffer): TTF.TTFObject;
 
-    dispose(): void;
+      dispose(): void;
   }
 
 
@@ -620,34 +620,34 @@ export namespace FontEditor {
   }
 
   class TTFWriter {
-    /**
+      /**
      * Creates a new TTFWriter instance
      * @param options - Configuration options for the writer
      */
-    constructor(options?: TTFWriterOptions);
-    /**
+      constructor(options?: TTFWriterOptions);
+      /**
      * Processes the TTF structure for writing
      * @param ttf - TTF data structure to process
      */
-    protected resolveTTF(ttf: TTF.TTFObject): void;
-    /**
+      protected resolveTTF(ttf: TTF.TTFObject): void;
+      /**
      * Writes the TTF file
      * @param ttf - TTF data structure to write
      * @returns ArrayBuffer containing the TTF file data
      */
-    protected dump(ttf: TTF.TTFObject): ArrayBuffer;
-    /**
+      protected dump(ttf: TTF.TTFObject): ArrayBuffer;
+      /**
      * Evaluates TTF tables and marks tables that need processing
      * @param ttf - TTF object to evaluate
      */
-    protected prepareDump(ttf: TTF.TTFObject): void;
-    /**
+      protected prepareDump(ttf: TTF.TTFObject): void;
+      /**
      * Writes the TTF file to a buffer
      * @param ttf - TTF data structure to write
      * @returns Buffer containing the TTF file data
      */
-    write(ttf: TTF.TTFObject): ArrayBuffer;
-    dispose(): void;
+      write(ttf: TTF.TTFObject): ArrayBuffer;
+      dispose(): void;
   }
 
 
@@ -914,12 +914,12 @@ export namespace FontEditor {
   }
 
   class Font {
-    /**
+      /**
      * create empty font object
      */
-    static create(): Font;
+      static create(): Font;
 
-    /**
+      /**
      * create font object with font data
      *
      * @param buffer font data, support format
@@ -927,14 +927,14 @@ export namespace FontEditor {
      * - for svg, support string or Document(parsed svg)
      * @param options font read options
      */
-    static create(buffer: FontInput, options: FontReadOptions): Font;
+      static create(buffer: FontInput, options: FontReadOptions): Font;
 
-    /**
+      /**
      * convert buffer data to base64 string
      *
      * @param buffer buffer data
      */
-    static toBase64(buffer: FontInput): string;
+      static toBase64(buffer: FontInput): string;
 
     /**
      * font data
@@ -1242,7 +1242,7 @@ export namespace FontEditor {
 // Named exports
 export const Font: typeof FontEditor.Font;
 export const woff2: FontEditor.Woff2;
-export const createFont: FontEditor.Core["createFont"];
+export const createFont: FontEditor.Core['createFont'];
 
 // Default export
 declare const fonteditorCore: FontEditor.Core;
