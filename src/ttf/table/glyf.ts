@@ -12,6 +12,7 @@ import write from './glyf/write';
 import sizeof from './glyf/sizeof';
 import {isEmptyObject} from '../../common/lang';
 import Reader from '../reader';
+import Writer from '../writer';
 
 export default class Glyf extends Table {
     name = 'glyf';
@@ -106,11 +107,11 @@ export default class Glyf extends Table {
         return glyphs;
     }
 
-    write(writer: any, ttf: any): any {
+    write(writer: Writer, ttf: TTFObject): any {
         return write.call(this, writer, ttf);
     }
 
-    size(ttf: any): number {
+    size(ttf: TTFObject): number {
         return sizeof.call(this, ttf);
     }
 }

@@ -85,11 +85,11 @@ export function isPointInBound(bound: BoundingBox, p: Point, fixed: boolean = fa
 /**
  * 判断点是否重合
  *
- * @param {Object} p0 p0
- * @param {Object} p1 p1
- * @return {boolean} 是否
+ * @param p0 p0
+ * @param p1 p1
+ * @return 是否
  */
-export function isPointOverlap(p0, p1) {
+export function isPointOverlap(p0: Point, p1: Point): boolean {
     return ceil(p0.x) === ceil(p1.x) && ceil(p0.y) === ceil(p1.y);
 }
 
@@ -97,10 +97,9 @@ export function isPointOverlap(p0, p1) {
 /**
  * 获取点的hash值
  *
- * @param {Object} p p
- * @param {Object} p1 p1
- * @return {number}
+ * @param p p
+ * @return hash 值
  */
-export function getPointHash(p) {
+export function getPointHash(p: Point): number {
     return Math.floor(7 * Math.floor(p.x * 10) + 131 * Math.floor(p.y * 100));
 }

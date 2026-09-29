@@ -4,14 +4,15 @@
  */
 
 import reducePath from '../../graphics/reducePath';
+import {Glyph} from '../ttf-types';
 
 /**
  * 缩减glyf，去除冗余节点
  *
- * @param {Object} glyf glyf对象
- * @return {Object} glyf对象
+ * @param glyf glyf对象
+ * @return glyf对象
  */
-export default function reduceGlyf(glyf) {
+export default function reduceGlyf(glyf: Glyph) {
 
     const contours = glyf.contours;
     let contour;

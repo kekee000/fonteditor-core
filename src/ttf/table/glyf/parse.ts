@@ -5,6 +5,7 @@
 
 import glyFlag from '../../enum/glyFlag';
 import componentFlag from '../../enum/componentFlag';
+import Reader from '../../reader';
 
 const MAX_INSTRUCTION_LENGTH = 5000; // 设置instructions阈值防止读取错误
 const MAX_NUMBER_OF_COORDINATES = 20000; // 设置坐标最大个数阈值，防止glyf读取错误
@@ -16,7 +17,7 @@ const MAX_NUMBER_OF_COORDINATES = 20000; // 设置坐标最大个数阈值，防
  * @param {Object} glyf 空glyf
  * @return {Object} 解析后的glyf
  */
-function parseSimpleGlyf(reader: any, glyf: any) {
+function parseSimpleGlyf(reader: Reader, glyf: any) {
     const offset = reader.offset;
 
     // 轮廓点个数
@@ -140,7 +141,7 @@ function parseSimpleGlyf(reader: any, glyf: any) {
  * @param {Object} glyf glyf对象
  * @return {Object} glyf对象
  */
-function parseCompoundGlyf(reader: any, glyf: any) {
+function parseCompoundGlyf(reader: Reader, glyf: any) {
     glyf.compound = true;
     glyf.glyfs = [];
 
@@ -247,7 +248,7 @@ function parseCompoundGlyf(reader: any, glyf: any) {
  * @param  {number=} offset 偏移
  * @return {Object}        glyf对象
  */
-export default function parseGlyf(reader: any, ttf: any, offset?: number) {
+export default function parseGlyf(reader: Reader, ttf: any, offset?: number) {
 
     if (null != offset) {
         reader.seek(offset);

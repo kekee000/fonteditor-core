@@ -2,8 +2,8 @@ import assert from 'assert';
 import {readData} from './data.mjs';
 import {createFont, woff2, Font} from 'fonteditor-core';
 import {DOMParser} from '@xmldom/xmldom';
-import getEmptyttfObject from 'fonteditor-core/lib/ttf/getEmptyttfObject';
-import ttf2svg from 'fonteditor-core/lib/ttf/ttf2svg';
+import getEmptyttfObject from 'fonteditor-core/lib-esm/ttf/getEmptyttfObject';
+import ttf2svg from 'fonteditor-core/lib-esm/ttf/ttf2svg';
 
 describe('test Font Class ============================', function () {
 
@@ -453,8 +453,8 @@ describe('esm import', function () {
         assert.ok(typeof createFont === 'function');
         assert.ok(typeof woff2 === 'object');
         assert.ok(typeof Font === 'function');
-        assert.ok(typeof getEmptyttfObject.default === 'function');
-        assert.ok(typeof ttf2svg.default === 'function');
+        assert.ok(typeof getEmptyttfObject === 'function');
+        assert.ok(typeof ttf2svg === 'function');
     });
 
 });

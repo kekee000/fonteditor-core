@@ -4,15 +4,16 @@
  */
 
 import componentFlag from '../../enum/componentFlag';
+import Writer from '../../writer';
 
 /**
  * 写glyf
  *
- * @param  {Object} writer 写入器
- * @param  {Object} ttf    ttf对象
- * @return {Object}        写入器
+ * @param  writer 写入器
+ * @param  ttf    ttf对象
+ * @return        写入器
  */
-export default function write(writer, ttf) {
+export default function write(writer: Writer, ttf: any) {
     const hinting = ttf.writeOptions ? ttf.writeOptions.hinting : false;
     const writeZeroContoursGlyfData = ttf.writeOptions ? ttf.writeOptions.writeZeroContoursGlyfData : false;
     ttf.glyf.forEach((glyf, index) => {

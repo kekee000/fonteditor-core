@@ -7,13 +7,13 @@
  * https://github.com/ecomfe/zrender/blob/master/src/tool/computeBoundingBox.js
  */
 import pathIterator from './pathIterator';
-import {Point} from './util';
+import {Point, BoundingBox} from './util';
 
 
 /**
  * 计算包围盒
  */
-function computeBoundingBox(points: Point[]): any {
+function computeBoundingBox(points: Point[]): BoundingBox | false {
 
     if (points.length === 0) {
         return false;
@@ -56,7 +56,7 @@ function computeBoundingBox(points: Point[]): any {
  * 计算二阶贝塞尔曲线的包围盒
  * http://pissang.net/blog/?p=91
  */
-function computeQuadraticBezierBoundingBox(p0: Point, p1: Point, p2: Point): any {
+function computeQuadraticBezierBoundingBox(p0: Point, p1: Point, p2: Point): BoundingBox {
     // Find extremities, where derivative in x dim or y dim is zero
     let tmp = (p0.x + p2.x - 2 * p1.x);
     // p1 is center of p0 and p2 in x dim
@@ -102,13 +102,13 @@ function computeQuadraticBezierBoundingBox(p0: Point, p1: Point, p2: Point): any
                 y: y2
             }
         ]
-    );
+    ) as BoundingBox;
 }
 
 /**
  * 计算曲线包围盒
  */
-function computePathBoundingBox(...args: Point[][]): any {
+function computePathBoundingBox(...args: Point[][]): BoundingBox | false {
 
     const points: Point[] = [];
     const iterator = function (c: string, p0: Point, p1: Point, p2: Point) {
@@ -157,7 +157,7 @@ function computePathBoundingBox(...args: Point[][]): any {
 /**
  * 计算曲线点边界
  */
-export function computePathBox(...args: Point[][]): any {
+export function computePathBox(...args: Point[][]): BoundingBox | false {
     let points: Point[] = [];
     if (args.length === 1) {
         points = args[0];

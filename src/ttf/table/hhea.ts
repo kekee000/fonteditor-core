@@ -10,7 +10,7 @@ import struct from './struct';
 
 export default class Hhea extends Table {
     name = 'hhea';
-    struct: Array<[string, number, any?]> = [
+    struct: Array<[string, number, number?]> = [
         ['version', struct.Fixed],
         ['ascent', struct.Int16],
         ['descent', struct.Int16],

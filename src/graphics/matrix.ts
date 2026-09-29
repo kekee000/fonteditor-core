@@ -10,7 +10,7 @@
  * @param matrix2 矩阵2
  * @return 新矩阵
  */
-export function mul(matrix1 = [1, 0, 0, 1], matrix2 = [1, 0, 0, 1]) {
+export function mul(matrix1: number[] = [1, 0, 0, 1], matrix2: number[] = [1, 0, 0, 1]): number[] {
     // 旋转变换 4 个参数
     if (matrix1.length === 4) {
         return [
@@ -36,10 +36,10 @@ export function mul(matrix1 = [1, 0, 0, 1], matrix2 = [1, 0, 0, 1]) {
 /**
  * 多个仿射矩阵相乘
  *
- * @param {...Array} matrixs matrix array
- * @return {Array}         新矩阵
+ * @param matrixs matrix array
+ * @return 新矩阵
  */
-export function multiply(...matrixs) {
+export function multiply(...matrixs: number[][]): number[] {
     let result = matrixs[0];
     for (let i = 1, matrix; (matrix = matrixs[i]); i++) {
         result = mul(result, matrix);

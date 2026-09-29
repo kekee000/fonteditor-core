@@ -6,7 +6,7 @@
 import {computePath} from './computeBoundingBox';
 import pathAdjust from './pathAdjust';
 import pathRotate from './pathRotate';
-import {Point} from './util';
+import {Point, BoundingBox} from './util';
 
 /**
  * 翻转路径
@@ -17,7 +17,7 @@ import {Point} from './util';
  * @return 变换后的路径
  */
 function mirrorPaths(paths: Point[][], xScale: number, yScale: number) {
-    const {x, y, width, height} = computePath(...paths);
+    const {x, y, width, height} = computePath(...paths) as BoundingBox;
 
     if (xScale === -1) {
         paths.forEach(p => {
@@ -55,7 +55,7 @@ export default {
             return paths;
         }
 
-        const bound = computePath(...paths);
+        const bound = computePath(...paths) as BoundingBox;
 
         const cx = bound.x + (bound.width) / 2;
         const cy = bound.y + (bound.height) / 2;
@@ -76,7 +76,7 @@ export default {
      * @return 变换后的路径
      */
     move(paths: Point[][], x: number, y: number) {
-        const bound = computePath(...paths);
+        const bound = computePath(...paths) as BoundingBox;
         paths.forEach(path => {
             pathAdjust(path, 1, 1, x - bound.x, y - bound.y);
         });

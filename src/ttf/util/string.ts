@@ -16,7 +16,7 @@ import postName from '../enum/postName';
  * @param {string} str str字符串
  * @return {string} 转换后字符串
  */
-function stringify(str) {
+function stringify(str: string): string {
     if (!str) {
         return str;
     }
@@ -42,7 +42,7 @@ export default {
      * @param {string} str str字符串
      * @return {string} 转换后字符串
      */
-    escape(str) {
+    escape(str: string): string {
         if (!str) {
             return str;
         }
@@ -55,7 +55,7 @@ export default {
      * @param  {Array} bytes 字节数组
      * @return {string}       string
      */
-    getString(bytes) {
+    getString(bytes: number[]): string {
         let s = '';
         for (let i = 0, l = bytes.length; i < l; i++) {
             s += String.fromCharCode(bytes[i]);
@@ -69,7 +69,7 @@ export default {
      * @param {number} unicode unicode
      * @return {string} 名字
      */
-    getUnicodeName(unicode) {
+    getUnicodeName(unicode: number): string {
         const unicodeNameIndex = unicodeName[unicode];
         if (undefined !== unicodeNameIndex) {
             return postName[unicodeNameIndex];
@@ -84,7 +84,7 @@ export default {
      * @param {string} str 字符串
      * @return {Array.<byte>} 字节数组
      */
-    toUTF8Bytes(str) {
+    toUTF8Bytes(str: string): number[] {
         str = stringify(str);
         const byteArray = [];
         for (let i = 0, l = str.length; i < l; i++) {
@@ -111,7 +111,7 @@ export default {
      * @param {string} str 字符串
      * @return {Array.<byte>} 字节数组
      */
-    toUCS2Bytes(str) {
+    toUCS2Bytes(str: string): number[] {
         str = stringify(str);
         const byteArray = [];
 
@@ -131,7 +131,7 @@ export default {
      * @param {string} str 字符串
      * @return {Array.<byte>} byteArray byte数组
      */
-    toPascalStringBytes(str) {
+    toPascalStringBytes(str: string): number[] {
         const bytes = [];
         const length = str ? (str.length < 256 ? str.length : 255) : 0;
         bytes.push(length);
@@ -151,7 +151,7 @@ export default {
      * @param {Array} bytes 字节
      * @return {string} 字符串
      */
-    getUTF8String(bytes) {
+    getUTF8String(bytes: number[]): string {
         let str = '';
         for (let i = 0, l = bytes.length; i < l; i++) {
             if (bytes[i] < 0x7F) {
@@ -171,7 +171,7 @@ export default {
      * @param {Array} bytes 字节
      * @return {string} 字符串
      */
-    getUCS2String(bytes) {
+    getUCS2String(bytes: number[]): string {
         let str = '';
         for (let i = 0, l = bytes.length; i < l; i += 2) {
             str += String.fromCharCode((bytes[i] << 8) + bytes[i + 1]);
@@ -185,7 +185,7 @@ export default {
      * @param {Array.<byte>} byteArray byte数组
      * @return {Array.<string>} 读取后的字符串数组
      */
-    getPascalString(byteArray) {
+    getPascalString(byteArray: number[]): string[] {
         const strArray = [];
         let i = 0;
         const l = byteArray.length;

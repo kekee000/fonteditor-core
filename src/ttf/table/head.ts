@@ -8,7 +8,7 @@ import struct from './struct';
 
 export default class Head extends Table {
     name = 'head';
-    struct: Array<[string, number, any?]> = [
+    struct: Array<[string, number, number?]> = [
         ['version', struct.Fixed],
         ['fontRevision', struct.Fixed],
         ['checkSumAdjustment', struct.Uint32],

@@ -3,7 +3,9 @@
  * @author mengke01(kekee000@gmail.com)
  */
 
+import {DOMParser as XmlDOMParser} from '@xmldom/xmldom';
+
 /* eslint-disable no-undef */
 export default typeof window !== 'undefined' && window.DOMParser
     ? window.DOMParser
-    : require('@xmldom/xmldom').DOMParser;
+    : XmlDOMParser;

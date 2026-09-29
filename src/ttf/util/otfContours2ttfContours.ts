@@ -56,10 +56,10 @@ function transformContour(otfContour: Contour) {
 /**
  * otf轮廓转ttf轮廓
  *
- * @param  {Array} otfContours otf轮廓数组
- * @return {Array} ttf轮廓
+ * @param  otfContours otf轮廓数组
+ * @return ttf轮廓
  */
-export default function otfContours2ttfContours(otfContours) {
+export default function otfContours2ttfContours(otfContours: Contour[]) {
     if (!otfContours || !otfContours.length) {
         return otfContours;
     }

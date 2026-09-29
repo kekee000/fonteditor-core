@@ -7,10 +7,10 @@ import string from '../../common/string';
 /**
  * unicode 转xml编码格式
  *
- * @param {Array.<number>} unicodeList unicode字符列表
- * @return {string} xml编码格式
+ * @param unicodeList unicode字符列表
+ * @return xml编码格式
  */
-export default function unicode2xml(unicodeList) {
+export default function unicode2xml(unicodeList: number | number[]): string {
     if (typeof unicodeList === 'number') {
         unicodeList = [unicodeList];
     }

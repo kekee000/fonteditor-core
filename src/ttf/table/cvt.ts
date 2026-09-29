@@ -6,6 +6,7 @@
  */
 
 import Reader from '../reader';
+import Writer from '../writer';
 import { TTFObject } from '../ttf-types';
 import Table from './table';
 
@@ -17,7 +18,7 @@ export default class Cvt extends Table {
         return reader.readBytes(this.offset, length);
     }
 
-    write(writer: any, ttf: TTFObject) {
+    write(writer: Writer, ttf: TTFObject) {
         if (ttf.cvt) {
             writer.writeBytes(ttf.cvt, ttf.cvt.length);
         }

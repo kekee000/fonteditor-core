@@ -3,7 +3,7 @@
  * @author mengke01(kekee000@gmail.com)
  */
 import {computePath} from './computeBoundingBox';
-import {Point} from './util';
+import {Point, BoundingBox} from './util';
 
 /**
  * path倾斜变换
@@ -15,7 +15,7 @@ import {Point} from './util';
  */
 export default function pathSkewX(contour: Point[], angle: number) {
     angle = angle === undefined ? 0 : angle;
-    const y = computePath(contour).y;
+    const y = (computePath(contour) as BoundingBox).y;
     const tan = Math.tan(angle);
     let p;
     // x 平移

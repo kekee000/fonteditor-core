@@ -15,7 +15,7 @@ import Writer from '../writer';
 
 class Posthead extends Table {
     name = 'posthead';
-    struct: Array<[string, number, any?]> = [
+    struct: Array<[string, number, number?]> = [
         ['format', struct.Fixed],
         ['italicAngle', struct.Fixed],
         ['underlinePosition', struct.Int16],
@@ -87,7 +87,7 @@ export default class Post extends Table {
             }
 
             // write names
-            ttf.support.post.names.forEach((name: any) => {
+            ttf.support.post.names.forEach((name: number[]) => {
                 writer.writeBytes(name);
             });
         }

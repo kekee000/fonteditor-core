@@ -6,6 +6,7 @@
 import {computePath} from '../../graphics/computeBoundingBox';
 import pathAdjust from '../../graphics/pathAdjust';
 import circlePath from '../../graphics/path/circle';
+import {BoundingBox} from '../../graphics/util';
 import {clone} from '../../common/lang';
 
 /**
@@ -23,7 +24,7 @@ export default function oval2contour(cx: number, cy: number, rx: number, ry: num
         ry = rx;
     }
 
-    const bound = computePath(circlePath);
+    const bound = computePath(circlePath) as BoundingBox;
     const scaleX = (+rx) * 2 / bound.width;
     const scaleY = (+ry) * 2 / bound.height;
     const centerX = bound.width * scaleX / 2;

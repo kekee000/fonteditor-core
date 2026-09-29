@@ -8,28 +8,29 @@ import string from './util/string';
 import pathAdjust from '../graphics/pathAdjust';
 import pathCeil from '../graphics/pathCeil';
 import {computePath, computePathBox} from '../graphics/computeBoundingBox';
+import {BoundingBox} from '../graphics/util';
 import compound2simpleglyf from './util/compound2simpleglyf';
 import glyfAdjust from './util/glyfAdjust';
 import optimizettf from './util/optimizettf';
 import config from './data/default';
-import { Head, TTFObject } from './ttf-types';
+import { Glyph, Head, TTFObject } from './ttf-types';
 
 /**
  * 缩放到EM框
  *
- * @param {Array} glyfList glyf列表
- * @param {number} ascent 上升
- * @param {number} descent 下降
- * @param {number} adjustToEmPadding  顶部和底部留白
- * @return {Array} glyfList
+ * @param glyfList glyf列表
+ * @param ascent 上升
+ * @param descent 下降
+ * @param adjustToEmPadding  顶部和底部留白
+ * @return glyfList
  */
-function adjustToEmBox(glyfList, ascent, descent, adjustToEmPadding) {
+function adjustToEmBox(glyfList: Glyph[], ascent: number, descent: number, adjustToEmPadding: number): Glyph[] {
 
     glyfList.forEach((g) => {
 
         if (g.contours && g.contours.length) {
             const rightSideBearing = g.advanceWidth - g.xMax;
-            const bound = computePath(...g.contours);
+            const bound = computePath(...g.contours) as BoundingBox;
             const scale = (ascent - descent - adjustToEmPadding) / bound.height;
             const center = (ascent + descent) / 2;
             const yOffset = center - (bound.y + bound.height / 2) * scale;
@@ -43,7 +44,7 @@ function adjustToEmBox(glyfList, ascent, descent, adjustToEmPadding) {
                 pathCeil(contour);
             });
 
-            const box = computePathBox(...g.contours);
+            const box = computePathBox(...g.contours) as BoundingBox;
 
             g.xMin = box.x;
             g.xMax = box.x + box.width;
@@ -100,7 +101,7 @@ function adjustPos(glyfList: any[], leftSideBearing: number, rightSideBearing: n
 
         glyfList.forEach(g => {
             if (g.contours && g.contours.length) {
-                const bound = computePath(...g.contours);
+                const bound = computePath(...g.contours) as BoundingBox;
                 const offset = verticalAlign - bound.y;
                 glyfAdjust(g, 1, 1, 0, offset);
             }
