@@ -8,6 +8,12 @@ import TTFReader from './ttfreader';
 import contours2svg from './util/contours2svg';
 import pathsUtil from '../graphics/pathsUtil';
 import error from './error';
+import {Glyph, TTFObject} from './ttf-types';
+
+export interface TTF2SymbolOptions {
+    /** 字体相关的信息 */
+    metadata?: string;
+}
 
 // xml 模板
 const XML_TPL = ''
@@ -29,11 +35,11 @@ const SYMBOL_TPL = ''
  * 2. 有 `unicode` 属性则取 unicode 第一个: 'uni' + unicode
  * 3. 使用索引号作为 id: 'symbol' + index
  *
- * @param  {Object} glyf  glyf 对象
- * @param  {number} index glyf 索引
- * @return {string}
+ * @param  glyf  glyf 对象
+ * @param  index glyf 索引
+ * @return symbol id
  */
-export function getSymbolId(glyf: any, index: number) {
+export function getSymbolId(glyf: Glyph, index: number): string {
     if (glyf.name) {
         return glyf.name;
     }
@@ -47,14 +53,13 @@ export function getSymbolId(glyf: any, index: number) {
 /**
  * ttf数据结构转svg
  *
- * @param {ttfObject} ttf ttfObject对象
- * @param {Object} options 选项
- * @param {Object} options.metadata 字体相关的信息
- * @return {string} svg字符串
+ * @param ttf ttfObject对象
+ * @param options 选项
+ * @return svg字符串
  */
 // eslint-disable-next-line no-unused-vars
-function ttfobject2symbol(ttf: any, options: any = {}) {
-    const xmlObject: any = {};
+function ttfobject2symbol(ttf: TTFObject, options: TTF2SymbolOptions = {}): string {
+    const xmlObject: Record<string, any> = {};
     const unitsPerEm = ttf.head.unitsPerEm;
     const descent = ttf.hhea.descent;
     // glyf 信息
@@ -81,13 +86,12 @@ function ttfobject2symbol(ttf: any, options: any = {}) {
 /**
  * ttf格式转换成svg字体格式
  *
- * @param {ArrayBuffer|ttfObject} ttfBuffer ttf缓冲数组或者ttfObject对象
- * @param {Object} options 选项
- * @param {Object} options.metadata 字体相关的信息
+ * @param ttfBuffer ttf缓冲数组或者ttfObject对象
+ * @param options 选项
  *
- * @return {string} svg字符串
+ * @return svg字符串
  */
-export default function ttf2symbol(ttfBuffer: any, options: any = {}) {
+export default function ttf2symbol(ttfBuffer: ArrayBuffer | TTFObject, options: TTF2SymbolOptions = {}): string {
 
     // 读取ttf二进制流
     if (ttfBuffer instanceof ArrayBuffer) {

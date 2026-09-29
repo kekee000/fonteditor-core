@@ -13,6 +13,12 @@ import contours2svg from './util/contours2svg';
 import unicode2xml from './util/unicode2xml';
 import error from './error';
 import config from './data/default';
+import {TTFObject} from './ttf-types';
+
+export interface TTF2SVGOptions {
+    /** 字体相关的信息 */
+    metadata?: string;
+}
 
 // svg font id
 const SVG_FONT_ID = config.fontId;
@@ -40,17 +46,16 @@ const GLYPH_TPL = '<glyph glyph-name="${name}" unicode="${unicode}" d="${d}" />'
 /**
  * ttf数据结构转svg
  *
- * @param {ttfObject} ttf ttfObject对象
- * @param {Object} options 选项
- * @param {string} options.metadata 字体相关的信息
- * @return {string} svg字符串
+ * @param ttf ttfObject对象
+ * @param options 选项
+ * @return svg字符串
  */
-function ttfobject2svg(ttf: any, options: any) {
+function ttfobject2svg(ttf: TTFObject, options: TTF2SVGOptions): string {
 
     const OS2 = ttf['OS/2'];
 
     // 用来填充xml的数据
-    const xmlObject: any = {
+    const xmlObject: Record<string, any> = {
         id: ttf.name.uniqueSubFamily || SVG_FONT_ID,
         metadata: string.encodeHTML(options.metadata || ''),
         advanceWidth: ttf.hhea.advanceWidthMax,
@@ -102,13 +107,12 @@ function ttfobject2svg(ttf: any, options: any) {
 /**
  * ttf格式转换成svg字体格式
  *
- * @param {ArrayBuffer|ttfObject} ttfBuffer ttf缓冲数组或者ttfObject对象
- * @param {Object} options 选项
- * @param {Object} options.metadata 字体相关的信息
+ * @param ttfBuffer ttf缓冲数组或者ttfObject对象
+ * @param options 选项
  *
- * @return {string} svg字符串
+ * @return svg字符串
  */
-export default function ttf2svg(ttfBuffer: any, options: any = {}) {
+export default function ttf2svg(ttfBuffer: ArrayBuffer | TTFObject, options: TTF2SVGOptions = {}): string {
 
     // 读取ttf二进制流
     if (ttfBuffer instanceof ArrayBuffer) {

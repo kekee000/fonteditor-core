@@ -21,7 +21,7 @@ export default {
      *     data: 错误数据
      * }
      */
-    raise(e: any, ...fargs: any[]) {
+    raise(e: number | {number?: number; data?: any}, ...fargs: any[]) {
         let number;
         let data;
         if (typeof e === 'object') {

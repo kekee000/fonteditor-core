@@ -367,6 +367,11 @@ function encodeDelta(delta: number) {
         : (delta < -0x7FFF ? delta + 0x10000 : delta);
 }
 
+interface GlyphUnicode {
+    unicode: number;
+    id: number;
+}
+
 /**
  * 根据bound获取glyf segment
  *
@@ -374,9 +379,9 @@ function encodeDelta(delta: number) {
  * @param bound 编码范围
  * @return 码表
  */
-function getSegments(glyfUnicodes: any[], bound?: number) {
+function getSegments(glyfUnicodes: GlyphUnicode[], bound?: number) {
 
-    let prevGlyph: any = null;
+    let prevGlyph: GlyphUnicode | null = null;
     const result: any[] = [];
     let segment: any = {};
 
@@ -424,7 +429,7 @@ function getSegments(glyfUnicodes: any[], bound?: number) {
  * @param glyfUnicodes glyf编码集合
  * @return 码表
  */
-function getFormat0Segment(glyfUnicodes: any[]) {
+function getFormat0Segment(glyfUnicodes: GlyphUnicode[]) {
     const unicodes: any[] = [];
     glyfUnicodes.forEach((u) => {
         if (u.unicode !== undefined && u.unicode < 256) {
@@ -510,7 +515,7 @@ export default class Cmap extends Table {
 
     size(ttf: TTFObject): number {
         ttf.support.cmap = {};
-        let glyfUnicodes: any[] = [];
+        let glyfUnicodes: GlyphUnicode[] = [];
         ttf.glyf.forEach((glyph: any, index: number) => {
 
             let unicodes = glyph.unicode;

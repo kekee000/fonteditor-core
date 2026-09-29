@@ -17,6 +17,30 @@ import utilString from './util/string';
 import error from './error';
 import config from './data/default';
 
+export interface WoffMetadataCredit {
+    name: string;
+    url: string;
+    role?: string;
+}
+
+export interface WoffMetadata {
+    uniqueid?: string;
+    vendor?: {name: string; url: string};
+    credit?: WoffMetadataCredit | WoffMetadataCredit[];
+    description?: string;
+    license?: {id: string; url: string; text: string};
+    copyright?: string;
+    trademark?: string;
+    licensee?: string;
+}
+
+export interface TTF2WoffOptions {
+    /** 字体相关的信息 */
+    metadata?: WoffMetadata;
+    /** 压缩相关函数 */
+    deflate?: (data: number[]) => number[];
+}
+
 /**
  * metadata 转换成XML
  *
@@ -51,7 +75,7 @@ import config from './data/default';
  *
  * @return {string} xml字符串
  */
-function metadata2xml(metadata: any) {
+function metadata2xml(metadata: WoffMetadata): string {
     let xml = ''
         + '<?xml version="1.0" encoding="UTF-8"?>'
         +   '<metadata version="1.0">';
@@ -68,7 +92,7 @@ function metadata2xml(metadata: any) {
         xml += '<credits>';
         const credits = metadata.credit instanceof Array ? metadata.credit : [metadata.credit];
 
-        credits.forEach((credit: any) => {
+        credits.forEach((credit) => {
             xml += '<credit name="' + string.encodeHTML(credit.name) + '"'
                 +     ' url="' + string.encodeHTML(credit.url) + '"'
                 +     ' role="' + string.encodeHTML(credit.role || 'Contributor') + '" />';
@@ -115,14 +139,12 @@ function metadata2xml(metadata: any) {
 /**
  * ttf格式转换成woff字体格式
  *
- * @param {ArrayBuffer} ttfBuffer ttf缓冲数组
- * @param {Object} options 选项
- * @param {Object} options.metadata 字体相关的信息
- * @param {Object} options.deflate 压缩相关函数
+ * @param ttfBuffer ttf缓冲数组
+ * @param options 选项
  *
- * @return {ArrayBuffer} woff格式byte流
+ * @return woff格式byte流
  */
-export default function ttf2woff(ttfBuffer: any, options: any = {}) {
+export default function ttf2woff(ttfBuffer: ArrayBuffer, options: TTF2WoffOptions = {}): ArrayBuffer {
 
     // woff 头部结构
     const woffHeader = {

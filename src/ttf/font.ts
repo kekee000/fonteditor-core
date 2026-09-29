@@ -31,6 +31,65 @@ import bytes2base64 from './util/bytes2base64';
 import woff2tobase64 from './woff2tobase64';
 
 import optimizettf from './util/optimizettf';
+import {Glyph, TTFObject} from './ttf-types';
+
+export type FontType = 'ttf' | 'otf' | 'eot' | 'woff' | 'woff2' | 'svg' | 'symbol';
+
+/** 字体原始数据类型 */
+export type FontBuffer = ArrayBuffer | Buffer | string | Document;
+
+export interface FontReadOptions {
+    /** 字体类型 */
+    type: FontType;
+    /** 子集化的 unicode 列表 */
+    subset?: number[];
+    /** 是否保留 hinting 信息 */
+    hinting?: boolean;
+    /** 是否保留 kerning 信息 */
+    kerning?: boolean;
+    /** 复合字形转简单字形 */
+    compound2simple?: boolean;
+    /** 解压相关函数（woff） */
+    inflate?: any;
+    /** 是否合并成单个字形（svg） */
+    combinePath?: boolean;
+    [key: string]: any;
+}
+
+export interface FontWriteOptions {
+    /** 字体类型，默认 ttf */
+    type?: FontType;
+    /** nodejs 环境中返回 Buffer 对象，默认 true */
+    toBuffer?: boolean;
+    /** 是否保留 hinting 信息 */
+    hinting?: boolean;
+    /** 是否保留 kerning 信息 */
+    kerning?: boolean;
+    /** 字体相关的信息（svg/woff） */
+    metadata?: any;
+    /** 压缩相关函数（woff） */
+    deflate?: any;
+    /** woff2 wasm 模块地址 */
+    wasmUrl?: string;
+    [key: string]: any;
+}
+
+export interface FontFindCondition {
+    /** unicode 编码列表或者单个 unicode 编码 */
+    unicode?: number[] | number;
+    /** glyf 名字，例如 `uniE001`, `uniE` */
+    name?: string;
+    /** 自定义过滤器 */
+    filter?: (glyf: Glyph) => boolean;
+}
+
+export interface FontMergeOptions {
+    /** 是否自动缩放 */
+    scale?: boolean;
+    /** 是否调整字形以适应边界（和 scale 互斥） */
+    adjustGlyf?: boolean;
+    [key: string]: any;
+}
 
 // 必须是nodejs环境下的Buffer对象才能触发buffer转换
 const SUPPORT_BUFFER =
@@ -40,23 +99,23 @@ const SUPPORT_BUFFER =
   typeof Buffer === 'function';
 
 class Font {
-    data: any;
-    type!: string;
+    data: TTFObject;
+    type!: FontType;
 
     /**
      * 字体对象构造函数
      *
-     * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
-     * @param {Object} options  读取参数
+     * @param buffer  字体数据
+     * @param options  读取参数
      */
-    constructor(buffer?: any, options: any = { type: 'ttf' }) {
+    constructor(buffer?: FontBuffer | TTFObject, options: FontReadOptions = { type: 'ttf' }) {
     // 字形对象
-        if (typeof buffer === 'object' && buffer.glyf) {
-            this.set(buffer);
+        if (typeof buffer === 'object' && (buffer as TTFObject).glyf) {
+            this.set(buffer as TTFObject);
         }
         // buffer
         else if (buffer) {
-            this.read(buffer, options);
+            this.read(buffer as FontBuffer, options);
         }
         // 空
         else {
@@ -67,15 +126,15 @@ class Font {
     /**
      * Create a Font instance
      *
-     * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
-     * @param {Object} options  读取参数
-     * @return {Font}
+     * @param buffer  字体数据
+     * @param options  读取参数
+     * @return Font 实例
      */
-    static create(buffer: any, options?: any) {
+    static create(buffer?: FontBuffer | TTFObject, options?: FontReadOptions) {
         return new Font(buffer, options);
     }
 
-    static toBase64: (buffer: any) => string;
+    static toBase64: (buffer: ArrayBuffer | Buffer | string) => string;
 
     /**
      * 设置一个空的 ttfObject 对象
@@ -90,23 +149,11 @@ class Font {
     /**
      * 读取字体数据
      *
-     * @param {ArrayBuffer|Buffer|string|Document} buffer  字体数据
-     * @param {Object} options  读取参数
-     * @param {string} options.type 字体类型
-     *
-     * ttf, woff , eot 读取配置
-     * @param {boolean} options.hinting 是否保留 hinting 信息
-     * @param {boolean} options.kerning 是否保留 kerning 信息
-     * @param {boolean} options.compound2simple 复合字形转简单字形
-     *
-     * woff 读取配置
-     * @param {Function} options.inflate 解压相关函数
-     *
-     * svg 读取配置
-     * @param {boolean} options.combinePath 是否合并成单个字形，仅限于普通svg导入
-     * @return {Font}
+     * @param buffer  字体数据
+     * @param options  读取参数
+     * @return this
      */
-    read(buffer: any, options: any) {
+    read(buffer: FontBuffer | TTFObject, options: FontReadOptions): this {
     // nodejs buffer
         if (SUPPORT_BUFFER) {
             if (buffer instanceof Buffer) {
@@ -115,20 +162,20 @@ class Font {
         }
 
         if (options.type === 'ttf') {
-            this.data = new TTFReader(options).read(buffer);
+            this.data = new TTFReader(options).read(buffer as ArrayBuffer);
         } else if (options.type === 'otf') {
             this.data = otf2ttfobject(buffer, options);
         } else if (options.type === 'eot') {
             buffer = eot2ttf(buffer, options);
-            this.data = new TTFReader(options).read(buffer);
+            this.data = new TTFReader(options).read(buffer as ArrayBuffer);
         } else if (options.type === 'woff') {
-            buffer = woff2ttf(buffer, options);
-            this.data = new TTFReader(options).read(buffer);
+            buffer = woff2ttf(buffer as ArrayBuffer, options);
+            this.data = new TTFReader(options).read(buffer as ArrayBuffer);
         } else if (options.type === 'woff2') {
-            buffer = woff2tottf(buffer, options);
-            this.data = new TTFReader(options).read(buffer);
+            buffer = woff2tottf(buffer as ArrayBuffer, options);
+            this.data = new TTFReader(options).read(buffer as ArrayBuffer);
         } else if (options.type === 'svg') {
-            this.data = svg2ttfobject(buffer, options);
+            this.data = svg2ttfobject(buffer as string | Document, options);
         } else {
             throw new Error('not support font type' + options.type);
         }
@@ -154,7 +201,7 @@ class Font {
      * @param {Function} options.deflate 压缩相关函数
      * @return {Buffer|ArrayBuffer|string}
      */
-    write(options: any = {}) {
+    write(options: FontWriteOptions = {}): ArrayBuffer | Buffer | string {
         if (!options.type) {
             options.type = this.type;
         }
@@ -199,7 +246,7 @@ class Font {
      * @param {ArrayBuffer=} buffer  如果提供了buffer数据则使用 buffer数据, 否则转换现有的 font
      * @return {string}
      */
-    toBase64(options: any, buffer?: any) {
+    toBase64(options: FontWriteOptions, buffer?: any): string {
         if (!options.type) {
             options.type = this.type;
         }
@@ -238,10 +285,10 @@ class Font {
     /**
      * 设置 font 对象
      *
-     * @param {Object} data font的ttfObject对象
-     * @return {this}
+     * @param data font的ttfObject对象
+     * @return this
      */
-    set(data: any) {
+    set(data: TTFObject): this {
         this.data = data;
         return this;
     }
@@ -249,20 +296,19 @@ class Font {
     /**
      * 获取 font 数据
      *
-     * @return {Object} ttfObject 对象
+     * @return ttfObject 对象
      */
-    get() {
+    get(): TTFObject {
         return this.data;
     }
 
     /**
      * 对字形数据进行优化
      *
-     * @param  {Object} out  输出结果
-     * @param  {boolean|Object} out.result `true` 或者有问题的地方
-     * @return {Font}
+     * @param  out  输出结果
+     * @return this
      */
-    optimize(out?: any) {
+    optimize(out?: {result?: any}): this {
         const result = optimizettf(this.data);
         if (out) {
             out.result = result;
@@ -307,7 +353,7 @@ class Font {
      *     }
      * @return {Array}  glyf字形列表
      */
-    find(condition: any) {
+    find(condition: FontFindCondition) {
         const ttfHelper = this.getHelper();
         const indexList = ttfHelper.findGlyf(condition);
         return indexList.length ? ttfHelper.getGlyf(indexList) : indexList;
@@ -324,7 +370,7 @@ class Font {
      *
      * @return {Font}
      */
-    merge(font: any, options?: any) {
+    merge(font: Font, options?: FontMergeOptions) {
         const ttfHelper = this.getHelper();
         ttfHelper.mergeGlyf(font.get(), options);
         this.data = ttfHelper.get();
@@ -342,10 +388,10 @@ class Font {
 /**
  * base64序列化buffer 数据
  *
- * @param {ArrayBuffer|Buffer|string} buffer 字体数据
- * @return {Font}
+ * @param buffer 字体数据
+ * @return base64 字符串
  */
-Font.toBase64 = function (buffer: any) {
+Font.toBase64 = function (buffer: ArrayBuffer | Buffer | string) {
     if (typeof buffer === 'string') {
     // node 环境中没有 btoa 函数
         if (typeof btoa === 'undefined') {
@@ -357,7 +403,7 @@ Font.toBase64 = function (buffer: any) {
     return bytes2base64(buffer);
 };
 
-function createFont(buffer?: any, options?: any) {
+function createFont(buffer?: FontBuffer | TTFObject, options?: FontReadOptions) {
     return new Font(buffer, options);
 }
 

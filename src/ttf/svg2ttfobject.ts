@@ -361,7 +361,7 @@ function parsePath(xmlDoc, ttf) {
  *
  * @return 解析后对象
  */
-function parseXML(xmlDoc: Document, options: {combinePath: boolean}) {
+function parseXML(xmlDoc: Document, options: SVG2TTFOptions) {
 
     if (!xmlDoc.getElementsByTagName('svg').length) {
         error.raise(10106);
@@ -412,15 +412,20 @@ function parseXML(xmlDoc: Document, options: {combinePath: boolean}) {
     return ttf;
 }
 
+export interface SVG2TTFOptions {
+    /** 是否合并成单个字形，仅限于普通svg导入 */
+    combinePath?: boolean;
+    [key: string]: any;
+}
+
 /**
  * svg格式转ttfObject格式
  *
  * @param svg svg格式
  * @param options 导入选项
- * @param options.combinePath 是否合并成单个字形，仅限于普通svg导入
  * @return ttfObject
  */
-export default function svg2ttfObject(svg: string | Document, options = {combinePath: false}) {
+export default function svg2ttfObject(svg: string | Document, options: SVG2TTFOptions = {combinePath: false}) {
     let xmlDoc: Document;
     if (typeof svg === 'string') {
         xmlDoc = loadXML(resolveSVG(svg));

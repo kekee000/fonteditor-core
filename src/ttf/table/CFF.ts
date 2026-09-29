@@ -27,7 +27,7 @@ import Reader from '../reader';
  * @param  {number} offset  起始偏移
  * @return {number}         偏移
  */
-function getOffset(reader: any, offSize: number) {
+function getOffset(reader: Reader, offSize: number) {
     let v = 0;
     for (let i = 0; i < offSize; i++) {
         v <<= 8;

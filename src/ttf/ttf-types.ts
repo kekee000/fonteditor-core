@@ -18,7 +18,7 @@ export interface Glyph {
   advanceWidth: number;
   leftSideBearing: number;
   name: string;
-  unicode: CodePoint[];
+  unicode?: CodePoint[];
   compound?: boolean;
 
   glyfs?: Glyph[];
@@ -32,7 +32,7 @@ export interface Head {
   checkSumAdjustment: number;
   magickNumber: number;
   flags: number;
-  unitsPerE: number;
+  unitsPerEm: number;
   created: number;
   modified: number;
   xMin: number;
@@ -212,8 +212,8 @@ export interface TTFObject {
   post: Post;
   maxp: Maxp;
   'OS/2': OS2;
-  tables: TTFTableDirectory;
-  support: Record<string, any>;
+  tables?: TTFTableDirectory;
+  support?: Record<string, any>;
 
   loca?: number[];
   // keep table as byte array
