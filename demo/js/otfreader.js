@@ -6,7 +6,7 @@
  * glyf canvas 绘制
  */
 import OTFReader from 'fonteditor-core/ttf/otfreader';
-import TTF from 'fonteditor-core/ttf/ttf';
+import TTF from 'fonteditor-core/ttf/ttf-helper';
 import otf2base64 from 'fonteditor-core/ttf/otf2base64';
 import ajaxFile from 'fonteditor-core/common/ajaxFile';
 import * as lang from 'fonteditor-core/common/lang';

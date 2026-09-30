@@ -14,11 +14,11 @@
     "otf"
   ],
   "homepage": "https://github.com/kekee000/fonteditor-core",
-  "authors": [
-    {
-      "name": "kekee000",
-      "email": "kekee000@gmail.com"
-    },
+  "author": {
+    "name": "kekee000",
+    "email": "kekee000@gmail.com"
+  },
+  "contributors": [
     {
       "name": "junmer",
       "email": "junmer@foxmail.com"
@@ -31,12 +31,7 @@
   "bugs": {
     "url": "https://github.com/kekee000/fonteditor-core/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/kekee000/fonteditor-core/raw/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "scripts": {
     "precommit": "npm run lint",
     "publish:npm": "npm run build && npm publish --registry=https://registry.npmjs.org/",
@@ -85,8 +80,18 @@
       "require": "./lib/main.js",
       "default": "./lib/main.js"
     },
-    "./lib/*": "./lib/*.js",
-    "./lib-esm/*": "./lib-esm/*.js"
+    "./lib/*": {
+      "types": "./lib/*.d.ts",
+      "default": "./lib/*.js"
+    },
+    "./lib-esm/*": {
+      "types": "./lib-esm/*.d.ts",
+      "default": "./lib-esm/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=14"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
@@ -112,7 +117,7 @@
     "style-loader": "^1.0.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "5.4",
+    "typescript": "^5.4",
     "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2"

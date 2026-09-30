@@ -6,7 +6,7 @@
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
 import TTFWriter from 'fonteditor-core/ttf/ttfwriter';
 import ttf2base64 from 'fonteditor-core/ttf/ttf2base64';
-import TTF from 'fonteditor-core/ttf/ttf';
+import TTF from 'fonteditor-core/ttf/ttf-helper';
 import * as lang from 'fonteditor-core/common/lang';
 import string from 'fonteditor-core/common/string';
 

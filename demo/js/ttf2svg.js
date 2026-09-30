@@ -10,7 +10,7 @@ import ajaxFile from 'fonteditor-core/common/ajaxFile';
 import ttf2svg from 'fonteditor-core/ttf/ttf2svg';
 import svg2base64 from 'fonteditor-core/ttf/svg2base64';
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
-import TTF from 'fonteditor-core/ttf/ttf';
+import TTF from 'fonteditor-core/ttf/ttf-helper';
 
 // 设置字体
 function setFont(base64str) {

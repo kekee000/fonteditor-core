@@ -16,6 +16,7 @@ node_modules
 node
 .vscode
 woff2/woff2
+woff2src/emsdk
 woff2src/woff2*
 /lib
 /lib-esm

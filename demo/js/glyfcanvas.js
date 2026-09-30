@@ -7,7 +7,7 @@
  */
 
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
-import TTF from 'fonteditor-core/ttf/ttf';
+import TTF from 'fonteditor-core/ttf/ttf-helper';
 import ttf2base64 from 'fonteditor-core/ttf/ttf2base64';
 import ajaxFile from 'fonteditor-core/common/ajaxFile';
 import * as lang from 'fonteditor-core/common/lang';

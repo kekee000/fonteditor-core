@@ -7,7 +7,7 @@
  */
 
 import TTFreader from 'fonteditor-core/ttf/ttfreader';
-import TTF from 'fonteditor-core/ttf/ttf';
+import TTF from 'fonteditor-core/ttf/ttf-helper';
 import ttf2base64 from 'fonteditor-core/ttf/ttf2base64';
 import ajaxFile from 'fonteditor-core/common/ajaxFile';
 import glyf2svg from 'fonteditor-core/ttf/util/glyf2svg';

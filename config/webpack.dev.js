@@ -53,7 +53,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.json'],
         alias: {
-            'fonteditor-core': path.resolve(__dirname, '../src')
+            'fonteditor-core': path.resolve(__dirname, '../lib-esm')
         }
     },
     externals: {

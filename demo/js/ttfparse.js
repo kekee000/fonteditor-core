@@ -7,7 +7,7 @@
  */
 
 import TTFReader from 'fonteditor-core/ttf/ttfreader';
-import TTF from 'fonteditor-core/ttf/ttf';
+import TTF from 'fonteditor-core/ttf/ttf-helper';
 import ajaxFile from 'fonteditor-core/common/ajaxFile';
 
 function printResult(ttfData) {
