@@ -40,6 +40,7 @@
     "test:node": "npm run build:cjs && mocha test/node-spec/**/*.spec.js",
     "test:esm": "npm run build:esm && cd test/esm && npm i &&  mocha --extension mjs index.mjs",
     "test:example": "cd test/example && npm i && npm run test",
+    "test:woff2": "cd woff2src && node test.mjs",
     "dev": "webpack-dev-server --open --config ./config/webpack.dev.js",
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",

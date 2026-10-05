@@ -18,6 +18,8 @@ node
 woff2/woff2
 woff2src/emsdk
 woff2src/woff2*
+woff2src/cjs
+woff2src/mjs
 /lib
 /lib-esm
 baiduHealth-deflate.woff
